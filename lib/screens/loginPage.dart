@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: 30),
                                 FlatButton(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 140),
+                                      vertical: 12.0, horizontal: 140.0),
                                   onPressed: () {
                                     loginUser(usernameController.text,
                                         passwordController.text);
