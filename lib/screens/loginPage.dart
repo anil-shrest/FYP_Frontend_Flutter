@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                                           hidePassword = !hidePassword;
                                         });
                                       },
-                                      color: Colors.white,
+                                      color: Colors.grey[700],
                                       icon: Icon(hidePassword
                                           ? Icons.visibility_off
                                           : Icons.visibility),
@@ -195,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: 30),
                                 FlatButton(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12.0, horizontal: 140.0),
+                                      vertical: 12, horizontal: 140),
                                   onPressed: () {
                                     loginUser(usernameController.text,
                                         passwordController.text);
