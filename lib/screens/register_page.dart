@@ -1,7 +1,8 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/models/signup.dart';
@@ -32,6 +33,41 @@ class _SignUpPageState extends State<SignUpPage> {
   File _image;
   final _picker = ImagePicker();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+//  FOR UPLOADING IMAGE TO BACKEND
+  static final String uploadEndPoint = 'http://10.0.2.2:8000/auth/register/';
+  Future<File> file;
+  String status = '';
+  String base64Image;
+  File tmpFile;
+  String errorMsg = 'Image Upload Failed';
+
+  setStatus(String message) {
+    setState(() {
+      status = message;
+    });
+  }
+
+  startUpload() {
+    setStatus('Uploading...');
+    if (null == tmpFile) {
+      setStatus(errorMsg);
+      return;
+    }
+    String fileName = tmpFile.path.split('/').last;
+    upload(fileName);
+  }
+
+  upload(String fileName) {
+    http.post(uploadEndPoint, body: {
+      "profile_image": base64Image,
+      "name": fileName,
+    }).then((result) {
+      setStatus(result.statusCode == 200 ? result.body : errorMsg);
+    }).catchError((error) {
+      setStatus(error);
+    });
+  }
 
   // File _image;
 
@@ -232,6 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 setState(() {
                                   isApiCallProcess = true;
                                 });
+                                // startUpload();
                                 onSubmit();
                                 _showDialog();
                               }

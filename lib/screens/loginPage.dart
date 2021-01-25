@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/models/credential.dart';
@@ -138,6 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                                       ? "Username should be valid"
                                       : null,
                                   decoration: new InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 11.0),
                                     fillColor: Colors.white,
                                     hintText: "Username",
                                     enabledBorder: OutlineInputBorder(
@@ -162,10 +163,12 @@ class _LoginPageState extends State<LoginPage> {
                                   onSaved: (input) =>
                                       loginRequestModel.password = input,
                                   validator: (input) => input.length < 3
-                                      ? "Password should be more than 3 characters"
+                                      ? "Enter a valid password"
                                       : null,
                                   obscureText: hidePassword,
                                   decoration: new InputDecoration(
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 11.0),
                                     fillColor: Colors.white,
                                     hintText: "Password",
                                     enabledBorder: OutlineInputBorder(
@@ -195,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: 30),
                                 FlatButton(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 140),
+                                      vertical: 12.0, horizontal: 140.0),
                                   onPressed: () {
                                     loginUser(usernameController.text,
                                         passwordController.text);
