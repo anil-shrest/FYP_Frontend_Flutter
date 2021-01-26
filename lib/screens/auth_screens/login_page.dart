@@ -7,12 +7,12 @@ import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/models/credential.dart';
 import 'package:simpleApi/models/login.dart';
-import 'package:simpleApi/screens/register_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:simpleApi/screens/auth_screens/register_page.dart';
 import 'package:simpleApi/shared_preference/shared_pref.dart';
-import '../ProgressHUD.dart';
-import 'AppointViewScreen.dart';
-import 'addAppoint.dart';
+
+import '../../ProgressHUD.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override

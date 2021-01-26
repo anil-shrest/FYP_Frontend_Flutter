@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/screens/AppointViewScreen.dart';
-import 'package:simpleApi/screens/landingPage.dart';
-import 'package:simpleApi/screens/loginPage.dart';
+import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
+import 'landing_page.dart';
 
 String finalUsername;
 

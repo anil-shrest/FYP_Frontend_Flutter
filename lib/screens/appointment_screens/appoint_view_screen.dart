@@ -3,11 +3,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/screens/addNote.dart';
-import 'package:simpleApi/screens/loginPage.dart';
 import 'package:http/http.dart' as http;
+import 'package:simpleApi/screens/auth_screens/login_page.dart';
+import 'package:simpleApi/screens/notes_screens/add_note.dart';
 
-import 'addAppoint.dart';
 
 class AppointHomePage extends StatelessWidget {
   // bool _appointmentTaken = false;

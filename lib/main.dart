@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/screens/loginPage.dart';
-import 'package:simpleApi/screens/splash_screen.dart';
-
-import 'screens/addAppoint.dart';
+import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,12 +14,13 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => AppointmentProvider(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.deepPurple,
           // visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        // home: LoginPage(),
-        home: SplashScreen(),
+        home: MainMenu(),
+        // home: SplashScreen(),
       ),
     );
   }

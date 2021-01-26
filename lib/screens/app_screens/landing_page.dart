@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/data/sliderImageData.dart';
-import 'package:simpleApi/screens/loginPage.dart';
+import 'package:simpleApi/screens/auth_screens/login_page.dart';
 
 // class Splash extends StatefulWidget {
 //   @override
@@ -56,6 +56,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
           child: Column(
@@ -121,9 +122,9 @@ class _LandingPageState extends State<LandingPage> {
                     //   )
                     // ],
                     ),
-                botttomSheet: slideIndex != mySLides.length - 1
-                    ? Container()
-                    : Container(),
+                // botttomSheet: slideIndex != mySLides.length - 1
+                //     ? Container()
+                //     : Container(),
               ),
               // bottomSheet: slideIndex != 2 ? Container(
               //    margin: EdgeInsets.symmetric(vertical: 16),

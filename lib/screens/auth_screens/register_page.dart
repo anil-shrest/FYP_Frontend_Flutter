@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
+import 'package:simpleApi/screens/auth_screens/login_page.dart';
 import 'package:simpleApi/models/signup.dart';
-import 'package:simpleApi/screens/loginPage.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key}) : super(key: key);
