@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/data/sliderImageData.dart';
 import 'package:simpleApi/screens/auth_screens/login_page.dart';
+
+import 'main_menu_page.dart';
 
 // class Splash extends StatefulWidget {
 //   @override
@@ -27,125 +31,102 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  List<SliderModel> mySLides = new List<SliderModel>();
+  List<SliderModel> mySlides = new List<SliderModel>();
 
   int slideIndex = 0;
 
-  PageController controller;
+  PageController pageController = new PageController(initialPage: 0);
 
-  Widget _buildPageIndicator(bool isCurrentPage) {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    mySlides = getSlides();
+    pageController = new PageController();
+  }
+
+  Widget buildPageIndicator(bool isCurrentPage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.0),
       height: isCurrentPage ? 10.0 : 6.0,
       width: isCurrentPage ? 10.0 : 6.0,
       decoration: BoxDecoration(
-        color: isCurrentPage ? Colors.grey : Colors.grey[300],
+        color: isCurrentPage ? Colors.grey[600] : Colors.grey[400],
         borderRadius: BorderRadius.circular(12),
       ),
     );
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    mySLides = getSlides();
-    controller = new PageController();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(18.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 30),
-                        Text("Dental",
-                            style: TextStyle(
-                                color: headingTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25)),
-                        Text("Home Nepal",
-                            style: TextStyle(
-                                color: headingTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25)),
-                      ],
+      body: PageView.builder(
+        controller: pageController,
+        itemCount: mySlides.length,
+        onPageChanged: (val) {
+          setState(() {
+            slideIndex = val;
+          });
+        },
+        itemBuilder: (context, index) {
+          return SlideTile(
+            imagePath: mySlides[index].getImageAssetPath(),
+            title: mySlides[index].getTitle(),
+            desc: mySlides[index].getDesc(),
+          );
+        },
+      ),
+      bottomSheet: slideIndex != mySlides.length - 1
+          ? Container(
+              height: Platform.isAndroid ? 50 : 70,
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        pageController.animateToPage(mySlides.length - 1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.decelerate);
+                      },
+                      child: Text('SKIP',
+                          style: TextStyle(
+                              color: Colors.redAccent[200],
+                              fontWeight: FontWeight.w600)),
                     ),
-                  ),
-                ],
-              ),
-              // SizedBox(height: 50.0),
-              Container(
-                height: MediaQuery.of(context).size.height - 300,
-                // height: 400,
-                child: PageView.builder(
-                    itemCount: mySLides.length,
-                    itemBuilder: (context, index) {
-                      return SlideTile(
-                        imagePath: mySLides[index].getImageAssetPath(),
-                        title: mySLides[index].getTitle(),
-                        desc: mySLides[index].getDesc(),
-                      );
-                    }
-                    // controller: controller,
-                    // onPageChanged: (index) {
-                    //   setState(() {
-                    //     slideIndex = index;
-                    //   });
-                    // },
-                    // children: <Widget>[
-                    //   SlideTile(
-                    //     imagePath: mySLides[0].getImageAssetPath(),
-                    //     title: mySLides[0].getTitle(),
-                    //     desc: mySLides[0].getDesc(),
-                    //   ),
-                    //   SlideTile(
-                    //     imagePath: mySLides[1].getImageAssetPath(),
-                    //     title: mySLides[1].getTitle(),
-                    //     desc: mySLides[1].getDesc(),
-                    //   ),
-                    //   SlideTile(
-                    //     imagePath: mySLides[2].getImageAssetPath(),
-                    //     title: mySLides[2].getTitle(),
-                    //     desc: mySLides[2].getDesc(),
-                    //   )
-                    // ],
+                    Row(children: [
+                      for (int i = 0; i < mySlides.length; i++)
+                        i == slideIndex
+                            ? buildPageIndicator(true)
+                            : buildPageIndicator(false),
+                    ]),
+                    GestureDetector(
+                      onTap: () {
+                        pageController.animateToPage(slideIndex + 1,
+                            duration: Duration(milliseconds: 400),
+                            curve: Curves.linear);
+                      },
+                      child: Text('NEXT',
+                          style: TextStyle(
+                              color: buttonColor, fontWeight: FontWeight.w600)),
                     ),
-                // botttomSheet: slideIndex != mySLides.length - 1
-                //     ? Container()
-                //     : Container(),
-              ),
-              // bottomSheet: slideIndex != 2 ? Container(
-              //    margin: EdgeInsets.symmetric(vertical: 16),
-
-              // ): InkWell();
-              // Container(
-              //   padding: EdgeInsets.symmetric(horizontal: 6.0),
-              //   child:
-              //       Text('''Visit to experience the best dental service in town
-              //   from from experienced Dentists.''',
-              //           style: TextStyle(
-              //               color: normalTextColor,
-              //               // fontWeight: FontWeight.w300,
-              //               fontSize: 15)),
-              // ),
-              Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  ]),
+            )
+          : Container(
+              color: Colors.white,
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 120.0, vertical: 60.0),
                   child: InkWell(
                     onTap: () {
+                      // FOR LOGIN VERIFICATION
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => LoginPage()));
+
+                      // FOR DEMO PURPOSE NO AUTH
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                          MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
                       width: 148.0,
@@ -164,7 +145,7 @@ class _LandingPageState extends State<LandingPage> {
                               style: new TextStyle(
                                   fontSize: 18.0, color: buttonTextColor),
                             ),
-                            SizedBox(width: 6.0),
+                            SizedBox(width: 5.0),
                             Icon(Icons.navigate_next,
                                 color: Colors.white, size: 25.0),
                           ],
@@ -172,71 +153,41 @@ class _LandingPageState extends State<LandingPage> {
                       ),
                     ),
                   )),
-              // SizedBox(height: 20.0),
+            ),
+    );
+  }
 
-              // Container(
-              //   height: MediaQuery.of(context).size.height / 2,
-              //   width: MediaQuery.of(context).size.width,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage("assets/initialbg1.jpg"),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              //   child: null /* add child content here */,
-              // ),
-
-              //               bottomSheet: slideIndex != 2 ? Container(
-              //   margin: EdgeInsets.symmetric(vertical: 16),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: <Widget>[
-              //       FlatButton(
-              //         onPressed: (){
-              //           controller.animateToPage(2, duration: Duration(milliseconds: 400), curve: Curves.linear);
-              //         },
-              //         splashColor: Colors.blue[50],
-              //         child: Text(
-              //           "SKIP",
-              //           style: TextStyle(color: Color(0xFF0074E4), fontWeight: FontWeight.w600),
-              //         ),
-              //       ),
-              //       Container(
-              //         child: Row(
-              //           children: [
-              //             for (int i = 0; i < 3 ; i++) i == slideIndex ? _buildPageIndicator(true): _buildPageIndicator(false),
-              //           ],),
-              //       ),
-              //       FlatButton(
-              //         onPressed: (){
-              //           print("this is slideIndex: $slideIndex");
-              //           controller.animateToPage(slideIndex + 1, duration: Duration(milliseconds: 500), curve: Curves.linear);
-              //         },
-              //         splashColor: Colors.blue[50],
-              //         child: Text(
-              //           "NEXT",
-              //           style: TextStyle(color: Color(0xFF0074E4), fontWeight: FontWeight.w600),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ): InkWell(
-              //   onTap: (){
-              //     print("Get Started Now");
-              //   },
-              //   child: Container(
-              //     height: Platform.isIOS ? 70 : 60,
-              //     color: Colors.blue,
-              //     alignment: Alignment.center,
-              //     child: Text(
-              //       "GET STARTED NOW",
-              //       style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-              //     ),
-              //   ),
-              // ),
+  Widget _titleInfo() {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 30),
+                    Text("Dental",
+                        style: TextStyle(
+                            // color: headingTextColor,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28)),
+                    Text("Home Nepal",
+                        style: TextStyle(
+                            // color: headingTextColor,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28)),
+                  ],
+                ),
+              ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -288,6 +239,41 @@ class SlideTile extends StatelessWidget {
     );
   }
 }
+
+// child: SafeArea(
+//   child: Container(
+//     child: Column(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         Row(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.all(18.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   SizedBox(height: 30),
+//                   Text("Dental",
+//                       style: TextStyle(
+//                           // color: headingTextColor,
+//                           color: Colors.grey[700],
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 28)),
+//                   Text("Home Nepal",
+//                       style: TextStyle(
+//                           // color: headingTextColor,
+//                           color: Colors.grey[700],
+//                           fontWeight: FontWeight.bold,
+//                           fontSize: 28)),
+//                 ],
+//               ),
+//             ),
+//           ],
+//         ),
+//       ],
+//     ),
+//   ),
+// ),
 
 // import 'dart:io';
 // import 'package:app_onboarding/data/data.dart';

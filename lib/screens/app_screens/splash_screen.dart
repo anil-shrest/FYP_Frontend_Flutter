@@ -43,23 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
         child: Container(
-          height: 100.0,
-          width: 100.0,
-          child: Card(
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            child: Image.asset(
-              'assets/logo.png',
-              fit: BoxFit.cover,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(7.0),
-            ),
-            elevation: 30.0,
-            shadowColor: Colors.grey[600],
-            margin: EdgeInsets.all(10),
+          height: 60.0,
+          width: 60.0,
+          child: Image.asset(
+            'assets/logo.png',
+            fit: BoxFit.cover,
           ),
         ),
       ),

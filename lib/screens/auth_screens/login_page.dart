@@ -13,7 +13,6 @@ import 'package:simpleApi/shared_preference/shared_pref.dart';
 
 import '../../ProgressHUD.dart';
 
-
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -54,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+// To show appropriate toast message
   _showToastMessage(String message) {
     return Fluttertoast.showToast(
       msg: "$message",
@@ -116,9 +116,9 @@ class _LoginPageState extends State<LoginPage> {
                                 Image.asset("assets/UserLogo.png"),
                                 SizedBox(height: 25),
                                 Text(
-                                  "Hello There!",
+                                  "Welcome",
                                   style: TextStyle(
-                                      color: Colors.grey[700], fontSize: 30.0),
+                                      color: Colors.grey[800], fontSize: 25.0),
                                 ),
                                 SizedBox(height: 60),
                                 Text(
@@ -130,7 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                                 new TextFormField(
                                   style: TextStyle(color: Colors.grey[800]),
                                   controller: usernameController,
-                                  // keyboardType: TextInputType.emailAddress,
                                   onSaved: (input) =>
                                       loginRequestModel.username = input,
                                   validator: (input) => input.length < 1
@@ -147,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                                     )),
                                     focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                      color: Colors.green[200],
+                                      color: Colors.black87,
                                     )),
                                     prefixIcon: Icon(
                                       Icons.person,
@@ -177,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                     )),
                                     focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: Colors.green[200])),
+                                            color: Colors.black87)),
                                     prefixIcon: Icon(
                                       Icons.lock,
                                       color: Colors.grey[700],
@@ -198,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                                 SizedBox(height: 30),
                                 FlatButton(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 12.0, horizontal: 140.0),
+                                      vertical: 12.0, horizontal: 150.0),
                                   onPressed: () {
                                     loginUser(usernameController.text,
                                         passwordController.text);
@@ -252,10 +251,10 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     "LOGIN",
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
+                                        color: buttonTextColor, fontSize: 18.0),
                                   ),
                                   color: primaryColor,
-                                  shape: StadiumBorder(),
+                                  // shape: StadiumBorder(),
                                 ),
                                 SizedBox(height: 15),
                               ],
@@ -292,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                               color: primaryColor,
                               fontWeight: FontWeight.w700,
-                              fontSize: 14.0,
+                              fontSize: 15.0,
                             ),
                           ),
                         ],
@@ -308,6 +307,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+// To validate the text fields before saving
   bool validateAndSave() {
     final form = globalFormKey.currentState;
     if (form.validate()) {
@@ -317,6 +317,7 @@ class _LoginPageState extends State<LoginPage> {
     return false;
   }
 
+// Login connection with API for authenticating the user
   Future<String> loginUser(String username, String password) async {
     final http.Response response =
         await http.post('http://10.0.2.2:8000/auth/login/',

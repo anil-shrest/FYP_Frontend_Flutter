@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 
+import 'screens/app_screens/splash_screen.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -19,8 +21,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepPurple,
           // visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: MainMenu(),
-        // home: SplashScreen(),
+        // home: MainMenu(),
+        home: SplashScreen(),
       ),
     );
   }

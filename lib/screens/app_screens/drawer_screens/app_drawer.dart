@@ -63,8 +63,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 duration: Duration(milliseconds: 150),
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/drawer_bg.jpg'),
-                    fit: BoxFit.cover,
+                    image: AssetImage('assets/drawer_bg.png'),
+                    fit: BoxFit.contain,
                   ),
                 ),
                 // child: Padding(

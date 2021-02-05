@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/appointment_page.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/doctor_page.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/home_page.dart';
@@ -7,7 +9,6 @@ import 'package:simpleApi/screens/app_screens/settings_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
 
 import 'drawer_screens/app_drawer.dart';
-
 
 class MainMenu extends StatefulWidget {
   @override
@@ -34,10 +35,7 @@ class _MainMenuState extends State<MainMenu> {
           appBar: AppBar(
             leading: Builder(
               builder: (context) => IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  color: Colors.black54,
-                ),
+                icon: SvgPicture.asset('assets/menu_icon.svg'),
                 onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
@@ -47,6 +45,26 @@ class _MainMenuState extends State<MainMenu> {
             backgroundColor: Colors.transparent,
             // backgroundColor: Color(0x44000000),
             elevation: 0,
+            actions: [
+              // IconButton(
+              //   icon: SvgPicture.asset('assets/search_icon.svg'),
+              //   onPressed: () {
+              //     // do something
+              //   },
+              // ),
+              IconButton(
+                icon: SvgPicture.asset('assets/profile_logo.svg'),
+                onPressed: () {
+                  // do something
+                },
+              ),
+              IconButton(
+                icon: SvgPicture.asset('assets/map_icon.svg'),
+                onPressed: () {
+                  // do something
+                },
+              ),
+            ],
           ),
           drawer: AppDrawer(onTap: (ctx, i) {
             setState(() {
@@ -86,7 +104,7 @@ class _MainMenuState extends State<MainMenu> {
                               duration: Duration(milliseconds: 100),
                               decoration: BoxDecoration(
                                   color: _index == 0
-                                      ? Colors.deepPurpleAccent
+                                      ? buttonColor
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(25.0)),
                               child: Padding(
@@ -127,7 +145,7 @@ class _MainMenuState extends State<MainMenu> {
                               duration: Duration(milliseconds: 100),
                               decoration: BoxDecoration(
                                   color: _index == 1
-                                      ? Colors.deepPurpleAccent
+                                      ? buttonColor
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(25.0)),
                               child: Padding(
@@ -168,7 +186,7 @@ class _MainMenuState extends State<MainMenu> {
                               duration: Duration(milliseconds: 100),
                               decoration: BoxDecoration(
                                   color: _index == 2
-                                      ? Colors.deepPurpleAccent
+                                      ? buttonColor
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(25.0)),
                               child: Padding(
@@ -177,7 +195,7 @@ class _MainMenuState extends State<MainMenu> {
                                 child: Row(
                                   children: [
                                     Icon(
-                                      Icons.list,
+                                      Icons.list_alt,
                                       color: _index == 2
                                           ? Colors.white
                                           : Colors.black,
@@ -209,7 +227,7 @@ class _MainMenuState extends State<MainMenu> {
                               duration: Duration(milliseconds: 100),
                               decoration: BoxDecoration(
                                   color: _index == 3
-                                      ? Colors.deepPurpleAccent
+                                      ? buttonColor
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(25.0)),
                               child: Padding(
@@ -218,7 +236,7 @@ class _MainMenuState extends State<MainMenu> {
                                 child: Row(
                                   children: [
                                     Icon(
-                                      Icons.payment,
+                                      Icons.monetization_on_outlined,
                                       color: _index == 3
                                           ? Colors.white
                                           : Colors.black,
