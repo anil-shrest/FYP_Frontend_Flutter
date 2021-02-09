@@ -33,6 +33,7 @@ dependencies:
   # flutter_session: ^0.1.1
   image_picker: ^0.6.7+17
   mime: ^0.9.7
+  dio: ^3.0.10
   shared_preferences: ^0.5.12+4
   fluttertoast: ^7.1.1
   flutter_svg: ^0.19.1 #it helps us to use SVG

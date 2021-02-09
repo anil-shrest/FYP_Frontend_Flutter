@@ -13,14 +13,14 @@ class _AddAppointScreenState extends State<AddAppointScreen> {
   final appointTypeController = TextEditingController();
   final appointDescController = TextEditingController();
   final appointAppointByController = TextEditingController();
-  // final appointAppointDateController = TextEditingController();
+  final appointAppointTimeController = TextEditingController();
 
   void onSubmit() {
     final String idVal = appointIdController.text;
     final String typeVal = appointTypeController.text;
     final String descVal = appointDescController.text;
     final String appointByVal = appointAppointByController.text;
-    // final String appointDateVal = appointTypeController.text;
+    final String appointTime = appointTypeController.text;
 
     if (
         idVal.isNotEmpty &&
@@ -30,7 +30,7 @@ class _AddAppointScreenState extends State<AddAppointScreen> {
         appointmentType: typeVal,
         appointmentDescription: descVal,
         appointmentBy: appointByVal,
-        // appDate: appointDateVal
+        appointmentTime: appointTime
       );
       Provider.of<AppointmentProvider>(context, listen: false)
           .addAppoint(appointment);
@@ -60,9 +60,9 @@ class _AddAppointScreenState extends State<AddAppointScreen> {
                 TextField(
                   controller: appointAppointByController,
                 ),
-                // TextField(
-                //   controller: appointAppointDateController,
-                // ),
+                TextField(
+                  controller: appointAppointTimeController,
+                ),
                 RaisedButton(
                   child: Text('BOOK'),
                   onPressed: () {

@@ -61,21 +61,30 @@ class _LandingPageState extends State<LandingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: PageView.builder(
-        controller: pageController,
-        itemCount: mySlides.length,
-        onPageChanged: (val) {
-          setState(() {
-            slideIndex = val;
-          });
-        },
-        itemBuilder: (context, index) {
-          return SlideTile(
-            imagePath: mySlides[index].getImageAssetPath(),
-            title: mySlides[index].getTitle(),
-            desc: mySlides[index].getDesc(),
-          );
-        },
+      body: Stack(
+        children: [
+          // Column(
+          //   children: [
+          //     Align(child: _titleInfo(), alignment: Alignment.topLeft),
+          //   ],
+          // ),
+          PageView.builder(
+            controller: pageController,
+            itemCount: mySlides.length,
+            onPageChanged: (val) {
+              setState(() {
+                slideIndex = val;
+              });
+            },
+            itemBuilder: (context, index) {
+              return SlideTile(
+                imagePath: mySlides[index].getImageAssetPath(),
+                title: mySlides[index].getTitle(),
+                desc: mySlides[index].getDesc(),
+              );
+            },
+          ),
+        ],
       ),
       bottomSheet: slideIndex != mySlides.length - 1
           ? Container(
@@ -121,15 +130,15 @@ class _LandingPageState extends State<LandingPage> {
                   child: InkWell(
                     onTap: () {
                       // FOR LOGIN VERIFICATION
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainMenu()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
-                      width: 148.0,
+                      // width: 148.0,
                       height: 44.0,
                       decoration: new BoxDecoration(
                         color: buttonColor,
@@ -172,16 +181,16 @@ class _LandingPageState extends State<LandingPage> {
                     SizedBox(height: 30),
                     Text("Dental",
                         style: TextStyle(
-                            // color: headingTextColor,
-                            color: Colors.grey[700],
+                            // color: Colors.grey[700],
+                            color: buttonColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 28)),
+                            fontSize: 25)),
                     Text("Home Nepal",
                         style: TextStyle(
-                            // color: headingTextColor,
-                            color: Colors.grey[700],
+                            // color: Colors.grey[700],
+                            color: buttonColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 28)),
+                            fontSize: 25)),
                   ],
                 ),
               ),
@@ -199,7 +208,7 @@ class SlideTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 15),
       alignment: Alignment.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -207,12 +216,12 @@ class SlideTile extends StatelessWidget {
           Container(
               width: MediaQuery.of(context).size.height - 300,
               height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: AssetImage(imagePath)),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                color: Colors.deepPurpleAccent,
-              ),
+              // decoration: BoxDecoration(
+              //   image: DecorationImage(
+              //       fit: BoxFit.cover, image: AssetImage(imagePath)),
+              //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              //   // color: Colors.deepPurpleAccent,
+              // ),
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,

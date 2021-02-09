@@ -1,7 +1,9 @@
 import 'dart:io';
-import 'dart:convert';
+// import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -475,11 +477,33 @@ class _SignUpPageState extends State<SignUpPage> {
 
 // To upload profile images
   Future getImage() async {
-    PickedFile image =
-        await _picker.getImage(source: ImageSource.gallery, imageQuality: 50);
+    PickedFile image = await _picker.getImage(
+        source: ImageSource.gallery,
+        imageQuality: 50,
+        maxHeight: 500,
+        maxWidth: 500);
 
     setState(() {
       _image = File(image.path);
+      // _upload(_image);
     });
   }
+
+  // void _upload(File file) async {
+  //   String fileName = file.path.split('/').last;
+
+  //   FormData data = FormData.fromMap({
+  //     "file": await MultipartFile.fromFile(
+  //       file.path,
+  //       filename: fileName,
+  //     ),
+  //   });
+
+  //   Dio dio = new Dio();
+
+  //   dio
+  //       .post("http://10.0.2.2:8000/auth/register/", data: data)
+  //       .then((response) => print(response))
+  //       .catchError((error) => print(error));
+  // }
 }

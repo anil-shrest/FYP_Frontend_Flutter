@@ -40,7 +40,7 @@ List<SliderModel> getSlides() {
   sliderModel.setDesc(
       "Food delivery or pickup from local restaurants, Explore restaurants that deliver near you.");
   sliderModel.setTitle("Experienced Doctors");
-  sliderModel.setImageAssetPath("assets/doctor.png");
+  sliderModel.setImageAssetPath("assets/doctors.png");
   slides.add(sliderModel);
 
   sliderModel = new SliderModel();

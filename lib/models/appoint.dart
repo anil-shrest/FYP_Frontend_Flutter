@@ -3,10 +3,10 @@ class Appointment {
   final String appointmentType;
   final String appointmentDescription;
   final String appointmentBy;
-  // final String appDate;
+  final String appointmentTime;
 
   Appointment(
-      {this.id, this.appointmentType, this.appointmentDescription, this.appointmentBy});
+      {this.id, this.appointmentType, this.appointmentDescription, this.appointmentBy, this.appointmentTime});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
@@ -14,7 +14,7 @@ class Appointment {
       appointmentType: json['appointmentType'],
       appointmentDescription: json['appointmentDescription'],
       appointmentBy: json['appointmentBy'],
-      // appDate: json['appDate'],
+      appointmentTime: json['appointmentTime'],
     );
   }
 
@@ -23,6 +23,6 @@ class Appointment {
         'appointmentType': appointmentType,
         'appointmentDescription': appointmentDescription,
         'appointmentBy': appointmentBy,
-        // 'appDate': appDate
+        'appointmentTime': appointmentTime
       };
 }

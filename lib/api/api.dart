@@ -43,10 +43,11 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // var authInfo;
-
+  
   void addAppoint(Appointment appointment) async {
-    final response = await http.post("http://10.0.2.2:8000/app/",
-        headers: {"Content-Type": "application/json"},
+    var token = '86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f';
+    final response = await http.post("http://10.0.2.2:8000/appointment/list/",
+        // headers: {'Authorization': 'Token $token'},
         body: json.encode(appointment));
     if (response.statusCode == 201) {
       appointment.id = json.decode(response.body)['id'];
@@ -76,7 +77,7 @@ class AppointmentProvider with ChangeNotifier {
 
   void signup(SignUp signUp) async {
     final response = await http.post("http://10.0.2.2:8000/auth/register/",
-        headers: {"Content-Type": "application/json"},
+        // headers: {"Content-Type": "multipart/form-data"},
         body: json.encode(signUp));
     if (response.statusCode == 200) {
       signUp.id = json.decode(response.body)['id'];

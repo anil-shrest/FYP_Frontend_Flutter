@@ -3,13 +3,15 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/models/credential.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 import 'package:simpleApi/screens/auth_screens/register_page.dart';
-import 'package:simpleApi/shared_preference/shared_pref.dart';
+// import 'package:simpleApi/shared_preference/shared_pref.dart';
 
 import '../../ProgressHUD.dart';
 
@@ -175,8 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                                       color: primaryColor,
                                     )),
                                     focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black87)),
+                                        borderSide:
+                                            BorderSide(color: Colors.black87)),
                                     prefixIcon: Icon(
                                       Icons.lock,
                                       color: Colors.grey[700],
@@ -206,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                       setState(() {
                                         isApiCallProcess = true;
-                                        // this.usernameController.text = '';
+                                        this.usernameController.text = '';
                                         this.passwordController.text = '';
                                       });
                                       // signIn(usernameController.text, passwordController.text);
@@ -335,9 +337,18 @@ class _LoginPageState extends State<LoginPage> {
       print(response);
       String token = jsonDecode(response.body)['token'].toString();
       print(token);
+      checkLogin(token);
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => MainMenu()));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
+          (Route<dynamic> route) => false);
       return token;
     } else {
-      throw Exception('Failed to load!');
+      _showToastMessage('Login failed!');
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      // throw Exception('Failed to load!');
     }
   }
 
@@ -395,8 +406,8 @@ class _LoginPageState extends State<LoginPage> {
   //   });
   // }
 
-  // signIn(String username, pass) async {
-  //   //SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  // signIn(String username, String pass) async {
+  //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   //   Map data = {'username': username, 'password': pass};
   //   var jsonResponse = null;
   //   var response =
@@ -409,12 +420,13 @@ class _LoginPageState extends State<LoginPage> {
   //       setState(() {
   //         _isLoading = false;
   //       });
-  //       //sharedPreferences.setString("token", jsonResponse['data']['token']);
+  //       sharedPreferences.setString("token", jsonResponse['data']['token']);
   //       userSave.token = jsonResponse['token'];
   //       userSave.username = jsonResponse['username'];
   //       sharedPref.save("user", userSave);
   //       Navigator.of(context).pushAndRemoveUntil(
-  //           MaterialPageRoute(builder: (BuildContext context) => AppointHomePage()),
+  //           MaterialPageRoute(
+  //               builder: (BuildContext context) => AppointHomePage()),
   //           (Route<dynamic> route) => false);
   //     }
   //   } else {
@@ -435,29 +447,29 @@ class _LoginPageState extends State<LoginPage> {
   //   }
   // }
 
-  // Future checkLogin(String token) async {
-  //   if (token != null) {
-  //     SharedPreferences preferences = await SharedPreferences.getInstance();
-  //     preferences.setString('token', token);
-  //     Fluttertoast.showToast(
-  //       msg: "Login Successful",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.deepPurple[400],
-  //       textColor: Colors.white,
-  //       fontSize: 14.0,
-  //     );
-  //   } else {
-  //     Fluttertoast.showToast(
-  //       msg: "Invalid username or password!",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red[300],
-  //       textColor: Colors.white,
-  //       fontSize: 14.0,
-  //     );
-  //   }
-  // }
+  Future checkLogin(String token) async {
+    if (token != null) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('token', token);
+      Fluttertoast.showToast(
+        msg: "Login Successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.deepPurple[400],
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Invalid username or password!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red[300],
+        textColor: Colors.white,
+        fontSize: 14.0,
+      );
+    }
+  }
 }

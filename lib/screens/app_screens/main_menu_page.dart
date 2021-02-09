@@ -3,11 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/appointment_page.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/doctor_page.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/home_page.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/payment_page.dart';
 import 'package:simpleApi/screens/app_screens/settings_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
+import 'package:simpleApi/screens/user_screen/profile_screen.dart';
 
+import 'bottom_bar_screens/HOME/home_page.dart';
 import 'drawer_screens/app_drawer.dart';
 
 class MainMenu extends StatefulWidget {
@@ -33,17 +34,19 @@ class _MainMenuState extends State<MainMenu> {
       home: Scaffold(
           extendBodyBehindAppBar: true,
           appBar: AppBar(
+            // backgroundColor: buttonColor,
             leading: Builder(
               builder: (context) => IconButton(
                 icon: SvgPicture.asset('assets/menu_icon.svg'),
                 onPressed: () => Scaffold.of(context).openDrawer(),
               ),
             ),
-            title: Text(
-              "Track your Shipment",
-            ),
+            // title: Text(
+            //   "Smile Clinic",
+            //   textAlign: TextAlign.center,
+            //   style: TextStyle(color: Colors.black, fontSize: 18.0),
+            // ),
             backgroundColor: Colors.transparent,
-            // backgroundColor: Color(0x44000000),
             elevation: 0,
             actions: [
               // IconButton(
@@ -55,7 +58,10 @@ class _MainMenuState extends State<MainMenu> {
               IconButton(
                 icon: SvgPicture.asset('assets/profile_logo.svg'),
                 onPressed: () {
-                  // do something
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfileScreen()));
                 },
               ),
               IconButton(
