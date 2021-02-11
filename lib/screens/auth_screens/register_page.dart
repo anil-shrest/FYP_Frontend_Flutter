@@ -147,18 +147,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: TextStyle(
                                 color: Colors.grey[800], fontSize: 25.0),
                           ),
-                          // Center(
-                          //   child: GestureDetector(
-                          //     onTap: () {
-                          //       _showImagePicker(context);
-                          //     },
-                          //     child: CircleAvatar(
-                          //       radius: 55,
-                          //       backgroundColor: Color(0xffFDCF09),
-                          //       child: _image != null,
-                          //     ),
-                          //   ),
-                          // ),
                           SizedBox(height: 15),
                           Center(
                             child: _image == null
@@ -205,19 +193,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                           image: Image.file(_image).image,
                                           fit: BoxFit.cover),
                                     )),
-                            // child: _image == null
-                            //     ? MaterialButton(
-                            //         onPressed: getImage,
-                            //         color: Colors.blue,
-                            //         textColor: Colors.white,
-                            //         child: Icon(
-                            //           Icons.camera_alt,
-                            //           size: 24,
-                            //         ),
-                            //         // padding: EdgeInsets.all(16),
-                            //         // shape: CircleBorder(),
-                            //       )
-                            //     : CircleAvatar(child: Image.file(_image, fit: BoxFit.fill,),backgroundColor: Colors.brown.shade800, radius: 100,),
                           ),
                           SizedBox(height: 15),
                           Text(
@@ -244,14 +219,6 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.grey[700],
                               )),
                           SizedBox(height: 20),
-                          // _textField(
-                          //     mobileController,
-                          //     'Do not leave this field empty *',
-                          //     'Mobile',
-                          //     Icon(
-                          //       Icons.phone,
-                          //       color: Colors.grey[700],
-                          //     )),
                           TextFormField(
                             style: TextStyle(color: Colors.grey[800]),
                             keyboardType: TextInputType.number,
@@ -324,7 +291,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               // shape: StadiumBorder(),
                               color: primaryColor,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (validateAndSave()) {
                                   print("Checking user info :-");
                                   print(signUpModel.toJson());
@@ -332,8 +299,23 @@ class _SignUpPageState extends State<SignUpPage> {
                                   setState(() {
                                     isApiCallProcess = true;
                                   });
-                                  // startUpload();
-                                  onSubmit();
+                                  // onSubmit();
+                                  // text field controllers
+                                  final String first_name =
+                                      firstNameController.text;
+                                  final String last_name =
+                                      lastNameController.text;
+                                  final String mobile = mobileController.text;
+                                  final String email = userEmailController.text;
+                                  final String username =
+                                      userNameController.text;
+                                  final String password =
+                                      userPasswordController.text;
+                                  final String password2 =
+                                      userPassword2Controller.text;
+
+                                  _upload(first_name, last_name, mobile, email,
+                                      username, password, password2, _image);
                                   _showDialog();
                                 }
                               }),
@@ -485,25 +467,41 @@ class _SignUpPageState extends State<SignUpPage> {
 
     setState(() {
       _image = File(image.path);
-      // _upload(_image);
     });
   }
 
-  // void _upload(File file) async {
-  //   String fileName = file.path.split('/').last;
+  void _upload(String fName, String lName, String mobile, String email,
+      String username, String password, String password2, File image) async {
+    Dio dio = new Dio();
 
-  //   FormData data = FormData.fromMap({
-  //     "file": await MultipartFile.fromFile(
-  //       file.path,
-  //       filename: fileName,
-  //     ),
-  //   });
+    try {
+      String imageFileName = image.path.split('/').last;
+      FormData data = FormData.fromMap({
+        'first_name': fName,
+        'last_name': lName,
+        'mobile': mobile,
+        'email': email,
+        'username': username,
+        'password': password,
+        'password2': password2,
+        'profile_image': await MultipartFile.fromFile(
+          image.path,
+          filename: imageFileName,
+        ),
+      });
 
-  //   Dio dio = new Dio();
-
-  //   dio
-  //       .post("http://10.0.2.2:8000/auth/register/", data: data)
-  //       .then((response) => print(response))
-  //       .catchError((error) => print(error));
-  // }
+      final response = await dio.post("http://10.0.2.2:8000/auth/register/",
+          data: data,
+          options: Options(contentType: 'multipart/form-data', headers: {
+            "Accept": "application/json",
+          }));
+      if (response.statusCode == 200) {
+        print('User Registered!');
+      } else {
+        print('Registeration failed X');
+      }
+    } catch (e) {
+      print('File upload failed!');
+    }
+  }
 }

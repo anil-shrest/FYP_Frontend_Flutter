@@ -130,12 +130,12 @@ class _LandingPageState extends State<LandingPage> {
                   child: InkWell(
                     onTap: () {
                       // FOR LOGIN VERIFICATION
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      // Navigator.push(context,
+                          // MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => MainMenu()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
                       // width: 148.0,

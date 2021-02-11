@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
 import 'landing_page.dart';
-
-String finalUsername;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,6 +11,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String finalUsername;
+
   @override
   void initState() {
     // super.initState();
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   builder: (context) => finalUsername == null
                       // ? LoginPage()
                       ? LandingPage()
-                      : AppointHomePage())));
+                      : MainMenu())));
     });
 
     super.initState();
@@ -33,11 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Future getValidationData() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
-    var obtainedUsername = sharedPreferences.getString('username');
+    String obtainedUsername = sharedPreferences.getString('token');
     setState(() {
       finalUsername = obtainedUsername;
     });
-    print(finalUsername);
+    print('Token of the user is: $finalUsername');
   }
 
   @override

@@ -1,18 +1,18 @@
 class Appointment {
   int id;
-  final String appointmentType;
-  final String appointmentDescription;
+  // final String appointmentType;
+  // final String appointmentDescription;
   final String appointmentBy;
   final String appointmentTime;
 
   Appointment(
-      {this.id, this.appointmentType, this.appointmentDescription, this.appointmentBy, this.appointmentTime});
+      {this.id, this.appointmentBy, this.appointmentTime});
 
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
       id: json['id'],
-      appointmentType: json['appointmentType'],
-      appointmentDescription: json['appointmentDescription'],
+      // appointmentType: json['appointmentType'],
+      // appointmentDescription: json['appointmentDescription'],
       appointmentBy: json['appointmentBy'],
       appointmentTime: json['appointmentTime'],
     );
@@ -20,9 +20,9 @@ class Appointment {
 
   dynamic toJson() => {
         'id': id,
-        'appointmentType': appointmentType,
-        'appointmentDescription': appointmentDescription,
+        // 'appointmentType': appointmentType,
+        // 'appointmentDescription': appointmentDescription,
         'appointmentBy': appointmentBy,
-        'appointmentTime': appointmentTime
+        'appointmentTime': appointmentTime,
       };
 }

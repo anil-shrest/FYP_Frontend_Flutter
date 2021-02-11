@@ -337,6 +337,8 @@ class _LoginPageState extends State<LoginPage> {
       print(response);
       String token = jsonDecode(response.body)['token'].toString();
       print(token);
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setString('token', token);
       checkLogin(token);
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => MainMenu()));
@@ -352,15 +354,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  var received_token;
+  // var received_token;
 
-  void getToken() async {
-    String userToken =
-        await loginUser(usernameController.text, passwordController.text);
-    setState(() {
-      received_token = userToken;
-    });
-  }
+  // void getToken() async {
+  //   String userToken =
+  //       await loginUser(usernameController.text, passwordController.text);
+  //   setState(() {
+  //     received_token = userToken;
+  //   });
+  // }
 
   // Future<LoginResponseModel> login(LoginRequestModel requestModel) async {
   //   String url = "http://10.0.2.2:8000/auth/login/";
@@ -449,8 +451,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Future checkLogin(String token) async {
     if (token != null) {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setString('token', token);
       Fluttertoast.showToast(
         msg: "Login Successful",
         toastLength: Toast.LENGTH_SHORT,

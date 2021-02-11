@@ -1,18 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/screens/user_screen/profile_edit_screen.dart';
 
-class UserProfileScreen extends StatefulWidget {
+class UserProfileEditScreen extends StatefulWidget {
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState();
+  _UserProfileEditScreenState createState() => _UserProfileEditScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   bool showPassword = false;
   String stringResponse;
   List listResponse;
@@ -20,14 +17,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   // to get the details of individual users
   Future fetchUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token');
-
     final url = "http://10.0.2.2:8000/properties/";
     final response = await http.get(
       url,
       headers: {
-        'Authorization': "Token $token",
+        'Authorization': 'Token 86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f'
       },
     );
     if (response.statusCode == 200) {
@@ -55,19 +49,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // final userProvider = Provider.of<AppointmentProvider>(context);
-    // String imageName = mapResponse['profile_image'].toString();
-    // print('Image is -->' + imageName);
     print(mapResponse.toString());
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurpleAccent,
         centerTitle: true,
         title: Text(
-          'User Profile',
-          // style: TextStyle(color: Colors.grey[800]),
+          'Edit Profile',
+          style: TextStyle(color: Colors.grey[800]),
         ),
-        // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // elevation: 1,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
         // leading: IconButton(
         //   icon: Icon(
         //     Icons.arrow_back,
@@ -99,9 +90,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       child: Stack(
                         children: [
                           Container(
-                              width: 130,
-                              height: 130,
-                              decoration: BoxDecoration(
+                            width: 130,
+                            height: 130,
+                            decoration: BoxDecoration(
                                 border: Border.all(
                                     width: 4,
                                     color: Theme.of(context)
@@ -114,19 +105,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       offset: Offset(0, 10))
                                 ],
                                 shape: BoxShape.circle,
-                                image: mapResponse['profile_image'] == null
-                                    ? DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                                        ))
-                                    : DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          "http://10.0.2.2:8000" +
-                                              mapResponse['profile_image']
-                                                  .toString(),
-                                        )),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
+                                    ))),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    width: 4,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor,
+                                  ),
+                                  color: Colors.green,
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    print('Edit Button Tapped!');
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               )),
                         ],
                       ),
@@ -134,38 +142,43 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     SizedBox(
                       height: 35,
                     ),
-                    buildTextField("First Name",
-                        mapResponse['first_name'].toString(), false),
-                    buildTextField("Last Name",
-                        mapResponse['last_name'].toString(), false),
-                    buildTextField(
-                        "Email", mapResponse['email'].toString(), false),
-                    buildTextField(
-                        "Mobile", mapResponse['mobile'].toString(), false),
+                    buildTextField("First Name", "Dor Alex", false),
+                    buildTextField("Last Name", "Dor Alex", false),
+                    buildTextField("Email", "demo@gmail.com", false),
+                    buildTextField("Mobile", "9872122234", false),
                     buildTextField("Address", "Kathmandu", false),
+                    SizedBox(
+                      height: 13,
+                    ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        ClipOval(
-                          child: Material(
-                            color: Colors.green, // button color
-                            child: InkWell(
-                              splashColor: buttonColor, // inkwell color
-                              child: SizedBox(
-                                  width: 56,
-                                  height: 56,
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: Colors.white,
-                                  )),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserProfileEditScreen()));
-                              },
-                            ),
+                        OutlineButton(
+                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("CANCEL",
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  letterSpacing: 2.2,
+                                  color: Colors.black)),
+                        ),
+                        RaisedButton(
+                          onPressed: () {},
+                          color: buttonColor,
+                          padding: EdgeInsets.symmetric(horizontal: 50),
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Text(
+                            "SAVE",
+                            style: TextStyle(
+                                fontSize: 14,
+                                letterSpacing: 2.2,
+                                color: Colors.white),
                           ),
                         )
                       ],
@@ -183,7 +196,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
-        enabled: false,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField

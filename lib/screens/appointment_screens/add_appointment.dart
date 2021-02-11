@@ -10,26 +10,28 @@ class AddAppointScreen extends StatefulWidget {
 
 class _AddAppointScreenState extends State<AddAppointScreen> {
   final appointIdController = TextEditingController();
-  final appointTypeController = TextEditingController();
-  final appointDescController = TextEditingController();
+  // final appointTypeController = TextEditingController();
+  // final appointDescController = TextEditingController();
   final appointAppointByController = TextEditingController();
   final appointAppointTimeController = TextEditingController();
 
   void onSubmit() {
     final String idVal = appointIdController.text;
-    final String typeVal = appointTypeController.text;
-    final String descVal = appointDescController.text;
-    final String appointByVal = appointAppointByController.text;
-    final String appointTime = appointTypeController.text;
+    // final String typeVal = appointTypeController.text;
+    // final String descVal = appointDescController.text;
+    final String appointBy = appointAppointByController.text;
+    final String appointTime = appointAppointTimeController.text;
 
     if (
         idVal.isNotEmpty &&
-        typeVal.isNotEmpty && descVal.isNotEmpty && appointByVal.isNotEmpty) {
+        // typeVal.isNotEmpty &&
+        appointTime.isNotEmpty &&
+        appointBy.isNotEmpty) {
       final Appointment appointment = Appointment(
         id: int.parse(idVal),
-        appointmentType: typeVal,
-        appointmentDescription: descVal,
-        appointmentBy: appointByVal,
+        // appointmentType: typeVal,
+        // appointmentDescription: descVal,
+        appointmentBy: appointBy,
         appointmentTime: appointTime
       );
       Provider.of<AppointmentProvider>(context, listen: false)
@@ -51,12 +53,12 @@ class _AddAppointScreenState extends State<AddAppointScreen> {
                 TextField(
                   controller: appointIdController,
                 ),
-                TextField(
-                  controller: appointTypeController,
-                ),
-                TextField(
-                  controller: appointDescController,
-                ),
+                // TextField(
+                //   controller: appointTypeController,
+                // ),
+                // TextField(
+                //   controller: appointDescController,
+                // ),
                 TextField(
                   controller: appointAppointByController,
                 ),

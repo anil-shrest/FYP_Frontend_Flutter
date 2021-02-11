@@ -1,14 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-// import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:simpleApi/api/auth_service.dart';
-// import 'package:simpleApi/models/credential.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:simpleApi/models/note.dart';
 import 'package:simpleApi/models/signup.dart';
-// import 'package:simpleApi/screens/loginPage.dart';
-// import 'package:simpleApi/shared_preference/shared_pref.dart';
 import '../models/appoint.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,15 +12,23 @@ class AppointmentProvider with ChangeNotifier {
   // Credential userSave = Credential();
   // bool _isLoading = false;
 
-  // AppointmentProvider() {
-  //   // this.fetchTask();
-  // }
+  AppointmentProvider() {
+    this.fetchTask();
+    // this.fetchUser();
+  }
 
 // Storing appoint details in list
   List<Appointment> _appointment = [];
 
   List<Appointment> get appointment {
     return [..._appointment];
+  }
+
+  // Storing user information
+  List<FetchUser> _user = [];
+
+  List<FetchUser> get user {
+    return [..._user];
   }
 
   // Storing notes
@@ -42,42 +45,50 @@ class AppointmentProvider with ChangeNotifier {
     return [..._signUp];
   }
 
-  // var authInfo;
-  
-  void addAppoint(Appointment appointment) async {
-    var token = '86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f';
-    final response = await http.post("http://10.0.2.2:8000/appointment/list/",
-        // headers: {'Authorization': 'Token $token'},
-        body: json.encode(appointment));
-    if (response.statusCode == 201) {
-      appointment.id = json.decode(response.body)['id'];
-      _appointment.add(appointment);
-      notifyListeners();
-    } else {
-      throw Exception('Failed to add appointment!');
-    }
-  }
+// // to get the details of individual users
+//   Future fetchUser() async {
+//     final url = "http://10.0.2.2:8000/properties/?format=json";
+//     final response = await http.get(
+//       url,
+//       headers: {
+//         'Authorization': 'Token 86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f'
+//       },
+//     );
+//     if (response.statusCode == 200) {
+//       // var data = FetchUser.fromJson(jsonDecode(response.body));
+//       // var data = json.decode(response.body) as List;
+//       // _user = data.map<FetchUser>((json) => FetchUser.fromJson(json)).toList();
+//       // notifyListeners();
+//       set
+//     } else {
+//       throw Exception('Failed to load data!');
+//     }
+//   }
 
-  void addNote(Note note) async {
-    // String token = await Candidate().getToken();
-    final response = await http.post("http://10.0.2.2:8000/api/note/create/",
-        headers: {
-          "Content-Type": "application/json",
-          // 'Authorization': 'Bearer $token',
-        },
-        body: json.encode(note));
-    if (response.statusCode == 201) {
-      note.id = json.decode(response.body)['id'];
-      _note.add(note);
-      notifyListeners();
-    } else {
-      throw Exception('Failed to add appointment!');
-    }
-  }
+  // void getAppoint(Appointment appointment) async {
+  //   var token = '86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f';
+  //   final response = await http.get(
+  //     "http://10.0.2.2:8000/appointment/list/?format=json",
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //       'Accept': 'application/json',
+  //       "Authorization": "Bearer $token"
+  //     },
+  //     body: json.encode(appointment)
+  //   );
+  //   if (response.statusCode == 201) {
+  //     appointment.id = json.decode(response.body)['id'];
+  //     _appointment.add(appointment);
+  //     notifyListeners();
+  //   } else {
+  //     throw Exception('Failed to add appointment!');
+  //   }
+  // }
 
+// to register a new user
   void signup(SignUp signUp) async {
     final response = await http.post("http://10.0.2.2:8000/auth/register/",
-        // headers: {"Content-Type": "multipart/form-data"},
+        headers: {"Content-Type": "multipart/form-data"},
         body: json.encode(signUp));
     if (response.statusCode == 200) {
       signUp.id = json.decode(response.body)['id'];
@@ -104,9 +115,38 @@ class AppointmentProvider with ChangeNotifier {
   //   }
   // }
 
-  fetchTask() async {
-    final url = "http://10.0.2.2:8000/app/?format=json";
-    final response = await http.get(url);
+// to add new appointment
+  void addAppoint(Appointment appointment) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    final response = await http.post("http://10.0.2.2:8000/appointment/list/",
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(appointment));
+    if (response.statusCode == 201) {
+      appointment.id = json.decode(response.body)['id'];
+      _appointment.add(appointment);
+      notifyListeners();
+    } else {
+      throw Exception('Failed to add appointment!');
+    }
+  }
+
+// to get the details of individual users appointment details
+  void fetchTask() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print(token);
+
+    final url = "http://10.0.2.2:8000/appointment/list/?format=json";
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Token $token'},
+    );
     if (response.statusCode == 200) {
       var data = json.decode(response.body) as List;
       _appointment =
@@ -115,12 +155,41 @@ class AppointmentProvider with ChangeNotifier {
     } else {
       throw Exception('Failed to load data!');
     }
-    // notifyListeners();
   }
 
+  // to delete or cancel the appointment
+  void deleteAppoint(Appointment appointment) async {
+    final response =
+        await http.delete("http://10.0.2.2:8000/appointment/list/");
+    if (response.statusCode == 204) {
+      _appointment.remove(appointment);
+      notifyListeners();
+    } else {
+      throw Exception('Failed to remove data!');
+    }
+  }
+
+// to add new notes
+  void addNote(Note note) async {
+    // String token = await Candidate().getToken();
+    final response = await http.post("http://10.0.2.2:8000/api/note/create/",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': 'Bearer $token',
+        },
+        body: json.encode(note));
+    if (response.statusCode == 201) {
+      note.id = json.decode(response.body)['id'];
+      _note.add(note);
+      notifyListeners();
+    } else {
+      throw Exception('Failed to add appointment!');
+    }
+  }
+
+// to get the details of individual users notes details
   fetchNote(LoginRequestModel loginRequestModel, Note note) async {
-    final url =
-        "http://10.0.2.2:8000/api/note/${loginRequestModel.username}-${note.title}/?format=json";
+    final url = "http://10.0.2.2:8000/api/note/list/?format=json";
     final response = await http.get(url);
     if (response.statusCode == 200) {
       var data = json.decode(response.body) as List;
@@ -129,15 +198,13 @@ class AppointmentProvider with ChangeNotifier {
     } else {
       throw Exception('Failed to load data!');
     }
-    // notifyListeners();
   }
 
-  void deleteAppoint(Appointment appointment) async {
-    final response =
-        await http.delete("http://10.0.2.2:8000/api/${appointment.id}/");
-    // await http.delete("http://10.0.2.2:8000/app/");
+  // to delete or cancel the appointment
+  void deleteNote(Note note) async {
+    final response = await http.delete("http://10.0.2.2:8000/api/note/");
     if (response.statusCode == 204) {
-      _appointment.remove(appointment);
+      _note.remove(note);
       notifyListeners();
     } else {
       throw Exception('Failed to remove data!');

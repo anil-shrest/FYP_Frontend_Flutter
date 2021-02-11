@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/screens/app_screens/landing_page.dart';
 import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 import 'package:simpleApi/screens/app_screens/settings_page.dart';
+import 'package:simpleApi/screens/app_screens/splash_screen.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
+import 'package:simpleApi/screens/auth_screens/login_page.dart';
 
 // class HomeDrawer extends StatefulWidget {
 //   @override
@@ -121,11 +125,35 @@ class _AppDrawerState extends State<AppDrawer> {
                 'Logout',
                 style: TextStyle(color: Colors.redAccent),
               ),
-              onTap: () => widget.onTap(context, 4),
+              // onTap: () => widget.onTap(context, 4),
+              onTap: () async {
+                final SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                print(sharedPreferences.getString('token'));
+                sharedPreferences.remove('token');
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => SplashScreen()),
+                    (Route<dynamic> route) => false);
+                _showToastMessage("See you later");
+              },
             ),
           ],
         ),
       ),
+    );
+  }
+
+// to display toast message
+  _showToastMessage(String message) {
+    return Fluttertoast.showToast(
+      msg: "$message",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey[600],
+      textColor: Colors.white,
+      fontSize: 14.0,
     );
   }
 }

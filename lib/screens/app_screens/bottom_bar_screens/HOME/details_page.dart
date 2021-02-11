@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/HOME/recommend_service.dart';
 
 class DetailsScreen extends StatelessWidget {
   @override

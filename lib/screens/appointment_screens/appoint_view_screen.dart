@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
-import 'package:http/http.dart' as http;
-import 'package:simpleApi/screens/appointment_screens/add_appointment.dart';
-import 'package:simpleApi/screens/auth_screens/login_page.dart';
-import 'package:simpleApi/screens/notes_screens/add_note.dart';
 
-class AppointHomePage extends StatelessWidget {
+class AppointHomePage extends StatefulWidget {
   // bool _appointmentTaken = false;
 
+  @override
+  _AppointHomePageState createState() => _AppointHomePageState();
+}
+
+class _AppointHomePageState extends State<AppointHomePage> {
   _showToastMessage(String message) {
     return Fluttertoast.showToast(
       msg: "$message",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey[600],
+      backgroundColor: Colors.grey[500],
       textColor: Colors.white,
       fontSize: 14.0,
     );
@@ -25,82 +26,74 @@ class AppointHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appointmentProvider = Provider.of<AppointmentProvider>(context);
+    final appointmentProvider = Provider.of<AppointmentProvider>(context, listen: false);
+    int list_count = appointmentProvider.appointment.length;
+    Size size = MediaQuery.of(context).size;
+    print('No. of appointments: $list_count');
     return Scaffold(
-      appBar: AppBar(
-        title: Text('API Home'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              _showToastMessage("See you later");
-              final SharedPreferences sharedPreferences =
-                  await SharedPreferences.getInstance();
-              print(sharedPreferences.get('token'));
-              sharedPreferences.remove('token');
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => LoginPage()),
-                  (Route<dynamic> route) => false);
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => LoginPage()));
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Container(child: Text('demo')),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: appointmentProvider.appointment.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                title: Text(
-                  appointmentProvider.appointment[index].appointmentBy,
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  appointmentProvider.appointment[index].appointmentDescription,
-                  style: TextStyle(fontSize: 15, color: Colors.black),
-                ),
-                trailing: IconButton(
-                    icon: Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      appointmentProvider.deleteAppoint(
-                          appointmentProvider.appointment[index]);
-                    }),
-              );
-            },
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-          size: 30,
-        ),
-        onPressed: () {
-          // Navigator.of(context).push(
-          //     MaterialPageRoute(builder: (context) => AddAppointScreen()));
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddAppointScreen()));
-        },
-      ),
+      body: list_count != null
+          ? SafeArea(
+              child: Column(
+                children: [
+                  SizedBox(height: 20.0),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: appointmentProvider.appointment.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        title: Text(
+                          appointmentProvider.appointment[index].appointmentBy,
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          appointmentProvider
+                              .appointment[index].appointmentTime,
+                          style: TextStyle(fontSize: 15, color: Colors.black),
+                        ),
+                        leading:
+                            Icon(Icons.calendar_today, color: Colors.grey[600]),
+                        trailing: Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black54,
+                        ),
+                        onTap: () {},
+                        // trailing: IconButton(
+                        //     icon: Icon(Icons.delete, color: Colors.red),
+                        //     onPressed: () {
+                        //       appointmentProvider.deleteAppoint(
+                        //           appointmentProvider.appointment[index]);
+                        //     }),
+                      );
+                    },
+                  ),
+                ],
+              ),
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                      width: size.width * 0.6,
+                      child: SvgPicture.asset(
+                        'assets/no_appoint.svg',
+                        fit: BoxFit.contain,
+                      )),
+                  Container(
+                    height: 40.0,
+                    width: 150.0,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1.0, color: Colors.grey[600]),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                    ),
+                    child: Center(child: Text('No Appointments')),
+                  ),
+                ],
+              ),
+            ),
     );
   }
-
-  // Future<Null> getData() async {
-  //   var url = "http://10.0.2.2:8000/appointment/list/";
-  //   http.post(url, body: {
-  //     "username": "string",
-  //     "password": "string",
-  //   }).then((response) {
-  //     print("Response Status: ${response.statusCode}");
-  //     print("Response Body: ${response.body}");
-  //   });
-  // }
 }
