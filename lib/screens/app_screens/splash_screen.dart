@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
@@ -47,10 +48,10 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: Container(
-          height: 60.0,
-          width: 60.0,
-          child: Image.asset(
-            'assets/logo.png',
+          height: 70.0,
+          width: 70.0,
+          child: SvgPicture.asset(
+            'assets/logo.svg',
             fit: BoxFit.cover,
           ),
         ),

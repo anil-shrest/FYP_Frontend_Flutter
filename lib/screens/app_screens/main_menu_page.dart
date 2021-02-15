@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/appointment_page.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/doctor_page.dart';
@@ -20,6 +21,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   int _index = 0;
   int index = 0;
+  var themeVal;
 
   List<Widget> list = [
     MainMenu(),
@@ -28,15 +30,27 @@ class _MainMenuState extends State<MainMenu> {
     SettingsPage(),
   ];
 
+  _darkModeVal() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      themeVal = preferences.get('darkMode');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    _darkModeVal();
+    // print('val is $themeVal');
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           // backgroundColor: buttonColor,
           leading: Builder(
             builder: (context) => IconButton(
-              icon: SvgPicture.asset('assets/menu_icon.svg'),
+              // icon: SvgPicture.asset('assets/menu_icon_p.svg'),
+              icon: themeVal == true
+                  ? SvgPicture.asset('assets/menu_icon_w.svg')
+                  : SvgPicture.asset('assets/menu_icon.svg'),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
@@ -122,7 +136,7 @@ class _MainMenuState extends State<MainMenu> {
                                     Icons.home,
                                     color: _index == 0
                                         ? Colors.white
-                                        : Colors.black,
+                                        : buttonColor,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
@@ -163,7 +177,7 @@ class _MainMenuState extends State<MainMenu> {
                                     Icons.person,
                                     color: _index == 1
                                         ? Colors.white
-                                        : Colors.black,
+                                        : buttonColor,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
@@ -204,7 +218,7 @@ class _MainMenuState extends State<MainMenu> {
                                     Icons.list_alt,
                                     color: _index == 2
                                         ? Colors.white
-                                        : Colors.black,
+                                        : buttonColor,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),
@@ -245,7 +259,7 @@ class _MainMenuState extends State<MainMenu> {
                                     Icons.monetization_on_outlined,
                                     color: _index == 3
                                         ? Colors.white
-                                        : Colors.black,
+                                        : buttonColor,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8.0),

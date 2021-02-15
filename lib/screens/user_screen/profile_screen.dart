@@ -60,11 +60,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     print(mapResponse.toString());
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         backgroundColor: Colors.deepPurpleAccent,
         centerTitle: true,
         title: Text(
           'User Profile',
-          // style: TextStyle(color: Colors.grey[800]),
+          style: TextStyle(color: Colors.white),
         ),
         // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         // elevation: 1,
@@ -117,8 +120,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 image: mapResponse['profile_image'] == null
                                     ? DecorationImage(
                                         fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
+                                        image: AssetImage(
+                                          "assets/UserLogo.png",
                                         ))
                                     : DecorationImage(
                                         fit: BoxFit.cover,
@@ -142,7 +145,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         "Email", mapResponse['email'].toString(), false),
                     buildTextField(
                         "Mobile", mapResponse['mobile'].toString(), false),
-                    buildTextField("Address", "Kathmandu", false),
+                    buildTextField(
+                        "Address", mapResponse['address'].toString(), false),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [

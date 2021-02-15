@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
@@ -114,149 +115,172 @@ class _LoginPageState extends State<LoginPage> {
                             key: globalFormKey,
                             child: Column(
                               children: <Widget>[
-                                SizedBox(height: 25),
-                                Image.asset("assets/UserLogo.png"),
-                                SizedBox(height: 25),
+                                SizedBox(height: 30.0),
+                                SvgPicture.asset(
+                                  "assets/logo.svg",
+                                  fit: BoxFit.contain,
+                                  height: 80.0,
+                                ),
+                                SizedBox(height: 20.0),
                                 Text(
-                                  "Welcome",
+                                  "Dental Home",
                                   style: TextStyle(
                                       color: Colors.grey[800], fontSize: 25.0),
                                 ),
-                                SizedBox(height: 60),
-                                Text(
-                                  "Please enter your details to login",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(fontSize: 15),
-                                ),
+                                SizedBox(height: 40),
+                                // Text(
+                                //   "Login Credentials",
+                                //   style: TextStyle(
+                                //       fontSize: 15,
+                                //       color: Colors.grey[800],
+                                //       fontWeight: FontWeight.w400),
+                                // ),
                                 SizedBox(height: 20),
-                                new TextFormField(
-                                  style: TextStyle(color: Colors.grey[800]),
-                                  controller: usernameController,
-                                  onSaved: (input) =>
-                                      loginRequestModel.username = input,
-                                  validator: (input) => input.length < 1
-                                      ? "Username should be valid"
-                                      : null,
-                                  decoration: new InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 11.0),
-                                    fillColor: Colors.white,
-                                    hintText: "Username",
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: primaryColor,
-                                    )),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: Colors.black87,
-                                    )),
-                                    prefixIcon: Icon(
-                                      Icons.person,
-                                      color: Colors.grey[700],
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: new TextFormField(
+                                    style: TextStyle(color: Colors.grey[800]),
+                                    controller: usernameController,
+                                    onSaved: (input) =>
+                                        loginRequestModel.username = input,
+                                    validator: (input) => input.length < 1
+                                        ? "Username should be valid"
+                                        : null,
+                                    decoration: new InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 11.0),
+                                      fillColor: Colors.white,
+                                      hintText: "Username",
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[800]),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: primaryColor,
+                                      )),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: Colors.black87,
+                                      )),
+                                      prefixIcon: Icon(
+                                        Icons.person,
+                                        color: Colors.grey[700],
+                                      ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 20),
-                                new TextFormField(
-                                  style: TextStyle(color: Colors.grey[800]),
-                                  keyboardType: TextInputType.text,
-                                  controller: passwordController,
-                                  onSaved: (input) =>
-                                      loginRequestModel.password = input,
-                                  validator: (input) => input.length < 3
-                                      ? "Enter a valid password"
-                                      : null,
-                                  obscureText: hidePassword,
-                                  decoration: new InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        vertical: 11.0),
-                                    fillColor: Colors.white,
-                                    hintText: "Password",
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                      color: primaryColor,
-                                    )),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.black87)),
-                                    prefixIcon: Icon(
-                                      Icons.lock,
-                                      color: Colors.grey[700],
-                                    ),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          hidePassword = !hidePassword;
-                                        });
-                                      },
-                                      color: Colors.grey[700],
-                                      icon: Icon(hidePassword
-                                          ? Icons.visibility_off
-                                          : Icons.visibility),
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: new TextFormField(
+                                    style: TextStyle(color: Colors.grey[800]),
+                                    keyboardType: TextInputType.text,
+                                    controller: passwordController,
+                                    onSaved: (input) =>
+                                        loginRequestModel.password = input,
+                                    validator: (input) => input.length < 3
+                                        ? "Enter a valid password"
+                                        : null,
+                                    obscureText: hidePassword,
+                                    decoration: new InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 11.0),
+                                      fillColor: Colors.white,
+                                      hintText: "Password",
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[800]),
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                        color: primaryColor,
+                                      )),
+                                      focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.black87)),
+                                      prefixIcon: Icon(
+                                        Icons.lock,
+                                        color: Colors.grey[700],
+                                      ),
+                                      suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            hidePassword = !hidePassword;
+                                          });
+                                        },
+                                        color: Colors.grey[700],
+                                        icon: Icon(hidePassword
+                                            ? Icons.visibility_off
+                                            : Icons.visibility),
+                                      ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: 30),
-                                FlatButton(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 12.0, horizontal: 150.0),
-                                  onPressed: () {
-                                    loginUser(usernameController.text,
-                                        passwordController.text);
-                                    if (validateAndSave()) {
-                                      print(loginRequestModel.toJson());
+                                Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 43.0,
+                                  child: FlatButton(
+                                    // padding: EdgeInsets.symmetric(
+                                    //     vertical: 12.0, horizontal: 150.0),
+                                    onPressed: () {
+                                      loginUser(usernameController.text,
+                                          passwordController.text);
+                                      if (validateAndSave()) {
+                                        print(loginRequestModel.toJson());
 
-                                      setState(() {
-                                        isApiCallProcess = true;
-                                        this.usernameController.text = '';
-                                        this.passwordController.text = '';
-                                      });
-                                      // signIn(usernameController.text, passwordController.text);
-                                      // loginUser(usernameController.text,
-                                      //     passwordController.text);
-                                      // APIService apiService = new APIService();
-                                      // apiService
-                                      // login(loginRequestModel).then((value) async {
-                                      //   if (value != null) {
-                                      //     setState(() {
-                                      //       isApiCallProcess = false;
-                                      //     });
+                                        setState(() {
+                                          isApiCallProcess = true;
+                                          this.usernameController.text = '';
+                                          this.passwordController.text = '';
+                                        });
+                                        // signIn(usernameController.text, passwordController.text);
+                                        // loginUser(usernameController.text,
+                                        //     passwordController.text);
+                                        // APIService apiService = new APIService();
+                                        // apiService
+                                        // login(loginRequestModel).then((value) async {
+                                        //   if (value != null) {
+                                        //     setState(() {
+                                        //       isApiCallProcess = false;
+                                        //     });
 
-                                      //     if (value.token.isNotEmpty) {
-                                      //       final snackBar = SnackBar(
-                                      //           content: Text("Login Successful"));
-                                      //       scaffoldKey.currentState
-                                      //           .showSnackBar(snackBar);
-                                      //       final SharedPreferences
-                                      //           sharedPreferences =
-                                      //           await SharedPreferences
-                                      //               .getInstance();
-                                      //       sharedPreferences.setString('username',
-                                      //           usernameController.text);
-                                      //       _showToastMessage("Login Successful");
-                                      //       Navigator.push(
-                                      //           context,
-                                      //           MaterialPageRoute(
-                                      //               builder: (context) =>
-                                      //                   AppointHomePage()));
-                                      //     } else {
-                                      //       _showToastMessage("Login failed!");
-                                      //       // final snackBar = SnackBar(
-                                      //       //     content: Text(value.error));
-                                      //       // scaffoldKey.currentState
-                                      //       //     .showSnackBar(snackBar);
-                                      //     }
-                                      //   }
-                                      // });
-                                    }
-                                  },
-                                  child: Text(
-                                    "LOGIN",
-                                    style: TextStyle(
-                                        color: buttonTextColor, fontSize: 18.0),
+                                        //     if (value.token.isNotEmpty) {
+                                        //       final snackBar = SnackBar(
+                                        //           content: Text("Login Successful"));
+                                        //       scaffoldKey.currentState
+                                        //           .showSnackBar(snackBar);
+                                        //       final SharedPreferences
+                                        //           sharedPreferences =
+                                        //           await SharedPreferences
+                                        //               .getInstance();
+                                        //       sharedPreferences.setString('username',
+                                        //           usernameController.text);
+                                        //       _showToastMessage("Login Successful");
+                                        //       Navigator.push(
+                                        //           context,
+                                        //           MaterialPageRoute(
+                                        //               builder: (context) =>
+                                        //                   AppointHomePage()));
+                                        //     } else {
+                                        //       _showToastMessage("Login failed!");
+                                        //       // final snackBar = SnackBar(
+                                        //       //     content: Text(value.error));
+                                        //       // scaffoldKey.currentState
+                                        //       //     .showSnackBar(snackBar);
+                                        //     }
+                                        //   }
+                                        // });
+                                      }
+                                    },
+                                    child: Text(
+                                      "LOGIN",
+                                      style: TextStyle(
+                                          color: buttonTextColor,
+                                          fontSize: 15.0),
+                                    ),
+                                    color: primaryColor,
+                                    // shape: StadiumBorder(),
                                   ),
-                                  color: primaryColor,
-                                  // shape: StadiumBorder(),
                                 ),
                                 SizedBox(height: 15),
                               ],
@@ -269,7 +293,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Column(
                   children: <Widget>[
-                    SizedBox(height: 130),
+                    SizedBox(height: 10),
                     GestureDetector(
                       onTap: () {
                         Navigator.push(

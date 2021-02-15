@@ -2,7 +2,8 @@ class SignUp {
   int id;
   final String first_name;
   final String last_name;
-  final String mobile;
+  // final String mobile;
+  final String address;
   final String email;
   final String username;
   final String password;
@@ -12,7 +13,8 @@ class SignUp {
       {this.id,
       this.first_name,
       this.last_name,
-      this.mobile,
+      // this.mobile,
+      this.address,
       this.email,
       this.username,
       this.password,
@@ -23,7 +25,8 @@ class SignUp {
       id: json['id'],
       first_name: json['first_name'],
       last_name: json['last_name'],
-      mobile: json['mobile'],
+      // mobile: json['mobile'],
+      address: json['address'],
       email: json['email'],
       username: json['username'],
       password: json['password'],
@@ -35,7 +38,8 @@ class SignUp {
         'id': id,
         'first_name': first_name,
         'last_name': last_name,
-        'mobile': mobile,
+        // 'mobile': mobile,
+        'address': address,
         'email': email,
         'username': username,
         'password': password,
@@ -85,6 +89,7 @@ class FetchUser {
   final String mobile;
   final String email;
   final String username;
+  final String address;
   final String profile_image;
 
   FetchUser({
@@ -94,6 +99,7 @@ class FetchUser {
     this.mobile,
     this.email,
     this.username,
+    this.address,
     this.profile_image,
   });
 
@@ -105,6 +111,7 @@ class FetchUser {
       mobile: json['mobile'],
       email: json['email'],
       username: json['username'],
+      address: json['address'],
       profile_image: json['profile_image'],
     );
   }
@@ -116,6 +123,7 @@ class FetchUser {
         'mobile': mobile,
         'email': email,
         'username': username,
+        'address': address,
         'profile_image': profile_image,
       };
 }

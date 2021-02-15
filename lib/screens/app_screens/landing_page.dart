@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/data/sliderImageData.dart';
 import 'package:simpleApi/screens/auth_screens/login_page.dart';
+import 'package:simpleApi/screens/otp_screen/otp_verification.dart';
+import 'package:simpleApi/screens/otp_screen/phone_screen.dart';
 
 import 'main_menu_page.dart';
 
@@ -51,7 +53,7 @@ class _LandingPageState extends State<LandingPage> {
       height: isCurrentPage ? 10.0 : 6.0,
       width: isCurrentPage ? 10.0 : 6.0,
       decoration: BoxDecoration(
-        color: isCurrentPage ? Colors.grey[600] : Colors.grey[400],
+        color: isCurrentPage ? Colors.teal : Colors.grey[400],
         borderRadius: BorderRadius.circular(12),
       ),
     );
@@ -126,16 +128,18 @@ class _LandingPageState extends State<LandingPage> {
               color: Colors.white,
               child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 120.0, vertical: 60.0),
+                      horizontal: 120.0, vertical: 40.0),
                   child: InkWell(
                     onTap: () {
-                      // FOR LOGIN VERIFICATION
-                      // Navigator.push(context,
-                          // MaterialPageRoute(builder: (context) => LoginPage()));
+                      // // FOR LOGIN VERIFICATION
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainMenu()));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => PhoneNumberScreen()));
                     },
                     child: new Container(
                       // width: 148.0,
@@ -214,8 +218,9 @@ class SlideTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-              width: MediaQuery.of(context).size.height - 300,
-              height: 300,
+              width: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.4,
+
               // decoration: BoxDecoration(
               //   image: DecorationImage(
               //       fit: BoxFit.cover, image: AssetImage(imagePath)),
@@ -227,7 +232,7 @@ class SlideTile extends StatelessWidget {
                 fit: BoxFit.contain,
               )),
           SizedBox(
-            height: 40,
+            height: 20,
           ),
           Text(
             title,

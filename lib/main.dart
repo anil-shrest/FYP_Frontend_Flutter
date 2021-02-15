@@ -1,19 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
+import 'package:simpleApi/components/color_theme.dart';
 import 'package:simpleApi/components/providers.dart';
 import 'package:simpleApi/components/text.dart';
 import 'components/theme.dart';
 import 'screens/app_screens/splash_screen.dart';
 
-void main() async {
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (context) => AppointmentProvider()),
-    ChangeNotifierProvider(create: (context) => Providers()),
-    ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
-    ChangeNotifierProvider(create: (context) => PageProvider()),
-  ], child: MyApp()));
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// void main() async {
+//   runApp(MultiProvider(providers: [
+//     ChangeNotifierProvider(create: (context) => AppointmentProvider()),
+//     ChangeNotifierProvider(create: (context) => Providers()),
+//     ChangeNotifierProvider(create: (context) => DarkThemeProvider()),
+//     ChangeNotifierProvider(create: (context) => PageProvider()),
+//   ], child: MyApp()));
+// }
+
+Future<void> main() async {
+  // Initializing local notification
+  WidgetsFlutterBinding.ensureInitialized();
+
+  var initializationSettingsAndroid = AndroidInitializationSettings('logo');
+  var initializationSettingsIOS = IOSInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+      onDidReceiveLocalNotification:
+          (int id, String title, String body, String payload) async {});
+  var initializationSettings = InitializationSettings(
+      initializationSettingsAndroid, initializationSettingsIOS);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+    if (payload != null) {
+      debugPrint('notification payload: ' + payload);
+    }
+  });
+
+  SharedPreferences.getInstance().then((prefs) {
+    var darkModeOn = prefs.getBool('darkMode') ?? true;
+    runApp(MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context) => AppointmentProvider()),
+      ChangeNotifierProvider(create: (context) => Providers()),
+      ChangeNotifierProvider(
+          create: (context) =>
+              ThemeNotifier(darkModeOn ? darkTheme : lightTheme)),
+      ChangeNotifierProvider(create: (context) => PageProvider()),
+    ], child: MyApp()));
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -48,12 +88,12 @@ class MyApp extends StatelessWidget {
     //     ));
 
 // NOW IT IS LIKE
-    // DarkThemeProvider themeChangeProvider = new DarkThemeProvider();
 
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // theme: Provider.of<ThemeNotifier>(context, listen: false).currentThemeData,
-      theme: ThemeData(primarySwatch: Colors.deepPurple),
+      theme: themeNotifier.getTheme(),
+      // theme: ThemeData(primarySwatch: Colors.deepPurple),
       // home: MainMenu(),
       home: SplashScreen(),
     );

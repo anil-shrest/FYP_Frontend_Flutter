@@ -1,17 +1,17 @@
 import 'dart:io';
-// import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
+import 'package:simpleApi/components/providers.dart';
 import 'package:simpleApi/screens/auth_screens/login_page.dart';
 import 'package:simpleApi/models/signup.dart';
 
+// Sign up screen
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key}) : super(key: key);
   @override
@@ -29,6 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final mobileController = TextEditingController();
+  final addressController = TextEditingController();
   final userEmailController = TextEditingController();
   final userNameController = TextEditingController();
   final userPasswordController = TextEditingController();
@@ -37,6 +38,7 @@ class _SignUpPageState extends State<SignUpPage> {
   File _image;
   final _picker = ImagePicker();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  String mobile_value;
 
 //  FOR UPLOADING IMAGE TO BACKEND
   static final String uploadEndPoint = 'http://10.0.2.2:8000/auth/register/';
@@ -52,59 +54,62 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  startUpload() {
-    setStatus('Uploading...');
-    if (null == tmpFile) {
-      setStatus(errorMsg);
-      return;
-    }
-    String fileName = tmpFile.path.split('/').last;
-    upload(fileName);
-  }
+  // startUpload() {
+  //   setStatus('Uploading...');
+  //   if (null == tmpFile) {
+  //     setStatus(errorMsg);
+  //     return;
+  //   }
+  //   String fileName = tmpFile.path.split('/').last;
+  //   upload(fileName);
+  // }
 
-  upload(String fileName) {
-    http.post(uploadEndPoint, body: {
-      "profile_image": base64Image,
-      "name": fileName,
-    }).then((result) {
-      setStatus(result.statusCode == 200 ? result.body : errorMsg);
-    }).catchError((error) {
-      setStatus(error);
-    });
-  }
+  // upload(String fileName) {
+  //   http.post(uploadEndPoint, body: {
+  //     "profile_image": base64Image,
+  //     "name": fileName,
+  //   }).then((result) {
+  //     setStatus(result.statusCode == 200 ? result.body : errorMsg);
+  //   }).catchError((error) {
+  //     setStatus(error);
+  //   });
+  // }
 
-  void onSubmit() {
-    final String first_name = firstNameController.text;
-    final String last_name = lastNameController.text;
-    final String mobile = mobileController.text;
-    final String email = userEmailController.text;
-    final String username = userNameController.text;
-    final String password = userPasswordController.text;
-    final String password2 = userPassword2Controller.text;
+  // void onSubmit() {
+  //   final String first_name = firstNameController.text;
+  //   final String last_name = lastNameController.text;
+  //   final String mobile = mobileController.text;
+  //   final String address = addressController.text;
+  //   final String email = userEmailController.text;
+  //   final String username = userNameController.text;
+  //   final String password = userPasswordController.text;
+  //   final String password2 = userPassword2Controller.text;
 
-    // Provider.of<AppointmentProvider>(context, listen: false).signup(first_name, last_name, mobile, username, password);
-    if (first_name.isNotEmpty &&
-        last_name.isNotEmpty &&
-        mobile.isNotEmpty &&
-        email.isNotEmpty &&
-        username.isNotEmpty &&
-        password.isNotEmpty &&
-        password2.isNotEmpty) {
-      final SignUp signUp = SignUp(
-        first_name: first_name,
-        last_name: last_name,
-        mobile: mobile,
-        email: email,
-        username: username,
-        password: password,
-        password2: password2,
-      );
-      Provider.of<AppointmentProvider>(context, listen: false).signup(signUp);
-      // _showDialog();
-    } else {
-      showErrorSnackBar("Registeration Failed!");
-    }
-  }
+  //   // Provider.of<AppointmentProvider>(context, listen: false).signup(first_name, last_name, mobile, username, password);
+  //   if (first_name.isNotEmpty &&
+  //       last_name.isNotEmpty &&
+  //       mobile.isNotEmpty &&
+  //       address.isNotEmpty &&
+  //       email.isNotEmpty &&
+  //       username.isNotEmpty &&
+  //       password.isNotEmpty &&
+  //       password2.isNotEmpty) {
+  //     final SignUp signUp = SignUp(
+  //       first_name: first_name,
+  //       last_name: last_name,
+  //       mobile: mobile,
+  //       address: address,
+  //       email: email,
+  //       username: username,
+  //       password: password,
+  //       password2: password2,
+  //     );
+  //     Provider.of<AppointmentProvider>(context, listen: false).signup(signUp);
+  //     // _showDialog();
+  //   } else {
+  //     showErrorSnackBar("Registeration Failed!");
+  //   }
+  // }
 
   void showErrorSnackBar(String value) {
     _scaffoldKey.currentState
@@ -117,8 +122,11 @@ class _SignUpPageState extends State<SignUpPage> {
     signUpModel = new SignUpModel();
   }
 
+// Text and image fields for registration
   @override
   Widget build(BuildContext context) {
+    // final mobileNotify = Provider.of<Providers>(context);
+    // mobile_value = mobileNotify.mobileNumber;
     return Stack(children: [
       Image.asset(
         "assets/circular.PNG",
@@ -142,45 +150,43 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Column(
                         children: <Widget>[
                           SizedBox(height: 10.0),
-                          Text(
-                            "Sign Up",
-                            style: TextStyle(
-                                color: Colors.grey[800], fontSize: 25.0),
+                          Row(
+                            children: [
+                              Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                    color: Colors.grey[800],
+                                    fontSize: 25.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 15),
+                          SizedBox(height: 10.0),
                           Center(
                             child: _image == null
-                                ? Container(
-                                    height: 95.0,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        border: Border.all(
-                                            width: 2, color: Colors.black54)),
-                                    child: MaterialButton(
-                                      onPressed: getImage,
-                                      color: primaryColor,
-                                      height: 80.0,
-                                      textColor: Colors.white,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.camera_alt,
-                                            color: Colors.white,
-                                            size: 25,
-                                          ),
-                                          SizedBox(height: 3.0),
-                                          Text(
-                                            'Select Image',
-                                            style: TextStyle(fontSize: 10.0),
-                                          ),
-                                        ],
-                                      ),
-                                      padding: EdgeInsets.all(16),
-                                      shape: CircleBorder(),
+                                ? MaterialButton(
+                                    onPressed: getImage,
+                                    color: primaryColor,
+                                    height: 80.0,
+                                    textColor: Colors.white,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                        SizedBox(height: 3.0),
+                                        Text(
+                                          'Select Image',
+                                          style: TextStyle(fontSize: 10.0),
+                                        ),
+                                      ],
                                     ),
+                                    padding: EdgeInsets.all(16),
+                                    shape: CircleBorder(),
                                   )
                                 : Container(
                                     height: 80.0,
@@ -198,7 +204,8 @@ class _SignUpPageState extends State<SignUpPage> {
                           Text(
                             "Please enter your details to register",
                             textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(
+                                fontSize: 15, color: Colors.grey[800]),
                           ),
                           SizedBox(height: 20),
                           _textField(
@@ -220,14 +227,19 @@ class _SignUpPageState extends State<SignUpPage> {
                               )),
                           SizedBox(height: 20),
                           TextFormField(
+                            enableInteractiveSelection:
+                                false, // will disable paste operation
+                            focusNode: new AlwaysDisabledFocusNode(),
+                            initialValue: '+9779843291455',
+                            // controller: mobileController,
                             style: TextStyle(color: Colors.grey[800]),
-                            keyboardType: TextInputType.number,
-                            maxLength: 10,
+                            // keyboardType: TextInputType.number,
+                            maxLength: 15,
                             inputFormatters: [
                               FilteringTextInputFormatter.digitsOnly
                             ],
-                            controller: mobileController,
-                            validator: (input) => input.length < 4
+                            // controller: mobileController,
+                            validator: (input) => input.length < 3
                                 ? "Do not leave this field empty *"
                                 : null,
                             decoration: new InputDecoration(
@@ -235,7 +247,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               fillColor: Colors.white,
                               contentPadding:
                                   const EdgeInsets.symmetric(vertical: 11.0),
-                              hintText: "Mobile",
+                              // hintText: mobile_value,
+                              // prefixText: '+977',
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                 color: primaryColor,
@@ -250,6 +263,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                             ),
                           ),
+                          SizedBox(height: 20),
+                          _textField(
+                              addressController,
+                              'Enter a valid address *',
+                              'Address',
+                              Icon(
+                                Icons.location_pin,
+                                color: Colors.grey[700],
+                              )),
                           SizedBox(height: 20),
                           _textField(
                               userEmailController,
@@ -281,44 +303,62 @@ class _SignUpPageState extends State<SignUpPage> {
                               'Confirm Password',
                               Icon(Icons.lock_clock, color: Colors.grey[700])),
                           SizedBox(height: 30.0),
-                          FlatButton(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14.0, horizontal: 138.0),
-                              child: Text(
-                                'REGISTER',
-                                style: TextStyle(
-                                    color: buttonTextColor, fontSize: 16.0),
-                              ),
-                              // shape: StadiumBorder(),
-                              color: primaryColor,
-                              onPressed: () async {
-                                if (validateAndSave()) {
-                                  print("Checking user info :-");
-                                  print(signUpModel.toJson());
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 43.0,
+                            child: FlatButton(
+                                // padding: EdgeInsets.symmetric(
+                                //     vertical: 14.0, horizontal: 138.0),
+                                child: Text(
+                                  'REGISTER',
+                                  style: TextStyle(
+                                      color: buttonTextColor, fontSize: 16.0),
+                                ),
+                                // shape: StadiumBorder(),
+                                color: primaryColor,
+                                onPressed: () async {
+                                  // final String mobile = mobileController.text;
+                                  print(mobileController.text);
 
-                                  setState(() {
-                                    isApiCallProcess = true;
-                                  });
-                                  // onSubmit();
-                                  // text field controllers
-                                  final String first_name =
-                                      firstNameController.text;
-                                  final String last_name =
-                                      lastNameController.text;
-                                  final String mobile = mobileController.text;
-                                  final String email = userEmailController.text;
-                                  final String username =
-                                      userNameController.text;
-                                  final String password =
-                                      userPasswordController.text;
-                                  final String password2 =
-                                      userPassword2Controller.text;
+                                  if (validateAndSave()) {
+                                    print("Checking user info :-");
+                                    print(signUpModel.toJson());
 
-                                  _upload(first_name, last_name, mobile, email,
-                                      username, password, password2, _image);
-                                  _showDialog();
-                                }
-                              }),
+                                    setState(() {
+                                      isApiCallProcess = true;
+                                    });
+                                    // onSubmit();
+                                    // text field controllers
+                                    final String first_name =
+                                        firstNameController.text;
+                                    final String last_name =
+                                        lastNameController.text;
+                                    // final String mobile = mobileController.text;
+                                    final String address =
+                                        addressController.text;
+                                    final String email =
+                                        userEmailController.text;
+                                    final String username =
+                                        userNameController.text;
+                                    final String password =
+                                        userPasswordController.text;
+                                    final String password2 =
+                                        userPassword2Controller.text;
+
+                                    _upload(
+                                        first_name,
+                                        last_name,
+                                        // mobile,
+                                        address,
+                                        email,
+                                        username,
+                                        password,
+                                        password2,
+                                        _image);
+                                    _showDialog();
+                                  }
+                                }),
+                          ),
                           SizedBox(height: 15),
                           Column(
                             children: <Widget>[
@@ -327,7 +367,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => SignUpPage()));
+                                          builder: (context) => LoginPage()));
                                 },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -369,24 +409,28 @@ class _SignUpPageState extends State<SignUpPage> {
 // Text field creation
   _textField(TextEditingController controller, String validator,
       String hintText, Icon icon) {
-    return TextFormField(
-      style: TextStyle(color: Colors.grey[800]),
-      keyboardType: TextInputType.text,
-      controller: controller,
-      validator: (input) => input.length < 4 ? "$validator" : null,
-      decoration: new InputDecoration(
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
-        hintText: "$hintText",
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-          color: primaryColor,
-        )),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-          color: Colors.black87,
-        )),
-        prefixIcon: icon,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: TextFormField(
+        style: TextStyle(color: Colors.grey[800]),
+        keyboardType: TextInputType.text,
+        controller: controller,
+        validator: (input) => input.length < 3 ? "$validator" : null,
+        decoration: new InputDecoration(
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
+          hintText: "$hintText",
+          hintStyle: TextStyle(color: Colors.grey[800]),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+            color: primaryColor,
+          )),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+            color: Colors.black87,
+          )),
+          prefixIcon: icon,
+        ),
       ),
     );
   }
@@ -394,33 +438,37 @@ class _SignUpPageState extends State<SignUpPage> {
 // Password field creation
   _passwordTextField(TextEditingController controller, String validator,
       String hintText, Icon icon) {
-    return new TextFormField(
-      style: TextStyle(color: Colors.grey[800]),
-      keyboardType: TextInputType.text,
-      controller: controller,
-      validator: (input) => input.length < 3 ? "$validator" : null,
-      obscureText: hidePassword,
-      decoration: new InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
-        fillColor: Colors.white,
-        hintText: "$hintText",
-        enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-          color: primaryColor,
-        )),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-          color: Colors.green[200],
-        )),
-        prefixIcon: icon,
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              hidePassword = !hidePassword;
-            });
-          },
-          color: Colors.grey[700],
-          icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility),
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: new TextFormField(
+        style: TextStyle(color: Colors.grey[800]),
+        keyboardType: TextInputType.text,
+        controller: controller,
+        validator: (input) => input.length < 3 ? "$validator" : null,
+        obscureText: hidePassword,
+        decoration: new InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
+          fillColor: Colors.white,
+          hintText: "$hintText",
+          hintStyle: TextStyle(color: Colors.grey[800]),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+            color: primaryColor,
+          )),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+            color: Colors.black87,
+          )),
+          prefixIcon: icon,
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                hidePassword = !hidePassword;
+              });
+            },
+            color: Colors.grey[700],
+            icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility),
+          ),
         ),
       ),
     );
@@ -470,8 +518,11 @@ class _SignUpPageState extends State<SignUpPage> {
     });
   }
 
-  void _upload(String fName, String lName, String mobile, String email,
+// Signing the user with proper credentials in the backend
+  void _upload(String fName, String lName, String address, String email,
       String username, String password, String password2, File image) async {
+    final mobileNotify = Provider.of<Providers>(context, listen: false);
+    mobile_value = mobileNotify.mobileNumber;
     Dio dio = new Dio();
 
     try {
@@ -479,7 +530,8 @@ class _SignUpPageState extends State<SignUpPage> {
       FormData data = FormData.fromMap({
         'first_name': fName,
         'last_name': lName,
-        'mobile': mobile,
+        'mobile': '+9779876777',
+        'address': address,
         'email': email,
         'username': username,
         'password': password,
@@ -504,4 +556,9 @@ class _SignUpPageState extends State<SignUpPage> {
       print('File upload failed!');
     }
   }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
 }

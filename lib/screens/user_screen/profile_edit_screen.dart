@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 
 class UserProfileEditScreen extends StatefulWidget {
@@ -17,12 +18,13 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
 
   // to get the details of individual users
   Future fetchUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
     final url = "http://10.0.2.2:8000/properties/";
     final response = await http.get(
       url,
-      headers: {
-        'Authorization': 'Token 86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f'
-      },
+      headers: {'Authorization': 'Token $token'},
     );
     if (response.statusCode == 200) {
       // var data = FetchUser.fromJson(jsonDecode(response.body));
@@ -52,22 +54,17 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
     print(mapResponse.toString());
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        backgroundColor: Colors.deepPurpleAccent,
         centerTitle: true,
         title: Text(
           'Edit Profile',
-          style: TextStyle(color: Colors.grey[800]),
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.arrow_back,
-        //     color: Colors.grey[700],
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
+        // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        // elevation: 1,
       ),
       body: mapResponse == null
           ? Center(
@@ -93,23 +90,32 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                             width: 130,
                             height: 130,
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 4,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor),
-                                boxShadow: [
-                                  BoxShadow(
-                                      spreadRadius: 2,
-                                      blurRadius: 10,
-                                      color: Colors.black.withOpacity(0.1),
-                                      offset: Offset(0, 10))
-                                ],
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                      "https://images.pexels.com/photos/3307758/pexels-photo-3307758.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=250",
-                                    ))),
+                              border: Border.all(
+                                  width: 4,
+                                  color: Theme.of(context)
+                                      .scaffoldBackgroundColor),
+                              boxShadow: [
+                                BoxShadow(
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: Offset(0, 10))
+                              ],
+                              shape: BoxShape.circle,
+                              image: mapResponse['profile_image'] == null
+                                  ? DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: AssetImage(
+                                        "assets/UserLogo.png",
+                                      ))
+                                  : DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        "http://10.0.2.2:8000" +
+                                            mapResponse['profile_image']
+                                                .toString(),
+                                      )),
+                            ),
                           ),
                           Positioned(
                               bottom: 0,
@@ -142,11 +148,16 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                     SizedBox(
                       height: 35,
                     ),
-                    buildTextField("First Name", "Dor Alex", false),
-                    buildTextField("Last Name", "Dor Alex", false),
-                    buildTextField("Email", "demo@gmail.com", false),
-                    buildTextField("Mobile", "9872122234", false),
-                    buildTextField("Address", "Kathmandu", false),
+                    buildTextField("First Name",
+                        mapResponse['first_name'].toString(), false),
+                    buildTextField("Last Name",
+                        mapResponse['last_name'].toString(), false),
+                    // buildTextField(
+                    //     "Email", mapResponse['email'].toString(), false),
+                    buildTextField(
+                        "Mobile", mapResponse['mobile'].toString(), false),
+                    buildTextField(
+                        "Address", mapResponse['address'].toString(), false),
                     SizedBox(
                       height: 13,
                     ),
