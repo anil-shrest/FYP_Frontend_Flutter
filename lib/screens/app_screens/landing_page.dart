@@ -132,14 +132,12 @@ class _LandingPageState extends State<LandingPage> {
                   child: InkWell(
                     onTap: () {
                       // // FOR LOGIN VERIFICATION
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => LoginPage()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => PhoneNumberScreen()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
                       // width: 148.0,
@@ -169,41 +167,6 @@ class _LandingPageState extends State<LandingPage> {
             ),
     );
   }
-
-  Widget _titleInfo() {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30),
-                    Text("Dental",
-                        style: TextStyle(
-                            // color: Colors.grey[700],
-                            color: buttonColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25)),
-                    Text("Home Nepal",
-                        style: TextStyle(
-                            // color: Colors.grey[700],
-                            color: buttonColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 25)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class SlideTile extends StatelessWidget {
@@ -220,13 +183,6 @@ class SlideTile extends StatelessWidget {
           Container(
               width: MediaQuery.of(context).size.height * 0.4,
               height: MediaQuery.of(context).size.height * 0.4,
-
-              // decoration: BoxDecoration(
-              //   image: DecorationImage(
-              //       fit: BoxFit.cover, image: AssetImage(imagePath)),
-              //   borderRadius: BorderRadius.all(Radius.circular(10.0)),
-              //   // color: Colors.deepPurpleAccent,
-              // ),
               child: Image.asset(
                 imagePath,
                 fit: BoxFit.contain,

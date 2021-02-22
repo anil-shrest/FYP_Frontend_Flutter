@@ -57,7 +57,7 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: buttonColor,
         centerTitle: true,
         title: Text(
           'Edit Profile',

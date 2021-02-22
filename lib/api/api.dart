@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpleApi/models/dental_services.dart';
+import 'package:simpleApi/models/doctors.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:simpleApi/models/note.dart';
 import 'package:simpleApi/models/signup.dart';
@@ -13,11 +17,27 @@ class AppointmentProvider with ChangeNotifier {
   // bool _isLoading = false;
 
   AppointmentProvider() {
-    this.fetchTask();
+    // this.fetchTask();
+    fetchServices();
     // this.fetchUser();
+    fetchDoctor();
   }
 
-// Storing appoint details in list
+  // OTP verification
+  // List<Otp> _otp = [];
+
+  // List<Otp> get otp {
+  //   return [..._otp];
+  // }
+
+  // Storing doctors details in list
+  List<Doctor> _doctor = [];
+
+  List<Doctor> get doctor {
+    return [..._doctor];
+  }
+
+  // Storing appoint details in list
   List<Appointment> _appointment = [];
 
   List<Appointment> get appointment {
@@ -38,11 +58,104 @@ class AppointmentProvider with ChangeNotifier {
     return [..._note];
   }
 
+  // Storing notes
+  List<Services> _services = [];
+
+  List<Services> get services {
+    return [..._services];
+  }
+
   // Storing user registeration in list
   List<SignUp> _signUp = [];
 
   List<SignUp> get signUp {
     return [..._signUp];
+  }
+
+  // Future<String> getToken() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String token = prefs.getString('token');
+  //   return token;
+  // }
+
+  // Mobile verify and OTP request
+  Future<String> verifyNumber(String mobile) async {
+    try {
+      final http.Response response =
+          await http.post("http://10.0.2.2:8000/verification/",
+              headers: <String, String>{
+                'Content-type': 'application/json',
+              },
+              body: jsonEncode(<String, dynamic>{
+                'mobile': mobile,
+              }));
+      if (response.statusCode == 200) {
+        print('Phone number verified and code sent');
+        notifyListeners();
+      } else {
+        _showToastMessage(
+            'Mobile verification failed! Try again', Colors.redAccent[200]);
+        print('Phone verification failed!!');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Verify recieved OTP code
+  Future<String> verifyOtp(String mobile, String otp) async {
+    try {
+      final response =
+          await http.post("http://10.0.2.2:8000/verification/token/",
+              headers: {
+                'Content-type': 'application/json',
+              },
+              body: jsonEncode(<String, dynamic>{
+                'mobile': mobile,
+                'otp': otp,
+              }));
+      if (response.statusCode == 200) {
+        print('Otp code confirmed and registered');
+        notifyListeners();
+      } else {
+        _showToastMessage(
+            'Otp code registration failed!', Colors.redAccent[200]);
+        print('Otp code registration failed!!');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Change user password
+  Future<String> changePassword(
+      String password, password2, old_password) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    int pk = prefs.getInt('pk');
+
+    final http.Response response =
+        await http.put('http://10.0.2.2:8000/auth/change_password/$pk/',
+            headers: <String, String>{
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Token $token"
+            },
+            body: jsonEncode(<String, dynamic>{
+              'password': password,
+              'password2': password2,
+              'old_password': old_password,
+            }));
+
+    if (response.statusCode == 200) {
+      print('Password successfully changed :D');
+      notifyListeners();
+      return 'success';
+    } else {
+      _showToastMessage(
+          'Sorry! Unable to change password', Colors.redAccent[200]);
+      // throw Exception('Password change failed!');
+    }
   }
 
 // // to get the details of individual users
@@ -132,7 +245,7 @@ class AppointmentProvider with ChangeNotifier {
       _appointment.add(appointment);
       notifyListeners();
     } else {
-      throw Exception('Failed to add appointment!');
+      _showToastMessage('Failed to add appointment!', Colors.redAccent[200]);
     }
   }
 
@@ -153,7 +266,7 @@ class AppointmentProvider with ChangeNotifier {
           data.map<Appointment>((json) => Appointment.fromJson(json)).toList();
       notifyListeners();
     } else {
-      throw Exception('Failed to load data!');
+      _showToastMessage('Failed to load data!', Colors.redAccent[200]);
     }
   }
 
@@ -210,6 +323,68 @@ class AppointmentProvider with ChangeNotifier {
       throw Exception('Failed to remove data!');
     }
   }
+
+// to get the details of individual users notes details
+  void fetchDoctor() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.getString('token');
+    // print(token);
+
+    final url = "http://10.0.2.2:8000/doctor/list/?format=json";
+    final response = await http.get(
+      url,
+      // headers: {'Authorization': 'Token $token'},
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body) as List;
+      _doctor = data.map<Doctor>((json) => Doctor.fromJson(json)).toList();
+      notifyListeners();
+    } else {
+      throw Exception('Failed to load doctor data!');
+    }
+  }
+
+  // to get the details of individual users appointment details
+  void fetchServices() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.getString('token');
+    // print(token);
+
+    final url = "http://10.0.2.2:8000/service/list/?format=json";
+    final response = await http.get(
+      url,
+      // headers: {'Authorization': 'Token $token'},
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body) as List;
+      _services =
+          data.map<Services>((json) => Services.fromJson(json)).toList();
+      // Saving service id
+      // SharedPreferences sharedPreferences =
+      //     await SharedPreferences.getInstance();
+      // sharedPreferences.setInt('id', id);
+      print('Services count is: -');
+      print(services.length);
+      notifyListeners();
+    } else {
+      _showToastMessage('Failed to load services data!', Colors.redAccent[200]);
+    }
+  }
+
+  // To show appropriate toast message
+  _showToastMessage(String message, Color color) {
+    return Fluttertoast.showToast(
+      msg: "$message",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: color,
+      textColor: Colors.white,
+      fontSize: 14.0,
+    );
+  }
+
+  // http://127.0.0.1:8000/service/list/?format=json <------ TO GET SERVCIES JSON
 
   // void verifyToken(String token) {
   //   var url = "<url to backend api>";

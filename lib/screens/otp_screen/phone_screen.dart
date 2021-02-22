@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/components/providers.dart';
 import 'package:simpleApi/screens/otp_screen/otp_verification.dart';
@@ -23,6 +24,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final otpCodeProvider = Provider.of<AppointmentProvider>(context);
     final mobileNotify = Provider.of<Providers>(context);
     return Scaffold(
       appBar: AppBar(
@@ -88,13 +90,13 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                       mobileNotify.setMobileNumber('+977$mobile_numb');
                       print(mobileNotify.mobileNumber);
                       print(mobileController.text);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OtpScreen()));
+                      // Sending otp code via sms
+                      otpCodeProvider.verifyNumber(mobileNotify.mobileNumber);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => OtpScreen(valPhone: mobileController.text)));
                     }
                   },
-                  child: Text('Confirm',
+                  child: Text('Continue',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 15.0,

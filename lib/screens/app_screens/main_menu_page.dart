@@ -3,11 +3,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/appointment_page.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/doctor_page.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/payment_page.dart';
 import 'package:simpleApi/screens/app_screens/settings_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
+import 'package:simpleApi/screens/doctor_screens/doctor_page.dart';
 import 'package:simpleApi/screens/map_screen/maps.dart';
+import 'package:simpleApi/screens/payment_screen/payment_page.dart';
 import 'package:simpleApi/screens/user_screen/profile_screen.dart';
 import 'bottom_bar_screens/HOME/home_page.dart';
 import 'drawer_screens/app_drawer.dart';
@@ -40,7 +40,6 @@ class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
     _darkModeVal();
-    // print('val is $themeVal');
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -121,10 +120,11 @@ class _MainMenuState extends State<MainMenu> {
                             });
                           },
                           child: AnimatedContainer(
+                            // color: Colors.yellowAccent,
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 0
-                                    ? buttonColor
+                                    ? Color(0xFF8271FD)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -165,7 +165,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 1
-                                    ? buttonColor
+                                    ? Color(0xFF7cd1a8)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -206,7 +206,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 2
-                                    ? buttonColor
+                                    ? Colors.grey[500]
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -247,7 +247,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 3
-                                    ? buttonColor
+                                    ? Colors.redAccent
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(

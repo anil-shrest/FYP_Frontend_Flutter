@@ -3,12 +3,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/components/constants.dart';
 import 'package:simpleApi/components/providers.dart';
 
 // Main body of otp screen
 class OtpBody extends StatelessWidget {
+  final valPhone;
+
+  const OtpBody({Key key, this.valPhone}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final mobileNotify = Provider.of<Providers>(context);
@@ -34,7 +38,7 @@ class OtpBody extends StatelessWidget {
               SizedBox(height: 15.0),
               timer(),
               SizedBox(height: 45.0),
-              OtpFields(),
+              OtpFields(valPhone: valPhone),
             ],
           ),
         ),
@@ -63,16 +67,28 @@ class OtpBody extends StatelessWidget {
 
 // Creating otp input fields
 class OtpFields extends StatefulWidget {
+  final valPhone;
+
+  const OtpFields({Key key, this.valPhone}) : super(key: key);
   @override
   _OtpFieldsState createState() => _OtpFieldsState();
 }
 
 class _OtpFieldsState extends State<OtpFields> {
+  final pin1Controller = TextEditingController();
+  final pin2Controller = TextEditingController();
+  final pin3Controller = TextEditingController();
+  final pin4Controller = TextEditingController();
+  final pin5Controller = TextEditingController();
+  final pin6Controller = TextEditingController();
+
   FocusNode pin2;
   FocusNode pin3;
   FocusNode pin4;
   FocusNode pin5;
   FocusNode pin6;
+
+  String userInputOtp;
 
   @override
   void initState() {
@@ -103,6 +119,10 @@ class _OtpFieldsState extends State<OtpFields> {
 
   @override
   Widget build(BuildContext context) {
+    final otpVerifyProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
+    final mobileNotify = Provider.of<Providers>(context);
+    // final userProvider = Provider.of<AppointmentProvider>(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -113,6 +133,7 @@ class _OtpFieldsState extends State<OtpFields> {
               child: SizedBox(
                 width: 42.0,
                 child: TextFormField(
+                    controller: pin1Controller,
                     inputFormatters: [LengthLimitingTextInputFormatter(1)],
                     // maxLength: 1,
                     autofocus: true,
@@ -129,6 +150,7 @@ class _OtpFieldsState extends State<OtpFields> {
             SizedBox(
               width: 42.0,
               child: TextFormField(
+                  controller: pin2Controller,
                   inputFormatters: [LengthLimitingTextInputFormatter(1)],
                   focusNode: pin2,
                   obscureText: true,
@@ -143,6 +165,7 @@ class _OtpFieldsState extends State<OtpFields> {
             SizedBox(
               width: 42.0,
               child: TextFormField(
+                  controller: pin3Controller,
                   inputFormatters: [LengthLimitingTextInputFormatter(1)],
                   focusNode: pin3,
                   obscureText: true,
@@ -157,6 +180,7 @@ class _OtpFieldsState extends State<OtpFields> {
             SizedBox(
               width: 42.0,
               child: TextFormField(
+                  controller: pin4Controller,
                   inputFormatters: [LengthLimitingTextInputFormatter(1)],
                   focusNode: pin4,
                   obscureText: true,
@@ -171,6 +195,7 @@ class _OtpFieldsState extends State<OtpFields> {
             SizedBox(
               width: 42.0,
               child: TextFormField(
+                  controller: pin5Controller,
                   inputFormatters: [LengthLimitingTextInputFormatter(1)],
                   focusNode: pin5,
                   obscureText: true,
@@ -185,6 +210,7 @@ class _OtpFieldsState extends State<OtpFields> {
             SizedBox(
               width: 42.0,
               child: TextFormField(
+                  controller: pin6Controller,
                   inputFormatters: [LengthLimitingTextInputFormatter(1)],
                   focusNode: pin6,
                   obscureText: true,
@@ -203,7 +229,19 @@ class _OtpFieldsState extends State<OtpFields> {
           width: MediaQuery.of(context).size.width,
           height: 40.0,
           child: RaisedButton(
-            onPressed: () {},
+            onPressed: () {
+              userInputOtp = pin1Controller.text +
+                  pin2Controller.text +
+                  pin3Controller.text +
+                  pin4Controller.text +
+                  pin5Controller.text +
+                  pin6Controller.text;
+              userInputOtp.toString();
+              print('User given OTP is: $userInputOtp');
+
+              // Sending OTP for verification
+              otpVerifyProvider.verifyOtp(widget.valPhone, userInputOtp);
+            },
             child: Text('Continue',
                 style: TextStyle(
                     color: Colors.white, fontSize: 15.0, letterSpacing: 0.2)),

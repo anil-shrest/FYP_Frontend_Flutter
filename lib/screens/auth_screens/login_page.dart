@@ -7,7 +7,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/models/credential.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
@@ -228,11 +227,11 @@ class _LoginPageState extends State<LoginPage> {
                                       if (validateAndSave()) {
                                         print(loginRequestModel.toJson());
 
-                                        setState(() {
-                                          isApiCallProcess = true;
-                                          this.usernameController.text = '';
-                                          this.passwordController.text = '';
-                                        });
+                                        // setState(() {
+                                        //   isApiCallProcess = true;
+                                        //   this.usernameController.text = '';
+                                        //   this.passwordController.text = '';
+                                        // });
                                         // signIn(usernameController.text, passwordController.text);
                                         // loginUser(usernameController.text,
                                         //     passwordController.text);
@@ -363,19 +362,27 @@ class _LoginPageState extends State<LoginPage> {
       print(token);
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('token', token);
-      checkLogin(token);
+      String tokenVal = preferences.getString('token');
+      checkLogin(tokenVal);
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => MainMenu()));
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
-          (Route<dynamic> route) => false);
+      if (token != null) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
+            (Route<dynamic> route) => false);
+      } else {
+        checkLogin(token);
+      }
       return token;
     } else {
-      _showToastMessage('Login failed!');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-      // throw Exception('Failed to load!');
+      _showToastMessage("Invalid Credentials");
     }
+    // else {
+    //   _showToastMessage('Login failed!');
+    //   Navigator.push(
+    //       context, MaterialPageRoute(builder: (context) => LoginPage()));
+    //   // throw Exception('Failed to load!');
+    // }
   }
 
   // var received_token;
@@ -480,7 +487,7 @@ class _LoginPageState extends State<LoginPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.deepPurple[400],
+        backgroundColor: Colors.grey[600],
         textColor: Colors.white,
         fontSize: 14.0,
       );

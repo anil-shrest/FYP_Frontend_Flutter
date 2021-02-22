@@ -26,7 +26,7 @@ class _AppointHomePageState extends State<AppointHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final appointmentProvider = Provider.of<AppointmentProvider>(context, listen: false);
+    final appointmentProvider = Provider.of<AppointmentProvider>(context);
     int list_count = appointmentProvider.appointment.length;
     Size size = MediaQuery.of(context).size;
     print('No. of appointments: $list_count');

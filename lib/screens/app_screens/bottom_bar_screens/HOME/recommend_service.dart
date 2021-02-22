@@ -1,53 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/providers.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/HOME/details_page.dart';
 
 // Recommendation services view method
-class RecommendsServices extends StatelessWidget {
+class RecommendsServices extends StatefulWidget {
   RecommendsServices({
     Key key,
   }) : super(key: key);
 
   @override
+  _RecommendsServicesState createState() => _RecommendsServicesState();
+}
+
+class _RecommendsServicesState extends State<RecommendsServices> {
+  @override
   Widget build(BuildContext context) {
+    final serviceProvider = Provider.of<AppointmentProvider>(context);
+    // int list_count = serviceProvider.services.length;
+    // print('Services count: $list_count');
+    // print(serviceProvider.services.first.doctor.full_name);
     var indexProvider = Provider.of<Providers>(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
+    return SafeArea(
+      child: Column(
         children: [
-          RecommedServices(
-            image: 'assets/rct.jpg',
-            title: 'Root Canal Treatment',
-            press: () {
-              indexProvider.indexValues(1);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen()));
-            },
-          ),
-          RecommedServices(
-            image: 'assets/crowns.jpeg',
-            title: 'Crowns and Caps',
-            press: () {
-              indexProvider.indexValues(2);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen()));
-            },
-          ),
-          RecommedServices(
-            image: 'assets/gum.jpeg',
-            title: 'Gum Surgery',
-            press: () {
-              indexProvider.indexValues(3);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsScreen()));
-            },
+          SizedBox(
+            height: 300.0,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: serviceProvider.services.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return RecommedServices(
+                    image: serviceProvider.services[index].service_image,
+                    title: serviceProvider.services[index].service_title,
+                    press: () {
+                      print(serviceProvider.services[index].service_image);
+                      indexProvider.indexValues(3);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailsScreen(
+                                    title: serviceProvider
+                                        .services[index].service_title,
+                                    details: serviceProvider
+                                        .services[index].service_detail,
+                                    doc_name: serviceProvider
+                                        .services[index].doctor.full_name,
+                                    nmc_number: serviceProvider
+                                        .services[index].doctor.nmc_number,
+                                    doc_image: serviceProvider
+                                        .services[index].doctor.photo,
+                                  )));
+                    },
+                  );
+                }),
           ),
         ],
       ),
@@ -56,7 +64,7 @@ class RecommendsServices extends StatelessWidget {
 }
 
 // Recommedation services main method
-class RecommedServices extends StatelessWidget {
+class RecommedServices extends StatefulWidget {
   const RecommedServices({
     Key key,
     this.image,
@@ -68,7 +76,14 @@ class RecommedServices extends StatelessWidget {
   final Function press;
 
   @override
+  _RecommedServicesState createState() => _RecommedServicesState();
+}
+
+class _RecommedServicesState extends State<RecommedServices> {
+  @override
   Widget build(BuildContext context) {
+    final serviceProvider = Provider.of<AppointmentProvider>(context);
+    // int list_count = serviceProvider.services.length;
     Size size = MediaQuery.of(context).size;
     return Container(
       // color: Colors.white,
@@ -86,13 +101,15 @@ class RecommedServices extends StatelessWidget {
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
                 image: DecorationImage(
-                  image: AssetImage(image),
-                  fit: BoxFit.cover,
+                  image: widget.image != null
+                      ? NetworkImage('${widget.image}')
+                      : AssetImage('assets/gum.jpeg'),
+                  fit: BoxFit.fill,
                 ),
               ),
             ),
             GestureDetector(
-              onTap: press,
+              onTap: widget.press,
               child: Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -104,22 +121,23 @@ class RecommedServices extends StatelessWidget {
                     BoxShadow(
                       offset: Offset(0, 10),
                       blurRadius: 15,
-                      color: Colors.grey[300],
+                      color: Colors.black26,
                     )
                   ],
                 ),
                 child: Container(
                   width: size.width * 0.6,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          child: Text(
-                            '$title',
-                            style: TextStyle(
-                                fontSize: 15.0, fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                            child: Text(
+                          '${widget.title}',
+                          style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[800]),
+                        )),
                         Container(
                           child: Text('Details',
                               style: TextStyle(

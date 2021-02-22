@@ -1,25 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class SetReminderPage extends StatefulWidget {
-//   @override
-//   _SetReminderPageState createState() => _SetReminderPageState();
-// }
-
-// class _SetReminderPageState extends State<SetReminderPage> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       color: Colors.purpleAccent,
-//       home: Scaffold(
-//         backgroundColor: Colors.blueGrey,
-//         // appBar: AppBar(title: Text('Settings')),
-//         body: Center(child: Text('Set Reminder Page')),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -40,12 +18,13 @@ class _SetReminderPageState extends State<SetReminderPage> {
   ReminderHelper _alarmHelper = ReminderHelper();
   Future<List<RemiderInfo>> _alarms;
   List<RemiderInfo> _currentAlarms;
+  final titleController = TextEditingController();
 
   @override
   void initState() {
     _alarmTime = DateTime.now();
     _alarmHelper.initializeDatabase().then((value) {
-      print('------database intialized');
+      print('--> Database intialized <--');
       loadAlarms();
     });
     super.initState();
@@ -181,7 +160,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
                                   horizontal: 32, vertical: 16),
                               onPressed: () {
                                 _alarmTimeString =
-                                    DateFormat('HH:mm').format(DateTime.now());
+                                    DateFormat('HH:mm aa').format(DateTime.now());
                                 showModalBottomSheet(
                                   useRootNavigator: true,
                                   context: context,
@@ -197,6 +176,8 @@ class _SetReminderPageState extends State<SetReminderPage> {
                                         return Container(
                                           padding: const EdgeInsets.all(32),
                                           child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
                                             children: [
                                               FlatButton(
                                                 onPressed: () async {
@@ -232,8 +213,43 @@ class _SetReminderPageState extends State<SetReminderPage> {
                                                       TextStyle(fontSize: 32),
                                                 ),
                                               ),
-                                              TextField(
-
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: TextFormField(
+                                                  style: TextStyle(
+                                                      color: Colors.grey[800]),
+                                                  keyboardType:
+                                                      TextInputType.text,
+                                                  controller: titleController,
+                                                  decoration:
+                                                      new InputDecoration(
+                                                    fillColor: Colors.white,
+                                                    contentPadding:
+                                                        const EdgeInsets
+                                                                .symmetric(
+                                                            vertical: 11.0),
+                                                    hintText: "Reminder Title",
+                                                    hintStyle: TextStyle(
+                                                        color:
+                                                            Colors.grey[800]),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                      color: Colors.grey[800],
+                                                    )),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                            borderSide:
+                                                                BorderSide(
+                                                      color: Colors.black87,
+                                                    )),
+                                                    prefixIcon:
+                                                        Icon(Icons.note_add),
+                                                  ),
+                                                ),
                                               ),
                                               // ListTile(
                                               //   title: Text('Repeat'),
@@ -326,8 +342,12 @@ class _SetReminderPageState extends State<SetReminderPage> {
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.schedule(0, 'Office', alarmInfo.title,
-        scheduledNotificationDateTime, platformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        0,
+        'Dental Home',
+        alarmInfo.title,
+        scheduledNotificationDateTime,
+        platformChannelSpecifics);
   }
 
   void onSaveAlarm() {
@@ -340,7 +360,7 @@ class _SetReminderPageState extends State<SetReminderPage> {
     var alarmInfo = RemiderInfo(
       alarmDateTime: scheduleAlarmDateTime,
       gradientColorIndex: _currentAlarms.length,
-      title: 'alarm',
+      title: titleController.text,
     );
     _alarmHelper.insertAlarm(alarmInfo);
     scheduleAlarm(scheduleAlarmDateTime, alarmInfo);

@@ -19,3 +19,5 @@ final lightTheme = ThemeData(
   accentIconTheme: IconThemeData(color: Colors.white),
   dividerColor: Colors.white54,
 );
+
+// color: Color(0xFF2cd1a8)

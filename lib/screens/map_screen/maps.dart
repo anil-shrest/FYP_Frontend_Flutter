@@ -165,6 +165,9 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
         title: Text(
           'Location',
           style: TextStyle(color: Colors.white),

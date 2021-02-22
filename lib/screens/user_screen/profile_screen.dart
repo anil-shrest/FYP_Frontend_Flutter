@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/screens/user_screen/profile_edit_screen.dart';
 
+import 'user_settings.dart';
+
+// User Profile UI creation with data
 class UserProfileScreen extends StatefulWidget {
   @override
   _UserProfileScreenState createState() => _UserProfileScreenState();
@@ -14,8 +17,8 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   bool showPassword = false;
-  String stringResponse;
-  List listResponse;
+  // String stringResponse;
+  // List listResponse;
   Map mapResponse;
 
   // to get the details of individual users
@@ -37,11 +40,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       // notifyListeners();
       setState(() {
         mapResponse = json.decode(response.body);
-
-        // listResponse = mapResponse['username'];
       });
+      // Saving user primary key
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      preferences.setInt('pk', mapResponse['pk']);
+      // for (var i = 0; i < mapResponse.length; i++)
+      //   print(mapResponse[i.toString()]);
     } else {
-      throw Exception('Failed to load data!');
+      // throw Exception('Failed to load data!');
+      print('No INTERNET');
     }
   }
 
@@ -63,23 +70,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         iconTheme: IconThemeData(
           color: Colors.white, //change your color here
         ),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: buttonColor,
         centerTitle: true,
         title: Text(
           'User Profile',
           style: TextStyle(color: Colors.white),
         ),
-        // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // elevation: 1,
-        // leading: IconButton(
-        //   icon: Icon(
-        //     Icons.arrow_back,
-        //     color: Colors.grey[700],
-        //   ),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => UserSetting()));
+            },
+          )
+        ],
       ),
       body: mapResponse == null
           ? Center(
@@ -124,7 +132,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                           "assets/UserLogo.png",
                                         ))
                                     : DecorationImage(
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.contain,
                                         image: NetworkImage(
                                           "http://10.0.2.2:8000" +
                                               mapResponse['profile_image']
@@ -152,9 +160,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       children: [
                         ClipOval(
                           child: Material(
-                            color: Colors.green, // button color
+                            color: Color(0xFF2cd1a8),
                             child: InkWell(
-                              splashColor: buttonColor, // inkwell color
+                              splashColor: buttonColor,
                               child: SizedBox(
                                   width: 56,
                                   height: 56,
