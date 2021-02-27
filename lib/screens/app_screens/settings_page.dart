@@ -133,7 +133,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             // shape: ,
             tileColor: Colors.black12,
-            title: Text('Dark Theme'),
+            title: Text('Dark Theme',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
             contentPadding: const EdgeInsets.only(left: 16.0),
             leading: Icon(
               Icons.wb_sunny_outlined,
@@ -150,6 +151,30 @@ class _SettingsPageState extends State<SettingsPage> {
                   onThemeChanged(val, themeNotifier);
                 },
               ),
+            ),
+          ),
+          SizedBox(height: 5.0),
+          ListTile(
+            // shape: ,
+            tileColor: Colors.black12,
+            title: Text('Give Feedbacks',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+            contentPadding: const EdgeInsets.only(left: 16.0),
+            leading: Icon(
+              Icons.rate_review,
+              color: Colors.blueAccent,
+            ),
+          ),
+          SizedBox(height: 5.0),
+          ListTile(
+            // shape: ,
+            tileColor: Colors.black12,
+            title: Text('About App',
+                style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+            contentPadding: const EdgeInsets.only(left: 16.0),
+            leading: Icon(
+              Icons.info_outline,
+              color: Colors.teal,
             ),
           )
         ],

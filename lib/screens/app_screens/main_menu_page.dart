@@ -120,11 +120,10 @@ class _MainMenuState extends State<MainMenu> {
                             });
                           },
                           child: AnimatedContainer(
-                            // color: Colors.yellowAccent,
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 0
-                                    ? Color(0xFF8271FD)
+                                    ? Color(0xFFb0bffc)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -135,14 +134,15 @@ class _MainMenuState extends State<MainMenu> {
                                   Icon(
                                     Icons.home,
                                     color: _index == 0
-                                        ? Colors.white
+                                        ? Color(0xFF07db07)
                                         : buttonColor,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding: const EdgeInsets.only(left: 4.0),
                                     child: Text(
                                       _index == 0 ? 'Home' : '',
                                       style: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                         color: _index == 0
                                             ? Colors.white
                                             : Colors.black,
@@ -180,12 +180,13 @@ class _MainMenuState extends State<MainMenu> {
                                         : buttonColor,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding: const EdgeInsets.only(left: 5.0),
                                     child: Text(
                                       _index == 1 ? 'Doctor' : '',
                                       style: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                         color: _index == 1
-                                            ? Colors.white
+                                            ? Colors.black
                                             : Colors.black,
                                       ),
                                     ),
@@ -206,7 +207,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 2
-                                    ? Colors.grey[500]
+                                    ? Colors.blue[200]
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -221,12 +222,13 @@ class _MainMenuState extends State<MainMenu> {
                                         : buttonColor,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding: const EdgeInsets.only(left: 7.0),
                                     child: Text(
                                       _index == 2 ? 'Appointment' : '',
                                       style: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                         color: _index == 2
-                                            ? Colors.white
+                                            ? Colors.black
                                             : Colors.black,
                                       ),
                                     ),
@@ -262,12 +264,13 @@ class _MainMenuState extends State<MainMenu> {
                                         : buttonColor,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding: const EdgeInsets.only(left: 6.0),
                                     child: Text(
                                       _index == 3 ? 'Payment' : '',
                                       style: TextStyle(
+                                        fontWeight: FontWeight.w500,
                                         color: _index == 3
-                                            ? Colors.white
+                                            ? Colors.black
                                             : Colors.black,
                                       ),
                                     ),

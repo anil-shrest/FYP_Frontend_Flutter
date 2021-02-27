@@ -108,37 +108,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     );
   }
 
-  // Text field creation
-  _textField(TextEditingController controller, String validator,
-      String hintText, Icon icon) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: TextFormField(
-        obscureText: true,
-        // style: TextStyle(color: Colors.grey[800]),
-        keyboardType: TextInputType.text,
-        controller: controller,
-        validator: (input) => input.length < 3 ? "$validator" : null,
-        decoration: new InputDecoration(
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
-          hintText: "$hintText",
-          // hintStyle: TextStyle(color: Colors.grey[800]),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: primaryColor,
-          )),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: Colors.grey[700],
-          )),
-          focusColor: Colors.tealAccent,
-          prefixIcon: icon,
-        ),
-      ),
-    );
-  }
-
   // Password field creation
   _passwordTextField(TextEditingController controller, String validator,
       String hintText, Icon icon) {

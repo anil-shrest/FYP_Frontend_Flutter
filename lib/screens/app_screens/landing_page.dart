@@ -10,23 +10,7 @@ import 'package:simpleApi/screens/otp_screen/phone_screen.dart';
 
 import 'main_menu_page.dart';
 
-// class Splash extends StatefulWidget {
-//   @override
-//   _SplashState createState() => _SplashState();
-// }
-
-// class _SplashState extends State<Splash> {
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold();
-//   }
-// }
-
+//  Landing page view creation
 class LandingPage extends StatefulWidget {
   @override
   _LandingPageState createState() => _LandingPageState();
@@ -41,12 +25,12 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     mySlides = getSlides();
     pageController = new PageController();
   }
 
+  // Crousel indicator creation
   Widget buildPageIndicator(bool isCurrentPage) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2.0),
@@ -65,11 +49,6 @@ class _LandingPageState extends State<LandingPage> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Column(
-          //   children: [
-          //     Align(child: _titleInfo(), alignment: Alignment.topLeft),
-          //   ],
-          // ),
           PageView.builder(
             controller: pageController,
             itemCount: mySlides.length,
@@ -88,6 +67,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ],
       ),
+      //  Features info slides 
       bottomSheet: slideIndex != mySlides.length - 1
           ? Container(
               height: Platform.isAndroid ? 50 : 70,
@@ -132,12 +112,12 @@ class _LandingPageState extends State<LandingPage> {
                   child: InkWell(
                     onTap: () {
                       // // FOR LOGIN VERIFICATION
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainMenu()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
                       // width: 148.0,
@@ -169,6 +149,7 @@ class _LandingPageState extends State<LandingPage> {
   }
 }
 
+// SLiders creation
 class SlideTile extends StatelessWidget {
   String imagePath, title, desc;
   SlideTile({this.imagePath, this.title, this.desc});

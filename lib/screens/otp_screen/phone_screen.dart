@@ -111,10 +111,10 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     );
   }
 
-  String validateNumber(String value) {
-    if (!(value.length < 9) && value.isNotEmpty) {
-      return "Number should contain 10 digits!";
-    }
-    return null;
-  }
+  // String validateNumber(String value) {
+  //   if (!(value.length < 9) && value.isNotEmpty) {
+  //     return "Number should contain 10 digits!";
+  //   }
+  //   return null;
+  // }
 }

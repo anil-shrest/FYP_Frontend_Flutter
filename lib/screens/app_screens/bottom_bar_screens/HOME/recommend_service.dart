@@ -46,6 +46,8 @@ class _RecommendsServicesState extends State<RecommendsServices> {
                                         .services[index].service_title,
                                     details: serviceProvider
                                         .services[index].service_detail,
+                                    service_image: serviceProvider
+                                        .services[index].service_image,
                                     doc_name: serviceProvider
                                         .services[index].doctor.full_name,
                                     nmc_number: serviceProvider

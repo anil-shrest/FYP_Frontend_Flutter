@@ -42,7 +42,7 @@ class _AppointHomePageState extends State<AppointHomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title: Text(
-                          appointmentProvider.appointment[index].appointmentBy,
+                          appointmentProvider.appointment[index].appointmentBy.full_name,
                           style: TextStyle(
                               color: Colors.green,
                               fontSize: 18,

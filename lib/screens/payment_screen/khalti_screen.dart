@@ -26,7 +26,6 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
 
   //  Khalti payment initiation
   _payViaKhalti() async {
-
     double amount = double.parse(amountController.text.trim()) * 100;
 
     FlutterKhalti _flutterKhalti = FlutterKhalti.configure(

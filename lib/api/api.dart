@@ -17,18 +17,11 @@ class AppointmentProvider with ChangeNotifier {
   // bool _isLoading = false;
 
   AppointmentProvider() {
-    // this.fetchTask();
-    fetchServices();
-    // this.fetchUser();
-    fetchDoctor();
+    // fetchTask();
+    // fetchServices();
+    // fetchDoctor();
   }
 
-  // OTP verification
-  // List<Otp> _otp = [];
-
-  // List<Otp> get otp {
-  //   return [..._otp];
-  // }
 
   // Storing doctors details in list
   List<Doctor> _doctor = [];
@@ -38,9 +31,9 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // Storing appoint details in list
-  List<Appointment> _appointment = [];
+  List<Appointments> _appointment = [];
 
-  List<Appointment> get appointment {
+  List<Appointments> get appointment {
     return [..._appointment];
   }
 
@@ -229,7 +222,7 @@ class AppointmentProvider with ChangeNotifier {
   // }
 
 // to add new appointment
-  void addAppoint(Appointment appointment) async {
+  void addAppoint(Appointments appointment) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
 
@@ -262,8 +255,9 @@ class AppointmentProvider with ChangeNotifier {
     );
     if (response.statusCode == 200) {
       var data = json.decode(response.body) as List;
-      _appointment =
-          data.map<Appointment>((json) => Appointment.fromJson(json)).toList();
+      _appointment = data
+          .map<Appointments>((json) => Appointments.fromJson(json))
+          .toList();
       notifyListeners();
     } else {
       _showToastMessage('Failed to load data!', Colors.redAccent[200]);
@@ -271,7 +265,7 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // to delete or cancel the appointment
-  void deleteAppoint(Appointment appointment) async {
+  void deleteAppoint(Appointments appointment) async {
     final response =
         await http.delete("http://10.0.2.2:8000/appointment/list/");
     if (response.statusCode == 204) {

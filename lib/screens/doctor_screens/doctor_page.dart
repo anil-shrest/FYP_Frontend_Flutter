@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:simpleApi/api/api.dart';
 
+//  All doctor list and view screen
 class DoctorPageScreen extends StatefulWidget {
   @override
   _DoctorPageScreenState createState() => _DoctorPageScreenState();
@@ -15,7 +15,6 @@ class _DoctorPageScreenState extends State<DoctorPageScreen> {
     int list_count = doctorProvider.doctor.length;
     print('Doctor count: $list_count');
     return Container(
-      // color: Colors.greenAccent,
       child: Column(
         children: [
           SizedBox(height: 20.0),
@@ -42,7 +41,12 @@ class _DoctorPageScreenState extends State<DoctorPageScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
-                        doctorProvider.doctor[index].nmc_number,
+                        'Nmc No: ' +
+                            doctorProvider.doctor[index].nmc_number +
+                            '\nSpeciality: ' +
+                            doctorProvider.doctor[index].speciality +
+                            '\nType: ' +
+                            doctorProvider.doctor[index].doc_type,
                         style: TextStyle(fontSize: 15, color: Colors.black),
                       ),
                       leading: Transform.scale(
