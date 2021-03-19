@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:simpleApi/components/text.dart';
+// import 'package:DentalHome/components/text.dart';
 
 // class SettingsPage extends StatefulWidget {
 //   @override
@@ -100,8 +100,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/components/color_theme.dart';
-import 'package:simpleApi/components/theme.dart';
+import 'package:DentalHome/components/color_theme.dart';
+import 'package:DentalHome/components/theme.dart';
 
 class SettingsPage extends StatefulWidget {
   @override

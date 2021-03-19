@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/models/dental_services.dart';
-import 'package:simpleApi/models/doctors.dart';
-import 'package:simpleApi/models/login.dart';
-import 'package:simpleApi/models/note.dart';
-import 'package:simpleApi/models/signup.dart';
-import 'package:simpleApi/models/time_table.dart';
+import 'package:DentalHome/models/dental_services.dart';
+import 'package:DentalHome/models/doctors.dart';
+import 'package:DentalHome/models/login.dart';
+import 'package:DentalHome/models/note.dart';
+import 'package:DentalHome/models/signup.dart';
+import 'package:DentalHome/models/time_table.dart';
 import '../models/appoint.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,10 +18,10 @@ class AppointmentProvider with ChangeNotifier {
   // bool _isLoading = false;
 
   AppointmentProvider() {
-    // fetchAppointment();
-    // fetchServices();
-    // fetchTimeTable();
-    // fetchDoctor();
+    fetchAppointment();
+    fetchServices();
+    fetchTimeTable();
+    fetchDoctor();
   }
 
   // Storing doctors details in list

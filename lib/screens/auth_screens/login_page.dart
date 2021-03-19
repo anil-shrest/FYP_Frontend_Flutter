@@ -6,12 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/models/login.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/models/login.dart';
 import 'package:http/http.dart' as http;
-import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
-import 'package:simpleApi/screens/auth_screens/register_page.dart';
+import 'package:DentalHome/screens/app_screens/main_menu_page.dart';
+import 'package:DentalHome/screens/auth_screens/register_page.dart';
 
 import '../../ProgressHUD.dart';
 import 'set_new_password.dart';
@@ -25,12 +25,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool hidePassword = true;
   bool isApiCallProcess = false;
+  bool isStaffCheckbox = false;
+
   String token_received_from_auth;
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   LoginRequestModel loginRequestModel;
+  Map mapResponse;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-
   final TextEditingController usernameController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
@@ -38,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    // fetchUser();
     loginRequestModel = new LoginRequestModel();
   }
 
@@ -56,6 +60,42 @@ class _LoginPageState extends State<LoginPage> {
       inAsyncCall: isApiCallProcess,
       opacity: 0.3,
     );
+  }
+
+  // to get the details of individual users
+  Future fetchUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    final url = "http://10.0.2.2:8000/properties/";
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': "Token $token",
+      },
+    );
+    if (response.statusCode == 200) {
+      // var data = FetchUser.fromJson(jsonDecode(response.body));
+      // var data = json.decode(response.body) as List;
+      // _user = data.map<FetchUser>((json) => FetchUser.fromJson(json)).toList();
+      // notifyListeners();
+      setState(() {
+        mapResponse = json.decode(response.body);
+        print(mapResponse['id']);
+      });
+      // Saving user primary key
+      // SharedPreferences preferences = await SharedPreferences.getInstance();
+      // preferences.setInt('pk', mapResponse['id']);
+      prefs.setBool('is_staff', mapResponse['is_staff']);
+      print('Staff is');
+      print(mapResponse['is_staff']);
+      // print(mapResponse['is_staff']);
+      // for (var i = 0; i < mapResponse.length; i++)
+      //   print(mapResponse[i.toString()]);
+    } else {
+      // throw Exception('Failed to load data!');
+      print('No INTERNET');
+    }
   }
 
 // To show appropriate toast message
@@ -191,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: 30),
+                                SizedBox(height: 40),
                                 Container(
                                   width: MediaQuery.of(context).size.width,
                                   height: 43.0,
@@ -225,7 +265,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Column(
                   children: <Widget>[
-                    SizedBox(height: 15.0),
                     GestureDetector(
                       onTap: () {
                         _showDialog();
@@ -350,7 +389,8 @@ class _LoginPageState extends State<LoginPage> {
                 if (_formKey.currentState.validate()) {
                   print(emailController.text);
                   // emailChangeProvider.getResetEmail(emailController.text);
-                  _showToastMessage('Reset url has been sent to the mail', Colors.teal[300]);
+                  _showToastMessage(
+                      'Reset url has been sent to the mail', Colors.teal[300]);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -395,15 +435,17 @@ class _LoginPageState extends State<LoginPage> {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       preferences.setString('token', token);
       String tokenVal = preferences.getString('token');
-      checkLogin(tokenVal);
+      // checkLogin(tokenVal);
+      fetchUser();
+      print('from api call');
+      bool val = preferences.getBool('is_staff');
+      print(val);
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => MainMenu()));
       if (token != null) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
             (Route<dynamic> route) => false);
-      } else {
-        checkLogin(token);
       }
       return token;
     } else {
@@ -411,29 +453,29 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future checkLogin(String token) async {
-    if (token != null) {
-      Fluttertoast.showToast(
-        msg: "Login Successful 🙏",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.teal[300],
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
-    } else {
-      Fluttertoast.showToast(
-        msg: "Invalid username or password!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red[300],
-        textColor: Colors.white,
-        fontSize: 14.0,
-      );
-    }
-  }
+  // Future checkLogin(String token) async {
+  //   if (token != null) {
+  //     Fluttertoast.showToast(
+  //       msg: "Login Successful 🙏",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.teal[300],
+  //       textColor: Colors.white,
+  //       fontSize: 14.0,
+  //     );
+  //   } else {
+  //     Fluttertoast.showToast(
+  //       msg: "Invalid username or password!",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red[300],
+  //       textColor: Colors.white,
+  //       fontSize: 14.0,
+  //     );
+  //   }
+  // }
 }
 
 class _SystemPadding extends StatelessWidget {

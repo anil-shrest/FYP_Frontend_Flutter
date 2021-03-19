@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/colors.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override

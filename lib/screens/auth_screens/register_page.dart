@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/screens/auth_screens/login_page.dart';
-import 'package:simpleApi/models/signup.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/auth_screens/login_page.dart';
+import 'package:DentalHome/models/signup.dart';
 
 // Sign up screen
 class SignUpPage extends StatefulWidget {

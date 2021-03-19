@@ -4,10 +4,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/color_theme.dart';
-import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/components/text.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/color_theme.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/components/text.dart';
 import 'components/theme.dart';
 import 'screens/app_screens/splash_screen.dart';
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 // import 'package:flutter_khalti/flutter_khalti.dart';
 // import 'package:provider/provider.dart';
-// import 'package:simpleApi/components/colors.dart';
-// import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/screens/app_screens/landing_page.dart';
+// import 'package:DentalHome/components/colors.dart';
+// import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/app_screens/landing_page.dart';
 
 import 'khalti_screen.dart';
 

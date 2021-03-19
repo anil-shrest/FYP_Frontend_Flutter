@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
+import 'package:DentalHome/api/api.dart';
 
 class AppointHomePage extends StatefulWidget {
   // bool _appointmentTaken = false;

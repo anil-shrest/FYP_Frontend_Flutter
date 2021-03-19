@@ -2,10 +2,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
-import 'package:simpleApi/data/theme_data.dart';
-import 'package:simpleApi/main.dart';
-import 'package:simpleApi/models/reminder_helper.dart';
-import 'package:simpleApi/models/reminder_info.dart';
+import 'package:DentalHome/data/theme_data.dart';
+import 'package:DentalHome/main.dart';
+import 'package:DentalHome/models/reminder_helper.dart';
+import 'package:DentalHome/models/reminder_info.dart';
 
 class SetReminderPage extends StatefulWidget {
   @override

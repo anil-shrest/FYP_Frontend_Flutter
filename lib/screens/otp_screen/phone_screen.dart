@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/screens/otp_screen/otp_verification.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/otp_screen/otp_verification.dart';
 
 class PhoneNumberScreen extends StatefulWidget {
   @override

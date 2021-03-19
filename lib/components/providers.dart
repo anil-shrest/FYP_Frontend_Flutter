@@ -20,4 +20,13 @@ class Providers extends ChangeNotifier {
     _mobileNumber = value;
     notifyListeners();
   }
+
+  // to get staff status
+  bool _staffStatus;
+  bool get staffStatus => _staffStatus;
+
+  setStaffStatus(bool value) {
+    _staffStatus = value;
+    notifyListeners();
+  }
 }

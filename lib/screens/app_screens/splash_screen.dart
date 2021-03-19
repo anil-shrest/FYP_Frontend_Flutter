@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
-import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
+import 'package:DentalHome/screens/app_screens/main_menu_page.dart';
+import 'package:DentalHome/screens/appointment_screens/appoint_view_screen.dart';
 import 'landing_page.dart';
 
 class SplashScreen extends StatefulWidget {

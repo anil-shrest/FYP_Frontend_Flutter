@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/screens/app_screens/settings_page.dart';
-import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
-import 'package:simpleApi/screens/appointment_screens/appointment_page.dart';
-import 'package:simpleApi/screens/doctor_screens/doctor_main_page.dart';
-import 'package:simpleApi/screens/map_screen/maps.dart';
-import 'package:simpleApi/screens/payment_screen/payment_page.dart';
-import 'package:simpleApi/screens/user_screen/profile_screen.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/app_screens/settings_page.dart';
+import 'package:DentalHome/screens/appointment_screens/appoint_view_screen.dart';
+import 'package:DentalHome/screens/appointment_screens/appointment_page.dart';
+import 'package:DentalHome/screens/doctor_screens/doctor_main_page.dart';
+import 'package:DentalHome/screens/map_screen/maps.dart';
+import 'package:DentalHome/screens/payment_screen/payment_page.dart';
+import 'package:DentalHome/screens/user_screen/profile_screen.dart';
 import 'bottom_bar_screens/HOME/home_page.dart';
 import 'drawer_screens/app_drawer.dart';
 import 'drawer_screens/set_reminder_page.dart';
+import 'splash_screen.dart';
 
 class MainMenu extends StatefulWidget {
   @override
@@ -22,6 +26,7 @@ class _MainMenuState extends State<MainMenu> {
   int _index = 0;
   int index = 0;
   var themeVal;
+  bool isStaff = false;
 
   List<Widget> list = [
     MainMenu(),
@@ -32,13 +37,34 @@ class _MainMenuState extends State<MainMenu> {
 
   _darkModeVal() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    // print('Staff status : -');
+    // print(preferences.getBool('is_staff'));
     setState(() {
       themeVal = preferences.get('darkMode');
     });
   }
 
+  _getStaffStatus() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    final staffStatusProvider = Provider.of<Providers>(context, listen: false);
+    staffStatusProvider.setStaffStatus(preferences.getBool('is_staff'));
+    // setState(() {
+    isStaff = staffStatusProvider.staffStatus;
+    // });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getStaffStatus();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _getStaffStatus();
+    final staffStatusProvider = Provider.of<Providers>(context, listen: false);
+
+    // print(isStaff);
     _darkModeVal();
     return Scaffold(
         extendBodyBehindAppBar: true,
@@ -53,20 +79,9 @@ class _MainMenuState extends State<MainMenu> {
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
-          // title: Text(
-          //   "Smile Clinic",
-          //   textAlign: TextAlign.center,
-          //   style: TextStyle(color: Colors.black, fontSize: 18.0),
-          // ),
           backgroundColor: Colors.transparent,
           elevation: 0,
           actions: [
-            // IconButton(
-            //   icon: SvgPicture.asset('assets/search_icon.svg'),
-            //   onPressed: () {
-            //     // do something
-            //   },
-            // ),
             IconButton(
               icon: SvgPicture.asset('assets/profile_logo.svg'),
               onPressed: () {
@@ -85,15 +100,58 @@ class _MainMenuState extends State<MainMenu> {
             ),
           ],
         ),
-        drawer: AppDrawer(onTap: (ctx, i) {
-          setState(() {
-            index = i;
-            Navigator.pop(ctx);
-            // Navigator.push(
-            //     context, MaterialPageRoute(builder: (context) => ctx));
-          });
-        }),
-        body: index == 0
+        drawer: staffStatusProvider.staffStatus == false
+            ? AppDrawer(onTap: (ctx, i) {
+                setState(() {
+                  index = i;
+                  Navigator.pop(ctx);
+                  // Navigator.push(
+                  //     context, MaterialPageRoute(builder: (context) => ctx));
+                });
+              })
+            : Drawer(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    DrawerHeader(
+                      child: Text('Staff'),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('View Appointments'),
+                      onTap: () {
+                        // Update the state of the app.
+                        // ...
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Set Time Table'),
+                      onTap: () {
+                        // Update the state of the app.
+                        // ...
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Logout'),
+                      onTap: () async {
+                        final SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        print(sharedPreferences.getString('token'));
+                        sharedPreferences.remove('token');
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    SplashScreen()),
+                            (Route<dynamic> route) => false);
+                        // _showToastMessage("See you later");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+        body:  staffStatusProvider.staffStatus == false ? index == 0
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -285,6 +343,6 @@ class _MainMenuState extends State<MainMenu> {
                   ),
                 ],
               )
-            : list[index]);
+            : list[index] : HomePageScreen());
   }
 }

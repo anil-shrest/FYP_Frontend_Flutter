@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/screens/user_screen/profile_edit_screen.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/user_screen/profile_edit_screen.dart';
 
 import 'user_settings.dart';
 
@@ -47,6 +49,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       preferences.setInt('pk', mapResponse['id']);
       print('pk is');
       print(mapResponse['id']);
+      // print(mapResponse['is_staff']);
       // for (var i = 0; i < mapResponse.length; i++)
       //   print(mapResponse[i.toString()]);
     } else {
@@ -64,10 +67,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // final userProvider = Provider.of<AppointmentProvider>(context);
     // String imageName = mapResponse['profile_image'].toString();
     // print('Image is -->' + imageName);
-    print(mapResponse.toString());
+    // print(mapResponse.toString());
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(

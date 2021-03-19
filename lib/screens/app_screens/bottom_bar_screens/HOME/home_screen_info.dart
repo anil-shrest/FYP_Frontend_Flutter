@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:simpleApi/components/colors.dart';
+import 'package:DentalHome/components/colors.dart';
 
 class HomeScreenInfo extends StatefulWidget {
   @override

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/models/appoint.dart';
-import 'package:simpleApi/models/note.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/models/appoint.dart';
+import 'package:DentalHome/models/note.dart';
 
 class AddNoteScreen extends StatefulWidget {
   @override

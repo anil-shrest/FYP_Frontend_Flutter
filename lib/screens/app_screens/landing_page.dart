@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/data/sliderImageData.dart';
-import 'package:simpleApi/screens/auth_screens/login_page.dart';
-import 'package:simpleApi/screens/doctor_screens/doctor_main_page.dart';
-import 'package:simpleApi/screens/otp_screen/otp_verification.dart';
-import 'package:simpleApi/screens/otp_screen/phone_screen.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/data/sliderImageData.dart';
+import 'package:DentalHome/screens/auth_screens/login_page.dart';
+import 'package:DentalHome/screens/doctor_screens/doctor_main_page.dart';
+import 'package:DentalHome/screens/otp_screen/otp_verification.dart';
+import 'package:DentalHome/screens/otp_screen/phone_screen.dart';
 
 import 'main_menu_page.dart';
 
@@ -113,12 +113,12 @@ class _LandingPageState extends State<LandingPage> {
                   child: InkWell(
                     onTap: () {
                       // // FOR LOGIN VERIFICATION
-                      // Navigator.push(context,
-                      //     MaterialPageRoute(builder: (context) => LoginPage()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => LoginPage()));
 
                       // FOR DEMO PURPOSE NO AUTH
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MainMenu()));
+                      // Navigator.push(context,
+                      //     MaterialPageRoute(builder: (context) => MainMenu()));
                     },
                     child: new Container(
                       // width: 148.0,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/colors.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/colors.dart';
 
 //  Appointment page creation
 class AppointmentPageScreen extends StatefulWidget {

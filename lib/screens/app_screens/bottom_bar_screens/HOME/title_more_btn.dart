@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simpleApi/components/colors.dart';
+import 'package:DentalHome/components/colors.dart';
 
 class TitleWithMoreBtn extends StatelessWidget {
   const TitleWithMoreBtn({

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/api/api.dart';
-import 'package:simpleApi/components/providers.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/HOME/details_page.dart';
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/app_screens/bottom_bar_screens/HOME/details_page.dart';
 
 import 'home_screen_info.dart';
 

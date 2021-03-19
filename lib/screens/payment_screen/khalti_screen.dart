@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_khalti/flutter_khalti.dart';
 import 'package:provider/provider.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/components/providers.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/components/providers.dart';
 
 class KhaltiScreen extends StatefulWidget {
   @override

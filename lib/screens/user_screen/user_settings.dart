@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/screens/user_screen/change_password.dart';
+import 'package:DentalHome/components/colors.dart';
+import 'package:DentalHome/screens/user_screen/change_password.dart';
 
 class UserSetting extends StatelessWidget {
   @override
