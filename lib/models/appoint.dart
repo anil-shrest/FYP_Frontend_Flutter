@@ -19,7 +19,7 @@ class DoctorAppointment {
   }
 }
 
-class Appointments {
+class Appointment {
   int id;
   // final String appointmentType;
   // final String appointmentDescription;
@@ -27,16 +27,17 @@ class Appointments {
   final String appointmentTime;
   final DoctorAppointment appointmentBy;
 
-  Appointments({this.id, this.appointmentTime, this.appointmentBy});
+  Appointment({this.id, this.appointmentTime, this.appointmentBy});
 
-  factory Appointments.fromJson(Map<String, dynamic> parsedJson) {
-    return Appointments(
+  factory Appointment.fromJson(Map<String, dynamic> parsedJson) {
+    return Appointment(
       id: parsedJson['id'],
       // appointmentType: json['appointmentType'],
       // appointmentDescription: json['appointmentDescription'],
       // appointmentBy: parsedJson['appointmentBy'],
       appointmentTime: parsedJson['appointmentTime'],
       appointmentBy: DoctorAppointment.fromJson(parsedJson['appointmentBy']),
+      // appointmentBy: DoctorAppointment.fromJson(parsedJson['appointmentBy']),
     );
   }
 }

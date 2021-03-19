@@ -151,7 +151,7 @@ class _AppDrawerState extends State<AppDrawer> {
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey[600],
+      backgroundColor: Colors.teal[300],
       textColor: Colors.white,
       fontSize: 14.0,
     );

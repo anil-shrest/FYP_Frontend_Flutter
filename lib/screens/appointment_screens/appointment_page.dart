@@ -14,31 +14,49 @@ class AppointmentPageScreen extends StatefulWidget {
 class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
   String ddlTitle = 'Select a doctor';
   var dt = DateTime.now();
-  List<String> _doctors = [];
+  List<String> _doctorList = [];
+  List<String> _timeList = [];
   String _selectedDoctor;
   var timeLabelColor = Colors.white;
+
+  List _selectedIndex = [];
+  String csv;
+  int selectedIndex;
+  int timeIndex = 0;
+  var selectedTimeSlot;
+
+  bool _enabled = true;
 
   @override
   void initState() {
     super.initState();
     _selectedDoctor = null;
-    _getdoctorlist();
+    _getDoctorlist();
+    // _getTimeTablelist();
   }
 
-  // Getting doctor's name to display in drop down list
-  _getdoctorlist() {
+  // Getting doctor's name and storing in a list to display in drop down list
+  _getDoctorlist() {
     final doctorProvider =
         Provider.of<AppointmentProvider>(context, listen: false);
     for (int i = 0; i < doctorProvider.doctor.length; i++) {
       print('this is the list :' + doctorProvider.doctor[i].full_name);
-      _doctors.add(doctorProvider.doctor[i].full_name);
+      _doctorList.add(doctorProvider.doctor[i].full_name);
     }
+  }
+
+ // Getting time table and storing in a list to display in chip
+  _getTimeTablelist() {
+    final timeProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
+    csv = timeProvider.timeTable[timeIndex].time_space.toString();
+    _timeList = csv.split(new RegExp(r","));
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(newDt); // Fri, Apr 3, 2021
-    // final doctorProvider = Provider.of<AppointmentProvider>(context);
+    _getTimeTablelist();
+    final doctorProvider = Provider.of<AppointmentProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
@@ -134,10 +152,12 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                           setState(() {
                             _selectedDoctor = newVal;
                             ddlTitle = '';
+                            timeIndex = _doctorList.indexOf(newVal);
                           });
                           print(_selectedDoctor);
+                          print(timeIndex);
                         },
-                        items: _doctors.map((doctor) {
+                        items: _doctorList.map((doctor) {
                           return DropdownMenuItem(
                             child: new Text(doctor.toString()),
                             value: doctor,
@@ -169,7 +189,53 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                     ],
                   ),
                   // SizedBox(height: 10.0),
-                  TimeLabel(),
+                  // TimeLabel(),
+                  SizedBox(
+                    height: 60.0,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _timeList.length,
+                        itemBuilder: (ctx, i) {
+                          final _isSelected = _selectedIndex.contains(i);
+                          return GestureDetector(
+                            onTap: () {
+                              print('button number is $i');
+                              setState(() {
+                                selectedIndex = i;
+                                selectedTimeSlot = _timeList[i];
+                                print(selectedTimeSlot);
+                              });
+                            },
+                            child: Container(
+                                margin: EdgeInsets.all(10),
+                                // padding: EdgeInsets.all(10),
+                                width: 106.0,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: selectedIndex == i
+                                      ? Color(0xFF00d1a8)
+                                      : Colors.white,
+                                  border: Border.all(
+                                      color: selectedIndex == i
+                                          ? Colors.teal
+                                          : Colors.teal,
+                                      width: 1.0), // set border width
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(
+                                          5.0)), // set rounded corner radius
+                                ),
+                                child: Text(
+                                  _timeList[i],
+                                  style: TextStyle(
+                                      color: selectedIndex == i
+                                          ? Colors.white
+                                          : Colors.black54,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                          );
+                        }),
+                  ),
                 ],
               ),
             ),
@@ -177,7 +243,9 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
               child: FlatButton(
                 height: 45.0,
                 minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {},
+                onPressed: () {
+                  print(selectedTimeSlot);
+                },
                 child: Text(
                   'Book Now',
                   style: TextStyle(color: buttonTextColor, fontSize: 15.0),
@@ -192,85 +260,102 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
   }
 }
 
-//  Labels for different time period creation
-class TimeLabel extends StatefulWidget {
-  @override
-  _TimeLabelState createState() => _TimeLabelState();
-}
+// //  Labels for different time period creation
+// class TimeLabel extends StatefulWidget {
+//   @override
+//   _TimeLabelState createState() => _TimeLabelState();
+// }
 
-class _TimeLabelState extends State<TimeLabel> {
-  List _selectedIndex = [];
-  int selectedIndex;
-  String selectedTimeSlot;
-  var timeList = [
-    '10:30 AM',
-    '11:30 AM',
-    '12:00 PM',
-    '12:30 PM',
-    '1:30 PM',
-    '2:00 PM',
-    '3:00 PM',
-    '4:00 PM',
-    '5:00 PM',
-    '5:30 PM'
-  ];
-  bool _enabled = true;
+// class _TimeLabelState extends State<TimeLabel> {
+//   List _selectedIndex = [];
+//   List cs = [];
+//   int selectedIndex;
+//   String selectedTimeSlot;
+//   // var timeList = [
+//   //   '10:30 AM',
+//   //   '11:30 AM',
+//   //   '12:00 PM',
+//   //   '12:30 PM',
+//   //   '1:30 PM',
+//   //   '2:00 PM',
+//   //   '3:00 PM',
+//   //   '4:00 PM',
+//   //   '5:00 PM',
+//   //   '5:30 PM'
+//   // ];
+//   bool _enabled = true;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60.0,
-      child: ListView.builder(
-          shrinkWrap: true,
-          scrollDirection: Axis.horizontal,
-          itemCount: timeList.length,
-          itemBuilder: (ctx, i) {
-            final _isSelected = _selectedIndex.contains(i);
-            return GestureDetector(
-              onTap: () {
-                print('button number is $i');
-                setState(() {
-                  selectedIndex = i;
-                  selectedTimeSlot = timeList[i];
-                  print(selectedTimeSlot);
-                  // if (_enabled) {
-                  //   _selectedIndex.remove(i);
-                  //   _enabled = false;
-                  //   // _firstPress = false;
-                  // } else {
-                  //   _selectedIndex.add(i);
-                  // }
-                });
-              },
-              child: Container(
-                  margin: EdgeInsets.all(10),
-                  // padding: EdgeInsets.all(10),
-                  width: 106.0,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color:
-                        selectedIndex == i ? Color(0xFF00d1a8) : Colors.white,
-                    border: Border.all(
-                        color: selectedIndex == i ? Colors.teal : Colors.teal,
-                        width: 1.0), // set border width
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(5.0)), // set rounded corner radius
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //       blurRadius: 8,
-                    //       color: Colors.grey[500],
-                    //       offset: Offset(1, 3))
-                    // ] // make rounded corner of border
-                  ),
-                  child: Text(
-                    timeList[i],
-                    style: TextStyle(
-                        color:
-                            selectedIndex == i ? Colors.white : Colors.black54,
-                        fontWeight: FontWeight.bold),
-                  )),
-            );
-          }),
-    );
-  }
-}
+//   @override
+//   void initState() {
+//     super.initState();
+//     // _selectedDoctor = null;
+//     _getTimeTablelist();
+//   }
+
+//   // Getting time table and storing in a list to display in chip
+//   _getTimeTablelist() {
+//     final timeProvider =
+//         Provider.of<AppointmentProvider>(context, listen: false);
+//     print(timeProvider.timeTable[0].time_space);
+//     cs.add(timeProvider.timeTable[0].time_space.split(", "));
+//     print('csv is: $cs');
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final timeProvider = Provider.of<AppointmentProvider>(context);
+//     _getTimeTablelist();
+//     print('wth');
+//     return SizedBox(
+//       height: 60.0,
+//       child: ListView.builder(
+//           shrinkWrap: true,
+//           scrollDirection: Axis.horizontal,
+//           itemCount: cs.length,
+//           // itemCount: timeProvider.fetchTimeTable.le,
+//           itemBuilder: (ctx, i) {
+//             final _isSelected = _selectedIndex.contains(i);
+//             return GestureDetector(
+//               onTap: () {
+//                 print('button number is $i');
+//                 print('CSV val is ->' + cs[i]);
+//                 setState(() {
+//                   selectedIndex = i;
+//                   selectedTimeSlot = cs[i];
+//                   print(selectedTimeSlot);
+//                   // if (_enabled) {
+//                   //   _selectedIndex.remove(i);
+//                   //   _enabled = false;
+//                   //   // _firstPress = false;
+//                   // } else {
+//                   //   _selectedIndex.add(i);
+//                   // }
+//                 });
+//               },
+//               child: Container(
+//                   margin: EdgeInsets.all(10),
+//                   // padding: EdgeInsets.all(10),
+//                   width: 106.0,
+//                   alignment: Alignment.center,
+//                   decoration: BoxDecoration(
+//                     color:
+//                         selectedIndex == i ? Color(0xFF00d1a8) : Colors.white,
+//                     border: Border.all(
+//                         color: selectedIndex == i ? Colors.teal : Colors.teal,
+//                         width: 1.0), // set border width
+//                     borderRadius: BorderRadius.all(
+//                         Radius.circular(5.0)), // set rounded corner radius
+//                   ),
+//                   child: Text(
+//                     cs[1],
+//                     // timeProvider.timeTable[i].time_space,
+//                     style: TextStyle(
+//                         color:
+//                             selectedIndex == i ? Colors.white : Colors.black54,
+//                         fontWeight: FontWeight.bold),
+//                   )),
+//             );
+//           }),
+//     );
+//   }
+// }

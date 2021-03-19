@@ -150,17 +150,18 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Column(
                         children: <Widget>[
                           SizedBox(height: 10.0),
-                          Row(
-                            children: [
-                              Text(
-                                "Sign Up",
-                                style: TextStyle(
-                                    color: Colors.grey[800],
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       "Enter the details for registration",
+                          //       style: TextStyle(
+                          //           color: Colors.grey[800],
+                          //           fontSize: 18.0,
+                          //           letterSpacing: 0.2,
+                          //           fontWeight: FontWeight.w400),
+                          //     ),
+                          //   ],
+                          // ),
                           SizedBox(height: 10.0),
                           Center(
                             child: _image == null
@@ -202,10 +203,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           SizedBox(height: 15),
                           Text(
-                            "Please enter your details to register",
+                            "Enter your details for Registeration",
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                                fontSize: 15, color: Colors.grey[800]),
+                                fontSize: 16,
+                                letterSpacing: 0.2,
+                                color: Colors.grey[800]),
                           ),
                           SizedBox(height: 20),
                           _textField(

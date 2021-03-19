@@ -39,9 +39,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: [
               SizedBox(height: 20),
               _passwordTextField(
+                  oldPwdController,
+                  'Do not leave this field empty *',
+                  'Old Password ',
+                  Icon(
+                    Icons.lock_open,
+                    color: Colors.teal,
+                  )),
+              SizedBox(height: 20),
+              _passwordTextField(
                   passwordController,
                   'Do not leave this field empty *',
-                  'New Password ',
+                  'New Password',
                   Icon(
                     Icons.lock,
                     color: Colors.teal,
@@ -51,15 +60,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   password2Controller,
                   'Do not leave this field empty *',
                   'Confirm New Password',
-                  Icon(
-                    Icons.lock,
-                    color: Colors.teal,
-                  )),
-              SizedBox(height: 20),
-              _passwordTextField(
-                  oldPwdController,
-                  'Do not leave this field empty *',
-                  'Old Password',
                   Icon(
                     Icons.lock_clock,
                     color: Colors.teal,
@@ -71,8 +71,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: FlatButton(
                   onPressed: () async {
                     if (validateAndSave()) {
-                      pwdChangeProvider.changePassword(passwordController.text,
-                          password2Controller.text, oldPwdController.text);
+                      pwdChangeProvider.changePassword(oldPwdController.text,
+                          passwordController.text, password2Controller.text);
 
                       passwordController.text = '';
                       password2Controller.text = '';
@@ -140,7 +140,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               });
             },
             // color: Colors.grey[700],
-            icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility),
+            icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey[500],),
           ),
         ),
       ),

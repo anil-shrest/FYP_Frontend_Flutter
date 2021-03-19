@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simpleApi/components/colors.dart';
-import 'package:simpleApi/screens/app_screens/bottom_bar_screens/appointment_page.dart';
 import 'package:simpleApi/screens/app_screens/settings_page.dart';
 import 'package:simpleApi/screens/appointment_screens/appoint_view_screen.dart';
-import 'package:simpleApi/screens/doctor_screens/doctor_page.dart';
+import 'package:simpleApi/screens/appointment_screens/appointment_page.dart';
+import 'package:simpleApi/screens/doctor_screens/doctor_main_page.dart';
 import 'package:simpleApi/screens/map_screen/maps.dart';
 import 'package:simpleApi/screens/payment_screen/payment_page.dart';
 import 'package:simpleApi/screens/user_screen/profile_screen.dart';
@@ -102,7 +102,7 @@ class _MainMenuState extends State<MainMenu> {
                       child: _index == 0
                           ? HomePageScreen()
                           : (_index == 1
-                              ? DoctorPageScreen()
+                              ? DoctorMainScreen()
                               : (_index == 2
                                   ? AppointmentPageScreen()
                                   : (_index == 3
@@ -123,7 +123,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 0
-                                    ? Color(0xFFb0bffc)
+                                    ? Color(0xFF9871FD)
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -134,7 +134,7 @@ class _MainMenuState extends State<MainMenu> {
                                   Icon(
                                     Icons.home,
                                     color: _index == 0
-                                        ? Color(0xFF07db07)
+                                        ? Colors.grey[800]
                                         : buttonColor,
                                   ),
                                   Padding(
@@ -165,7 +165,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 1
-                                    ? Color(0xFF7cd1a8)
+                                    ? Colors.teal[200]
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -176,7 +176,7 @@ class _MainMenuState extends State<MainMenu> {
                                   Icon(
                                     Icons.person,
                                     color: _index == 1
-                                        ? Colors.white
+                                        ? Colors.grey[800]
                                         : buttonColor,
                                   ),
                                   Padding(
@@ -186,7 +186,7 @@ class _MainMenuState extends State<MainMenu> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: _index == 1
-                                            ? Colors.black
+                                            ? Colors.white
                                             : Colors.black,
                                       ),
                                     ),
@@ -218,7 +218,7 @@ class _MainMenuState extends State<MainMenu> {
                                   Icon(
                                     Icons.list_alt,
                                     color: _index == 2
-                                        ? Colors.white
+                                        ? Colors.grey[800]
                                         : buttonColor,
                                   ),
                                   Padding(
@@ -228,7 +228,7 @@ class _MainMenuState extends State<MainMenu> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: _index == 2
-                                            ? Colors.black
+                                            ? Colors.white
                                             : Colors.black,
                                       ),
                                     ),
@@ -249,7 +249,7 @@ class _MainMenuState extends State<MainMenu> {
                             duration: Duration(milliseconds: 100),
                             decoration: BoxDecoration(
                                 color: _index == 3
-                                    ? Colors.redAccent
+                                    ? Colors.red[300]
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.circular(25.0)),
                             child: Padding(
@@ -260,7 +260,7 @@ class _MainMenuState extends State<MainMenu> {
                                   Icon(
                                     Icons.monetization_on_outlined,
                                     color: _index == 3
-                                        ? Colors.white
+                                        ? Colors.grey[800]
                                         : buttonColor,
                                   ),
                                   Padding(
@@ -270,7 +270,7 @@ class _MainMenuState extends State<MainMenu> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: _index == 3
-                                            ? Colors.black
+                                            ? Colors.white
                                             : Colors.black,
                                       ),
                                     ),

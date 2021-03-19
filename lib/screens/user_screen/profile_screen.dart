@@ -40,10 +40,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       // notifyListeners();
       setState(() {
         mapResponse = json.decode(response.body);
+        print(mapResponse['id']);
       });
       // Saving user primary key
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setInt('pk', mapResponse['pk']);
+      preferences.setInt('pk', mapResponse['id']);
+      print('pk is');
+      print(mapResponse['id']);
       // for (var i = 0; i < mapResponse.length; i++)
       //   print(mapResponse[i.toString()]);
     } else {

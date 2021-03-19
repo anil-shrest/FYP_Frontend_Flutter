@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/colors.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +14,7 @@ import 'package:simpleApi/screens/app_screens/main_menu_page.dart';
 import 'package:simpleApi/screens/auth_screens/register_page.dart';
 
 import '../../ProgressHUD.dart';
+import 'set_new_password.dart';
 
 //  Login page creation
 class LoginPage extends StatefulWidget {
@@ -56,14 +59,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // To show appropriate toast message
-  _showToastMessage(String message) {
+  _showToastMessage(String message, Color color) {
     return Fluttertoast.showToast(
       msg: "$message",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.teal[300],
-      textColor: Colors.white,
+      backgroundColor: color,
+      // textColor: color,
       fontSize: 14.0,
     );
   }
@@ -341,10 +344,17 @@ class _LoginPageState extends State<LoginPage> {
               child: Text('Confirm',
                   style: TextStyle(color: Colors.black, fontSize: 15.0)),
               onPressed: () {
+                var emailChangeProvider =
+                    Provider.of<AppointmentProvider>(context, listen: false);
+
                 if (_formKey.currentState.validate()) {
                   print(emailController.text);
-                  _showToastMessage('Reset url has been sent to the mail');
-                  Navigator.pop(context);
+                  // emailChangeProvider.getResetEmail(emailController.text);
+                  _showToastMessage('Reset url has been sent to the mail', Colors.teal[300]);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SetNewPasswordScreen()));
                 }
               },
             )
@@ -397,18 +407,18 @@ class _LoginPageState extends State<LoginPage> {
       }
       return token;
     } else {
-      _showToastMessage("Invalid Credentials");
+      _showToastMessage("Invalid Credentials", Colors.redAccent[200]);
     }
   }
 
   Future checkLogin(String token) async {
     if (token != null) {
       Fluttertoast.showToast(
-        msg: "Login Successful",
+        msg: "Login Successful 🙏",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey[600],
+        backgroundColor: Colors.teal[300],
         textColor: Colors.white,
         fontSize: 14.0,
       );

@@ -8,6 +8,7 @@ import 'package:simpleApi/models/doctors.dart';
 import 'package:simpleApi/models/login.dart';
 import 'package:simpleApi/models/note.dart';
 import 'package:simpleApi/models/signup.dart';
+import 'package:simpleApi/models/time_table.dart';
 import '../models/appoint.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,11 +18,11 @@ class AppointmentProvider with ChangeNotifier {
   // bool _isLoading = false;
 
   AppointmentProvider() {
-    // fetchTask();
+    // fetchAppointment();
     // fetchServices();
+    // fetchTimeTable();
     // fetchDoctor();
   }
-
 
   // Storing doctors details in list
   List<Doctor> _doctor = [];
@@ -31,10 +32,17 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // Storing appoint details in list
-  List<Appointments> _appointment = [];
+  List<Appointment> _appointment = [];
 
-  List<Appointments> get appointment {
+  List<Appointment> get appointment {
     return [..._appointment];
+  }
+
+  // Storing time table
+  List<TimeTable> _timeTable = [];
+
+  List<TimeTable> get timeTable {
+    return [..._timeTable];
   }
 
   // Storing user information
@@ -109,6 +117,7 @@ class AppointmentProvider with ChangeNotifier {
               }));
       if (response.statusCode == 200) {
         print('Otp code confirmed and registered');
+        _showToastMessage('OTP code verified 🙌', Colors.teal[300]);
         notifyListeners();
       } else {
         _showToastMessage(
@@ -122,32 +131,33 @@ class AppointmentProvider with ChangeNotifier {
 
   // Change user password
   Future<String> changePassword(
-      String password, password2, old_password) async {
+      String old_password, password, password2) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     int pk = prefs.getInt('pk');
 
     final http.Response response =
-        await http.put('http://10.0.2.2:8000/auth/change_password/$pk/',
+        await http.put('http://10.0.2.2:8000/change_password/$pk/',
             headers: <String, String>{
               'Content-type': 'application/json',
               'Accept': 'application/json',
               "Authorization": "Token $token"
             },
             body: jsonEncode(<String, dynamic>{
+              'old_password': old_password,
               'password': password,
               'password2': password2,
-              'old_password': old_password,
             }));
 
     if (response.statusCode == 200) {
       print('Password successfully changed :D');
+      _showToastMessage('Password change successful 🔐', Colors.teal[300]);
       notifyListeners();
       return 'success';
     } else {
       _showToastMessage(
-          'Sorry! Unable to change password', Colors.redAccent[200]);
-      // throw Exception('Password change failed!');
+          'Failed! Enter correct and strong password', Colors.redAccent[200]);
+      return 'failure';
     }
   }
 
@@ -191,7 +201,29 @@ class AppointmentProvider with ChangeNotifier {
   //   }
   // }
 
-// to register a new user
+  //to get reset password reset email
+  Future<String> getResetEmail(String email) async {
+    final http.Response response =
+        await http.post('http://10.0.2.2:8000/reset_email/',
+            headers: <String, String>{
+              'Content-type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'email': email,
+            }));
+
+    if (response.statusCode == 200) {
+      print('Reset email has been sent to the specific user :)');
+      notifyListeners();
+      return 'success';
+    } else {
+      _showToastMessage('Error! Email sent failed', Colors.redAccent[200]);
+      return 'failure';
+    }
+  }
+
+  // to register a new user
   void signup(SignUp signUp) async {
     final response = await http.post("http://10.0.2.2:8000/auth/register/",
         headers: {"Content-Type": "multipart/form-data"},
@@ -201,7 +233,8 @@ class AppointmentProvider with ChangeNotifier {
       _signUp.add(signUp);
       notifyListeners();
     } else {
-      throw Exception('User failed to register!');
+      _showToastMessage('Registration failed!', Colors.redAccent[200]);
+      // throw Exception('User failed to register!');
     }
   }
 
@@ -222,7 +255,28 @@ class AppointmentProvider with ChangeNotifier {
   // }
 
 // to add new appointment
-  void addAppoint(Appointments appointment) async {
+  void addAppoint(Appointment appointment) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    final response = await http.post("http://10.0.2.2:8000/appointment/list/",
+        headers: {
+          'Content-type': 'application/json',
+          'Accept': 'application/json',
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(appointment));
+    if (response.statusCode == 201) {
+      appointment.id = json.decode(response.body)['id'];
+      _appointment.add(appointment);
+      notifyListeners();
+    } else {
+      _showToastMessage('Failed to add appointment!', Colors.redAccent[200]);
+    }
+  }
+
+  // to add new appointment
+  void addAppointment(Appointment appointment) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
 
@@ -243,7 +297,7 @@ class AppointmentProvider with ChangeNotifier {
   }
 
 // to get the details of individual users appointment details
-  void fetchTask() async {
+  void fetchAppointment() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     print(token);
@@ -255,9 +309,29 @@ class AppointmentProvider with ChangeNotifier {
     );
     if (response.statusCode == 200) {
       var data = json.decode(response.body) as List;
-      _appointment = data
-          .map<Appointments>((json) => Appointments.fromJson(json))
-          .toList();
+      _appointment =
+          data.map<Appointment>((json) => Appointment.fromJson(json)).toList();
+      notifyListeners();
+    } else {
+      _showToastMessage('Failed to load data!', Colors.redAccent[200]);
+    }
+  }
+
+  // to get the details of individual users appointment details
+  void fetchTimeTable() async {
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // String token = prefs.getString('token');
+    // print(token);
+
+    final url = "http://10.0.2.2:8000/time_table/list/?format=json";
+    final response = await http.get(
+      url,
+      // headers: {'Authorization': 'Token $token'},
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body) as List;
+      _timeTable =
+          data.map<TimeTable>((json) => TimeTable.fromJson(json)).toList();
       notifyListeners();
     } else {
       _showToastMessage('Failed to load data!', Colors.redAccent[200]);
@@ -265,7 +339,7 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // to delete or cancel the appointment
-  void deleteAppoint(Appointments appointment) async {
+  void deleteAppoint(Appointment appointment) async {
     final response =
         await http.delete("http://10.0.2.2:8000/appointment/list/");
     if (response.statusCode == 204) {
@@ -371,7 +445,7 @@ class AppointmentProvider with ChangeNotifier {
       msg: "$message",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
+      timeInSecForIosWeb: 2,
       backgroundColor: color,
       textColor: Colors.white,
       fontSize: 14.0,

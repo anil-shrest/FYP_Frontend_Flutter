@@ -4,6 +4,8 @@ import 'package:simpleApi/api/api.dart';
 import 'package:simpleApi/components/providers.dart';
 import 'package:simpleApi/screens/app_screens/bottom_bar_screens/HOME/details_page.dart';
 
+import 'home_screen_info.dart';
+
 // Recommendation services view method
 class RecommendsServices extends StatefulWidget {
   RecommendsServices({
@@ -25,8 +27,9 @@ class _RecommendsServicesState extends State<RecommendsServices> {
     return SafeArea(
       child: Column(
         children: [
+          SizedBox(height: 15.0),
           SizedBox(
-            height: 300.0,
+            height: 170.0,
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
@@ -59,6 +62,8 @@ class _RecommendsServicesState extends State<RecommendsServices> {
                   );
                 }),
           ),
+          HomeScreenInfo(),
+          SizedBox(height: 20.0),
         ],
       ),
     );
