@@ -1,3 +1,5 @@
+import 'package:DentalHome/screens/staff_screens/set_time.dart';
+import 'package:DentalHome/screens/staff_screens/view_appointments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -114,27 +116,49 @@ class _MainMenuState extends State<MainMenu> {
                   padding: EdgeInsets.zero,
                   children: <Widget>[
                     DrawerHeader(
-                      child: Text('Staff'),
+                      child: Center(
+                        child: Text('Staff Panel',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                                letterSpacing: 0.1)),
+                      ),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: buttonColor,
                       ),
                     ),
                     ListTile(
-                      title: Text('View Appointments'),
+                      title: Text('View Appointments',
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 16.0,
+                              letterSpacing: 0.1)),
                       onTap: () {
-                        // Update the state of the app.
-                        // ...
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ViewAllAppointments()));
                       },
                     ),
                     ListTile(
-                      title: Text('Set Time Table'),
+                      title: Text('Set Time Table',
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 16.0,
+                              letterSpacing: 0.1)),
                       onTap: () {
-                        // Update the state of the app.
-                        // ...
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SetTimeScreen()));
                       },
                     ),
                     ListTile(
-                      title: Text('Logout'),
+                      title: Text('Logout',
+                          style: TextStyle(
+                              color: Colors.redAccent,
+                              fontSize: 16.0,
+                              letterSpacing: 0.1)),
                       onTap: () async {
                         final SharedPreferences sharedPreferences =
                             await SharedPreferences.getInstance();
@@ -151,198 +175,204 @@ class _MainMenuState extends State<MainMenu> {
                   ],
                 ),
               ),
-        body:  staffStatusProvider.staffStatus == false ? index == 0
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // Changing the page according to the selected index
-                  Expanded(
-                      child: _index == 0
-                          ? HomePageScreen()
-                          : (_index == 1
-                              ? DoctorMainScreen()
-                              : (_index == 2
-                                  ? AppointmentPageScreen()
-                                  : (_index == 3
-                                      ? PaymentPageScreen()
-                                      : HomePageScreen())))),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 5.0, left: 18.0, right: 18, bottom: 3.0),
-                    child: Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _index = 0;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 100),
-                            decoration: BoxDecoration(
-                                color: _index == 0
-                                    ? Color(0xFF9871FD)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(25.0)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 15.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.home,
+        body: staffStatusProvider.staffStatus == false
+            ? index == 0
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      // Changing the page according to the selected index
+                      Expanded(
+                          child: _index == 0
+                              ? HomePageScreen()
+                              : (_index == 1
+                                  ? DoctorMainScreen()
+                                  : (_index == 2
+                                      ? AppointmentPageScreen()
+                                      : (_index == 3
+                                          ? PaymentPageScreen()
+                                          : HomePageScreen())))),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 5.0, left: 18.0, right: 18, bottom: 3.0),
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _index = 0;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 100),
+                                decoration: BoxDecoration(
                                     color: _index == 0
-                                        ? Colors.grey[800]
-                                        : buttonColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
-                                    child: Text(
-                                      _index == 0 ? 'Home' : '',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
+                                        ? Color(0xFF9871FD)
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 15.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.home,
                                         color: _index == 0
-                                            ? Colors.white
-                                            : Colors.black,
+                                            ? Colors.grey[800]
+                                            : buttonColor,
                                       ),
-                                    ),
-                                  )
-                                ],
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 4.0),
+                                        child: Text(
+                                          _index == 0 ? 'Home' : '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: _index == 0
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _index = 1;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 100),
-                            decoration: BoxDecoration(
-                                color: _index == 1
-                                    ? Colors.teal[200]
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(25.0)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 15.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.person,
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _index = 1;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 100),
+                                decoration: BoxDecoration(
                                     color: _index == 1
-                                        ? Colors.grey[800]
-                                        : buttonColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      _index == 1 ? 'Doctor' : '',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
+                                        ? Colors.teal[200]
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 15.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.person,
                                         color: _index == 1
-                                            ? Colors.white
-                                            : Colors.black,
+                                            ? Colors.grey[800]
+                                            : buttonColor,
                                       ),
-                                    ),
-                                  )
-                                ],
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 5.0),
+                                        child: Text(
+                                          _index == 1 ? 'Doctor' : '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: _index == 1
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _index = 2;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 100),
-                            decoration: BoxDecoration(
-                                color: _index == 2
-                                    ? Colors.blue[200]
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(25.0)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 15.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.list_alt,
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _index = 2;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 100),
+                                decoration: BoxDecoration(
                                     color: _index == 2
-                                        ? Colors.grey[800]
-                                        : buttonColor,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 7.0),
-                                    child: Text(
-                                      _index == 2 ? 'Appointment' : '',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
+                                        ? Colors.blue[200]
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 15.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.list_alt,
                                         color: _index == 2
-                                            ? Colors.white
-                                            : Colors.black,
+                                            ? Colors.grey[800]
+                                            : buttonColor,
                                       ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _index = 3;
-                            });
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 100),
-                            decoration: BoxDecoration(
-                                color: _index == 3
-                                    ? Colors.red[300]
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(25.0)),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 15.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.monetization_on_outlined,
-                                    color: _index == 3
-                                        ? Colors.grey[800]
-                                        : buttonColor,
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 7.0),
+                                        child: Text(
+                                          _index == 2 ? 'Appointment' : '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: _index == 2
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6.0),
-                                    child: Text(
-                                      _index == 3 ? 'Payment' : '',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: _index == 3
-                                            ? Colors.white
-                                            : Colors.black,
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
                             ),
-                          ),
+                            Spacer(),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _index = 3;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 100),
+                                decoration: BoxDecoration(
+                                    color: _index == 3
+                                        ? Colors.red[300]
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.circular(25.0)),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 15.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.monetization_on_outlined,
+                                        color: _index == 3
+                                            ? Colors.grey[800]
+                                            : buttonColor,
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 6.0),
+                                        child: Text(
+                                          _index == 3 ? 'Payment' : '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: _index == 3
+                                                ? Colors.white
+                                                : Colors.black,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            : list[index] : HomePageScreen());
+                      ),
+                    ],
+                  )
+                : list[index]
+            : HomePageScreen());
   }
 }
