@@ -1,4 +1,4 @@
-package com.example.simpleApi
+package com.example.DentalHomeFYP
 
 import io.flutter.embedding.android.FlutterActivity
 

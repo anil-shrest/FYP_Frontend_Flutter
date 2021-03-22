@@ -21,21 +21,21 @@ class UserSetting extends StatelessWidget {
       body: Container(
         child: Stack(
           children: [
-            SvgPicture.asset(
-              'assets/settings_bg.svg',
-              // fit: BoxFit.fitHeight,
-              alignment: Alignment.bottomCenter,
-              // width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
-            ),
+            // SvgPicture.asset(
+            //   'assets/settings_bg.svg',
+            //   // fit: BoxFit.fitHeight,
+            //   alignment: Alignment.bottomCenter,
+            //   // width: MediaQuery.of(context).size.width,
+            //   // height: MediaQuery.of(context).size.height,
+            // ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10.0),
+                  Image.asset('assets/settings.png'),
+                  SizedBox(height: 40.0),
                   GestureDetector(
                     child: Card(
                       elevation: 5.0,
@@ -77,7 +77,13 @@ class UserSetting extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
+            // Align(
+            //   alignment: Alignment.center,
+            //   child: Image.network(
+            //       'https://pbs.twimg.com/media/DtFmKc9XcAEGvbD.jpg',
+            //       alignment: Alignment.center),
+            // ),
           ],
         ),
       ),

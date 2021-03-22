@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:DentalHome/api/api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:DentalHome/components/colors.dart';
 
@@ -15,6 +17,14 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   String stringResponse;
   List listResponse;
   Map mapResponse;
+
+  // Text field controllers
+  // final usernameController = TextEditingController();
+  // final emailController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final addressController = TextEditingController();
 
   // to get the details of individual users
   Future fetchUser() async {
@@ -50,7 +60,7 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // final userProvider = Provider.of<AppointmentProvider>(context);
+    final userUpdateProvider = Provider.of<AppointmentProvider>(context);
     print(mapResponse.toString());
     return Scaffold(
       appBar: AppBar(
@@ -148,16 +158,22 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                     SizedBox(
                       height: 35,
                     ),
-                    buildTextField("First Name",
-                        mapResponse['first_name'].toString(), false),
-                    buildTextField("Last Name",
-                        mapResponse['last_name'].toString(), false),
+                    buildTextField(
+                        "First Name",
+                        mapResponse['first_name'].toString(),
+                        false,
+                        firstNameController),
+                    buildTextField(
+                        "Last Name",
+                        mapResponse['last_name'].toString(),
+                        false,
+                        lastNameController),
                     // buildTextField(
                     //     "Email", mapResponse['email'].toString(), false),
-                    buildTextField(
-                        "Mobile", mapResponse['mobile'].toString(), false),
-                    buildTextField(
-                        "Address", mapResponse['address'].toString(), false),
+                    buildTextField("Mobile", mapResponse['mobile'].toString(),
+                        false, phoneController),
+                    buildTextField("Address", mapResponse['address'].toString(),
+                        false, addressController),
                     SizedBox(
                       height: 13,
                     ),
@@ -178,7 +194,19 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                                   color: Colors.black)),
                         ),
                         RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            userUpdateProvider.updateUserProfile(
+                                // usernameController.text,
+                                firstNameController.text,
+                                lastNameController.text,
+                                phoneController.text,
+                                addressController.text
+                                // 'jaade',
+                                // 'james',
+                                // '1111111',
+                                // 'kamalpokhari',
+                                );
+                          },
                           color: buttonColor,
                           padding: EdgeInsets.symmetric(horizontal: 50),
                           elevation: 2,
@@ -202,39 +230,48 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   }
 
 // Building required text fields
-  Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+  Widget buildTextField(String labelText, String placeholder,
+      bool isPasswordTextField, TextEditingController controllers) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        // initialValue: placeholder,
+        controller: controllers,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
-            suffixIcon: isPasswordTextField
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: Colors.grey,
-                    ),
-                  )
-                : null,
-            contentPadding: EdgeInsets.only(bottom: 3),
-            labelText: labelText,
-            labelStyle: TextStyle(
-                color: buttonColor,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
+          // enabledBorder: OutlineInputBorder(
+          //   borderSide: BorderSide(color: Colors.grey[700], width: 1.0),
+          //   // borderRadius: BorderRadius.circular(25.0),
+          // ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.green, width: 1.0),
+            // borderRadius: BorderRadius.circular(25.0),
+          ),
+          suffixIcon: isPasswordTextField
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      showPassword = !showPassword;
+                    });
+                  },
+                  icon: Icon(
+                    Icons.remove_red_eye,
+                    color: Colors.grey,
+                  ),
+                )
+              : null,
+          contentPadding: EdgeInsets.only(bottom: 3),
+          labelText: labelText,
+          labelStyle: TextStyle(
+              color: buttonColor, fontSize: 18.0, fontWeight: FontWeight.w600),
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          // hintText: placeholder,
+          // hintStyle: TextStyle(
+          //   fontSize: 16,
+          //   fontWeight: FontWeight.bold,
+          //   color: Colors.black,
+          // )
+        ),
       ),
     );
   }

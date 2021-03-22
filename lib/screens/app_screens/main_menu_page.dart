@@ -206,7 +206,7 @@ class _MainMenuState extends State<MainMenu> {
                                 duration: Duration(milliseconds: 100),
                                 decoration: BoxDecoration(
                                     color: _index == 0
-                                        ? Color(0xFF9871FD)
+                                        ? Color(0xFF6271FD)
                                         : Colors.transparent,
                                     borderRadius: BorderRadius.circular(25.0)),
                                 child: Padding(
@@ -335,7 +335,7 @@ class _MainMenuState extends State<MainMenu> {
                                 duration: Duration(milliseconds: 100),
                                 decoration: BoxDecoration(
                                     color: _index == 3
-                                        ? Colors.red[300]
+                                        ? Color(0xFFf56349)
                                         : Colors.transparent,
                                     borderRadius: BorderRadius.circular(25.0)),
                                 child: Padding(

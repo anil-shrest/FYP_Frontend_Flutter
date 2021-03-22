@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:DentalHome/api/api.dart';
 import 'package:DentalHome/components/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'appoint_view_screen.dart';
 
 //  Appointment page creation
 class AppointmentPageScreen extends StatefulWidget {
@@ -12,27 +15,45 @@ class AppointmentPageScreen extends StatefulWidget {
 }
 
 class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
-  String ddlTitle = 'Select a doctor';
-  var dt = DateTime.now();
   List<String> _doctorList = [];
   List<String> _timeList = [];
-  String _selectedDoctor;
-  var timeLabelColor = Colors.white;
-
   List _selectedIndex = [];
+
   String csv;
+  String _selectedDoctor;
+  String bookedTime;
+  String ddlTitle = 'Select a doctor';
   int selectedIndex;
   int timeIndex = 0;
+
   var selectedTimeSlot;
+  var timeLabelColor = Colors.white;
+  var dt = DateTime.now();
 
   bool _enabled = true;
+  bool _shouldIgnore = false;
 
   @override
   void initState() {
     super.initState();
     _selectedDoctor = null;
     _getDoctorlist();
-    // _getTimeTablelist();
+
+    _getBookedTime();
+    // var _date = DateTime.parse(bookedTime).add(Duration(hours: 12));
+
+    // if (_date.isBefore(DateTime.now())) {
+    //   _shouldIgnore = false;
+    // } else {
+    //   _shouldIgnore = true;
+    // }
+    // var _date = DateTime.parse(bookedTime).add(Duration(hours: 12));
+
+    // if (_date.isBefore(DateTime.now())) {
+    //   _shouldIgnore = false;
+    // } else {
+    //   _shouldIgnore = true;
+    // }
   }
 
   // Getting doctor's name and storing in a list to display in drop down list
@@ -45,12 +66,27 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
     }
   }
 
- // Getting time table and storing in a list to display in chip
+  // Getting time table and storing in a list to display in chip
   _getTimeTablelist() {
     final timeProvider =
         Provider.of<AppointmentProvider>(context, listen: false);
     csv = timeProvider.timeTable[timeIndex].time_space.toString();
     _timeList = csv.split(new RegExp(r","));
+  }
+
+  // Getting the time of appointment booked to disbale it for a day
+  _getBookedTime() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //DateTime.parse because you can only save Strings locally.
+    // .add Adds the time limit we wanr for demo only 3 minutes
+    var _date = DateTime.parse(prefs.getString('lastPressed'))
+        .add(Duration(minutes: 2));
+
+    if (_date.isBefore(DateTime.now())) {
+      _shouldIgnore = false;
+    } else {
+      _shouldIgnore = true;
+    }
   }
 
   @override
@@ -240,17 +276,39 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
               ),
             ),
             Center(
-              child: FlatButton(
-                height: 45.0,
-                minWidth: MediaQuery.of(context).size.width,
-                onPressed: () {
-                  print(selectedTimeSlot);
-                },
-                child: Text(
-                  'Book Now',
-                  style: TextStyle(color: buttonTextColor, fontSize: 15.0),
+              child: IgnorePointer(
+                ignoring: _shouldIgnore,
+                child: FlatButton(
+                  height: 45.0,
+                  minWidth: MediaQuery.of(context).size.width,
+                  onPressed: () async {
+                    setState(() {
+                      _lockButton();
+                    });
+                    // // Disable book button for 12 hours (minutes: 1 -> for demo)
+                    // SharedPreferences prefs =
+                    //     await SharedPreferences.getInstance();
+                    // var _date = DateTime.parse(prefs.getString('lastPressed'))
+                    //     .add(Duration(hours: 12));
+
+                    // if (_date.isBefore(DateTime.now())) {
+                    //   _shouldIgnore = false;
+                    // } else {
+                    //   _shouldIgnore = true;
+                    // }
+                    print('tap');
+                    print(selectedTimeSlot);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AppointHomePage()));
+                  },
+                  child: Text(
+                    'Book Now',
+                    style: TextStyle(color: buttonTextColor, fontSize: 15.0),
+                  ),
+                  color: primaryColor,
                 ),
-                color: primaryColor,
               ),
             )
           ],
@@ -258,6 +316,13 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
       ),
     );
   }
+}
+
+_lockButton() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  var _date = DateTime.now();
+  await prefs.setString('lastPressed', _date.toString());
 }
 
 // //  Labels for different time period creation

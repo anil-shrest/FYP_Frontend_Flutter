@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:DentalHome/components/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Services Details UI view with specific data
 class DetailsScreen extends StatefulWidget {
@@ -112,7 +113,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             children: [
                               IconButton(
                                 onPressed: () {
-                                  print('tap');
+                                  _makeCall();
                                 },
                                 icon: Icon(Icons.phone,
                                     color: Colors.white, size: 30.0),
@@ -124,7 +125,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  _launchUrl();
+                                },
                                 icon: Icon(Icons.info,
                                     color: Colors.white, size: 30.0),
                               ),
@@ -232,3 +235,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 }
 
+// to open phone app to make a call
+_makeCall() async {
+  const url = 'tel:4433221';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+// to open url in the browser
+_launchUrl() async {
+  const url =
+      'https://www.betterhealth.vic.gov.au/health/conditionsandtreatments/dental-treatment';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}

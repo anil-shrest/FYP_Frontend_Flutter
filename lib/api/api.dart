@@ -18,6 +18,7 @@ class AppointmentProvider with ChangeNotifier {
   // bool _isLoading = false;
 
   AppointmentProvider() {
+    fetchAllAppointment();
     fetchAppointment();
     fetchServices();
     fetchTimeTable();
@@ -36,6 +37,13 @@ class AppointmentProvider with ChangeNotifier {
 
   List<Appointment> get appointment {
     return [..._appointment];
+  }
+
+  // Storing appoint details in list
+  List<Appointment> _allAppointment = [];
+
+  List<Appointment> get allAppointment {
+    return [..._allAppointment];
   }
 
   // Storing time table
@@ -140,7 +148,7 @@ class AppointmentProvider with ChangeNotifier {
         await http.put('http://10.0.2.2:8000/change_password/$pk/',
             headers: <String, String>{
               'Content-type': 'application/json',
-              'Accept': 'application/json',
+              'Accept': 'ap 2q  /json',
               "Authorization": "Token $token"
             },
             body: jsonEncode(<String, dynamic>{
@@ -317,6 +325,27 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
+  // to get all the details of users appointment details
+  void fetchAllAppointment() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print(token);
+
+    final url = "http://10.0.2.2:8000/appointment/list-all/?format=json";
+    final response = await http.get(
+      url,
+      headers: {'Authorization': 'Token $token'},
+    );
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body) as List;
+      _allAppointment =
+          data.map<Appointment>((json) => Appointment.fromJson(json)).toList();
+      notifyListeners();
+    } else {
+      _showToastMessage('Failed to load data!', Colors.redAccent[200]);
+    }
+  }
+
   // to get the details of individual users appointment details
   void fetchTimeTable() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -436,6 +465,39 @@ class AppointmentProvider with ChangeNotifier {
       notifyListeners();
     } else {
       _showToastMessage('Failed to load services data!', Colors.redAccent[200]);
+    }
+  }
+
+  Future<String> updateUserProfile(
+      String first_name, last_name, mobile, address) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print(token);
+
+    final url = "http://10.0.2.2:8000/properties/update/";
+    final response = await http.put(url,
+        headers: <String, String>{
+          // "Content-Type": "application/json",
+          'Content-type': 'application/json',
+          // 'Accept': 'ap 2q  /json',
+          "Authorization": "Token $token"
+        },
+        body: jsonEncode(<String, dynamic>{
+          // 'username': username,
+          'first_name': first_name,
+          'last_name': last_name,
+          'mobile': mobile,
+          'address': address,
+        }));
+    if (response.statusCode == 200) {
+      print('Profile Updated :D');
+      _showToastMessage('Update Successful', Colors.teal[300]);
+      notifyListeners();
+      return 'success';
+    } else {
+      print(response.body);
+      _showToastMessage('Failed to update user data!', Colors.redAccent[200]);
+      return 'failure';
     }
   }
 

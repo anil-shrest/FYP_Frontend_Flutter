@@ -23,7 +23,8 @@ final List<Clinic> clinicDetails = [
       description: '📞 01-4282219\nOpens and close: 9AM - 7PM',
       locationCordinates: LatLng(27.701830065912485, 85.29982222846189),
       thumbnail:
-          'https://scontent.fktm8-1.fna.fbcdn.net/v/t1.0-9/68836873_102089914502275_2545263371263934464_o.jpg?_nc_cat=102&ccb=3&_nc_sid=e3f864&_nc_ohc=1F78h7QUg04AX-cw5hi&_nc_ht=scontent.fktm8-1.fna&oh=afa85ee8af69ec39abfb01703e636b89&oe=60497EC6'),
+          'https://scontent.fktm8-1.fna.fbcdn.net/v/t1.0-9/68836873_102089914502275_2545263371263934464_o.jpg?_nc_cat=102&ccb=3&_nc_sid=e3f864&_nc_ohc=1F78h7QUg04AX-cw5hi&_nc_ht=scontent.fktm8-1.fna&oh=afa85ee8af69ec39abfb01703e636b89&oe=60497EC6'
+          ),
   Clinic(
       name: 'Love Your Teeth Dental Clinic',
       address: 'Bafal, Kathmandu',
@@ -37,5 +38,6 @@ final List<Clinic> clinicDetails = [
       description: '📞 01-4282219\nOpens and close: 9AM - 7PM',
       locationCordinates: LatLng(27.679417, 85.319258),
       thumbnail:
-          'https://scontent.fktm8-1.fna.fbcdn.net/v/t1.0-9/68836873_102089914502275_2545263371263934464_o.jpg?_nc_cat=102&ccb=3&_nc_sid=e3f864&_nc_ohc=1F78h7QUg04AX-cw5hi&_nc_ht=scontent.fktm8-1.fna&oh=afa85ee8af69ec39abfb01703e636b89&oe=60497EC6'),
+          'https://scontent.fktm8-1.fna.fbcdn.net/v/t1.0-9/68836873_102089914502275_2545263371263934464_o.jpg?_nc_cat=102&ccb=3&_nc_sid=e3f864&_nc_ohc=1F78h7QUg04AX-cw5hi&_nc_ht=scontent.fktm8-1.fna&oh=afa85ee8af69ec39abfb01703e636b89&oe=60497EC6'
+          ),
 ];

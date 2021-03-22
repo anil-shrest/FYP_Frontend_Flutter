@@ -25,70 +25,69 @@ class _RecommendsServicesState extends State<RecommendsServices> {
     // print('Services count: $list_count');
     // print(serviceProvider.services.first.doctor.full_name);
     var indexProvider = Provider.of<Providers>(context);
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 10.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 13.0),
-            child: Text(
-              'Home',
-              style: TextStyle(fontSize: 22.0, letterSpacing: 0.2),
-            ),
-          ),
-          // HomeScreenInfo(),
-          // SizedBox(height: 40.0),
-          SizedBox(height: 10.0),
-          TitleWithMoreBtn(press: () {}),
-          SizedBox(height: 8.0),
-          SizedBox(
-            height: 100.0,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                itemCount: serviceProvider.services.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return RecommedServices(
-                    image: serviceProvider.services[index].service_image,
-                    title: serviceProvider.services[index].service_title,
-                    press: () {
-                      print(serviceProvider.services[index].service_image);
-                      indexProvider.indexValues(3);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsScreen(
-                                    title: serviceProvider
-                                        .services[index].service_title,
-                                    details: serviceProvider
-                                        .services[index].service_detail,
-                                    service_image: serviceProvider
-                                        .services[index].service_image,
-                                    doc_name: serviceProvider
-                                        .services[index].doctor.full_name,
-                                    nmc_number: serviceProvider
-                                        .services[index].doctor.nmc_number,
-                                    doc_image: serviceProvider
-                                        .services[index].doctor.photo,
-                                  )));
-                    },
-                  );
-                }),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 400.0,
-              color: Colors.teal,
-              child: Text('Wallpaper'),
-            ),
-          ),
-          HomeScreenInfo(),
-          SizedBox(height: 20.0),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // SizedBox(height: 10.0),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 13.0),
+        //   child: Text(
+        //     'Home',
+        //     style: TextStyle(fontSize: 22.0, letterSpacing: 0.2),
+        //   ),
+        // ),
+        // HomeScreenInfo(),
+        // SizedBox(height: 40.0),
+        SizedBox(height: 10.0),
+        TitleWithMoreBtn(press: () {}),
+        SizedBox(height: 8.0),
+        SizedBox(
+          height: 100.0,
+          child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              itemCount: serviceProvider.services.length,
+              itemBuilder: (BuildContext context, int index) {
+                return RecommedServices(
+                  image: serviceProvider.services[index].service_image,
+                  title: serviceProvider.services[index].service_title,
+                  press: () {
+                    print(serviceProvider.services[index].service_image);
+                    indexProvider.indexValues(3);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DetailsScreen(
+                                  title: serviceProvider
+                                      .services[index].service_title,
+                                  details: serviceProvider
+                                      .services[index].service_detail,
+                                  service_image: serviceProvider
+                                      .services[index].service_image,
+                                  doc_name: serviceProvider
+                                      .services[index].doctor.full_name,
+                                  nmc_number: serviceProvider
+                                      .services[index].doctor.nmc_number,
+                                  doc_image: serviceProvider
+                                      .services[index].doctor.photo,
+                                )));
+                  },
+                );
+              }),
+        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(15.0),
+        //   child: Container(
+        //     width: MediaQuery.of(context).size.width,
+        //     height: 400.0,
+        //     color: Colors.teal,
+        //     child: Text('Wallpaper'),
+        //   ),
+        // ),
+        SizedBox(height: 25.0),
+        HomeScreenInfo(),
+      ],
     );
   }
 }
@@ -140,10 +139,10 @@ class _RecommedServicesState extends State<RecommedServices> {
             // ),
             GestureDetector(
               onTap: widget.press,
-              child: Stack(children: [
+              child: Column(children: [
                 Container(
-                  width: 60.0,
-                  height: 60.0,
+                  width: 65.0,
+                  height: 65.0,
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -162,6 +161,12 @@ class _RecommedServicesState extends State<RecommedServices> {
                       )
                     ],
                   ),
+                  // child: Text('Title'),
+                ),
+                SizedBox(height: 5.0),
+                Text(
+                  '${widget.title}',
+                  style: TextStyle(color: Colors.grey[700]),
                 ),
                 // Container(
                 //   width: size.width * 0.6,

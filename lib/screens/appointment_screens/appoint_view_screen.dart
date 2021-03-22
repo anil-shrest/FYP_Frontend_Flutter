@@ -1,3 +1,4 @@
+import 'package:DentalHome/screens/app_screens/main_menu_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,7 +43,8 @@ class _AppointHomePageState extends State<AppointHomePage> {
                     itemBuilder: (BuildContext context, int index) {
                       return ListTile(
                         title: Text(
-                          appointmentProvider.appointment[index].appointmentTime,
+                          appointmentProvider
+                              .appointment[index].appointmentTime,
                           style: TextStyle(
                               color: Colors.green,
                               fontSize: 18,
@@ -55,9 +57,19 @@ class _AppointHomePageState extends State<AppointHomePage> {
                         ),
                         leading:
                             Icon(Icons.calendar_today, color: Colors.grey[600]),
-                        trailing: Icon(
-                          Icons.arrow_forward,
-                          color: Colors.black54,
+                        trailing: RaisedButton(
+                          textColor: Colors.white,
+                          color: Colors.black,
+                          child: Text("R"),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainMenu()));
+                          },
+                          shape: new RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(30.0),
+                          ),
                         ),
                         onTap: () {},
                         // trailing: IconButton(

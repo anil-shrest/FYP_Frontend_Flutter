@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:DentalHome/components/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Services Details UI view with specific data
 class DoctorDetailsScreen extends StatefulWidget {
@@ -258,18 +259,28 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                         ),
                         Row(
                           children: <Widget>[
-                            IconTile(
-                              backColor: Color(0xffFFECDD),
-                              imgAssetPath:
-                                  "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/email.png",
+                            GestureDetector(
+                              onTap: () {
+                                _makeMail();
+                              },
+                              child: IconTile(
+                                backColor: Color(0xffFFECDD),
+                                imgAssetPath:
+                                    "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/email.png",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                _makeCall();
+                              },
+                              child: IconTile(
+                                backColor: Colors.greenAccent[100],
+                                imgAssetPath:
+                                    "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/call.png",
+                              ),
                             ),
                             IconTile(
-                              backColor: Color(0xffFEF2F0),
-                              imgAssetPath:
-                                  "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/call.png",
-                            ),
-                            IconTile(
-                              backColor: Color(0xffEBECEF),
+                              backColor: Colors.blue[100],
                               imgAssetPath:
                                   "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/video_call.png",
                             ),
@@ -296,7 +307,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                 style: TextStyle(fontSize: 17, letterSpacing: 0.3),
               ),
               SizedBox(
-                height: 24,
+                height: 30.0,
               ),
               Row(
                 children: <Widget>[
@@ -304,8 +315,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Image.network(
-                              "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/mappin.png"),
+                          Image.asset('assets/nmc.png', height: 30.0),
                           SizedBox(
                             width: 20,
                           ),
@@ -343,8 +353,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                       ),
                       Row(
                         children: <Widget>[
-                          Image.network(
-                              "https://raw.githubusercontent.com/theindianappguy/doctor_booking_app/master/assets/clock.png"),
+                          Image.asset('assets/specialty.png'),
                           SizedBox(
                             width: 20,
                           ),
@@ -492,5 +501,25 @@ class IconTile extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// to open phone app to make a call
+_makeCall() async {
+  const url = 'tel:4433221';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+// to send mail
+_makeMail() async {
+  const url = 'mailto:dental.home@gmail.com';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
