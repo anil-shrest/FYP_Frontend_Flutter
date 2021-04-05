@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:DentalHome/components/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TitleWithMoreBtn extends StatelessWidget {
   const TitleWithMoreBtn({
@@ -20,7 +21,7 @@ class TitleWithMoreBtn extends StatelessWidget {
           ),
           Spacer(),
           FlatButton(
-            onPressed: press,
+            onPressed: () => _launchUrl(),
             child: Row(
               children: [
                 Text(
@@ -34,5 +35,15 @@ class TitleWithMoreBtn extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// to open url in the browser to view more services
+_launchUrl() async {
+  const url = 'https://loveyourteethdentalclinic.business.site/';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }

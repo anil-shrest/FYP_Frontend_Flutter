@@ -1,6 +1,9 @@
+import 'package:DentalHome/api/api.dart';
+import 'package:DentalHome/screens/auth_screens/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:DentalHome/components/colors.dart';
+import 'package:provider/provider.dart';
 
 class SetNewPasswordScreen extends StatefulWidget {
   @override
@@ -14,6 +17,8 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pwdResetProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -61,13 +66,13 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
                         'New Password', Icon(Icons.lock, color: Colors.teal)),
                     SizedBox(height: 15.0),
                     _textField(
-                        passwordController,
-                        'Enter a valid password *',
+                        tokenController,
+                        'Enter the valid *',
                         'Confirmation Token',
                         Icon(Icons.code, color: Colors.teal)),
                     SizedBox(height: 15.0),
-                    _textField(passwordController, 'Enter a valid password *',
-                        'Uid', Icon(Icons.file_present, color: Colors.teal)),
+                    _textField(uidController, 'Enter the valid ID *', 'Uid',
+                        Icon(Icons.file_present, color: Colors.teal)),
                   ],
                 ),
               ),
@@ -77,8 +82,13 @@ class _SetNewPasswordScreenState extends State<SetNewPasswordScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.teal,
-        onPressed: () {},
-        tooltip: 'Increment Counter',
+        onPressed: () {
+          pwdResetProvider.passwordResetConfirmation(passwordController.text,
+              tokenController.text, uidController.text);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
+        },
+        tooltip: 'Continue Button',
         child: const Icon(Icons.send),
       ),
     );

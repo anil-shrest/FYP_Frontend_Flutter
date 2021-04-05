@@ -29,4 +29,22 @@ class Providers extends ChangeNotifier {
     _staffStatus = value;
     notifyListeners();
   }
+
+  // to get amount to be paid for booking appointment
+  int _bookingAmount;
+  int get bookingAmount => _bookingAmount;
+
+  setBookingAmount(int value) {
+    _bookingAmount = value;
+    notifyListeners();
+  }
+
+  //  to get staff id for sending fcm notification
+  int _staffId;
+  int get staffId => _staffId;
+
+  setStaffId(int value) {
+    _staffId = value;
+    notifyListeners();
+  }
 }

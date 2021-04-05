@@ -14,6 +14,8 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   String amount;
+  String paymentStatus;
+  int amt;
 
   final amountController = TextEditingController();
 
@@ -26,7 +28,13 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
 
   //  Khalti payment initiation
   _payViaKhalti() async {
-    double amount = double.parse(amountController.text.trim()) * 100;
+    final paymentProvider = Provider.of<Providers>(context, listen: false);
+    paymentStatus = paymentProvider.bookingAmount.toString();
+
+    // double amount1 = double.parse(amountController.text.trim()) * 100;
+    double amount2 = paymentStatus != null
+        ? double.parse(amt.toString()) * 100
+        : double.parse(amountController.text.trim()) * 100;
 
     FlutterKhalti _flutterKhalti = FlutterKhalti.configure(
       publicKey: "test_public_key_9f55c8620fd546158ea76f2173ce5fa8",
@@ -38,7 +46,7 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
 
     KhaltiProduct product = KhaltiProduct(
       id: "test",
-      amount: amount,
+      amount: amount2,
       name: "Dental service payment",
     );
     _flutterKhalti.startPayment(
@@ -54,6 +62,8 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final paymentProvider = Provider.of<Providers>(context, listen: false);
+    paymentStatus = paymentProvider.bookingAmount.toString();
     return Scaffold(
         // key: scaffoldKey,
         appBar: AppBar(
@@ -90,33 +100,67 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
                   key: _formKey,
                   child: Container(
                       width: MediaQuery.of(context).size.width,
-                      child: TextFormField(
-                        // style: TextStyle(color: Colors.grey[800]),
-                        keyboardType: TextInputType.number,
-                        controller: amountController,
-                        validator: (input) => input.length <= 0 || input.isEmpty
-                            ? "Amount must be higher than Rs.0*"
-                            : null,
-                        decoration: new InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 11.0),
-                          hintText: "Amount in Rupees",
-                          hintStyle: TextStyle(color: Colors.grey[800]),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: primaryColor,
-                          )),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Colors.black87,
-                          )),
-                          prefixIcon: Icon(
-                            Icons.attach_money,
-                            color: Colors.teal,
-                          ),
-                        ),
-                      )),
+                      child: paymentStatus != null
+                          ? TextFormField(
+                              initialValue:
+                                  paymentProvider.bookingAmount.toString(),
+                              // style: TextStyle(color: Colors.grey[800]),
+                              keyboardType: TextInputType.number,
+                              // controller: amountController,
+                              validator: (input) =>
+                                  input.length <= 0 || input.isEmpty
+                                      ? "Amount must be higher than Rs.0*"
+                                      : null,
+                              decoration: new InputDecoration(
+                                fillColor: Colors.white,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 11.0),
+                                hintText: "Amount in Rupees",
+                                hintStyle: TextStyle(color: Colors.grey[800]),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: primaryColor,
+                                )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.black87,
+                                )),
+                                prefixIcon: Icon(
+                                  Icons.attach_money,
+                                  color: Colors.teal,
+                                ),
+                              ),
+                            )
+                          : TextFormField(
+                              // initialValue:
+                              //     paymentProvider.bookingAmount.toString(),
+                              // style: TextStyle(color: Colors.grey[800]),
+                              keyboardType: TextInputType.number,
+                              controller: amountController,
+                              validator: (input) =>
+                                  input.length <= 0 || input.isEmpty
+                                      ? "Amount must be higher than Rs.0*"
+                                      : null,
+                              decoration: new InputDecoration(
+                                fillColor: Colors.white,
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 11.0),
+                                hintText: "Amount in Rupees",
+                                hintStyle: TextStyle(color: Colors.grey[800]),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: primaryColor,
+                                )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                  color: Colors.black87,
+                                )),
+                                prefixIcon: Icon(
+                                  Icons.attach_money,
+                                  color: Colors.teal,
+                                ),
+                              ),
+                            )),
                 ),
                 SizedBox(height: 20.0),
                 FlatButton(
@@ -128,7 +172,12 @@ class _KhaltiScreenState extends State<KhaltiScreen> {
                     ),
                     color: primaryColor,
                     onPressed: () {
-                      amount = (amountController.text);
+                      amt = int.parse(paymentProvider.bookingAmount.toString());
+                      amount = paymentStatus != null
+                          ? amt.toString()
+                          : amountController.text;
+                      print('amount is');
+                      print(amount);
                       if (_formKey.currentState.validate()) {
                         _payViaKhalti();
                       }

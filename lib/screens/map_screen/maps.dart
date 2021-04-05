@@ -1,3 +1,4 @@
+import 'package:DentalHome/components/colors.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -169,10 +170,10 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
           color: Colors.white, //change your color here
         ),
         title: Text(
-          'Location',
+          'Branch Locations',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.deepPurpleAccent,
+        backgroundColor: buttonColor,
       ),
       body: Stack(children: <Widget>[
         Container(

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "903307804227",
+    "project_id": "dentalhome-78842",
+    "storage_bucket": "dentalhome-78842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903307804227:android:2fec87e499ef6c22889ef6",
+        "android_client_info": {
+          "package_name": "com.example.DentalHomeFYP"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903307804227-v439q22suoh0m6mlggtit71vmm4crdse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDNRgOTf93rNu9camwHLq2nyXSZ4jyzZs8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903307804227-v439q22suoh0m6mlggtit71vmm4crdse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

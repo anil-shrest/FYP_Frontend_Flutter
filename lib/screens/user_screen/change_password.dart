@@ -17,7 +17,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pwdChangeProvider = Provider.of<AppointmentProvider>(context);
+    final pwdChangeProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -70,13 +71,16 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 height: 43.0,
                 child: FlatButton(
                   onPressed: () async {
+                    // print(oldPwdController.text);
+                    // print(passwordController.text);
+                    // print(password2Controller.text);
                     if (validateAndSave()) {
                       pwdChangeProvider.changePassword(oldPwdController.text,
                           passwordController.text, password2Controller.text);
 
-                      passwordController.text = '';
-                      password2Controller.text = '';
-                      oldPwdController.text = '';
+                      // passwordController.text = '';
+                      // password2Controller.text = '';
+                      // oldPwdController.text = '';
                     } else {
                       print('ERROR!!!');
                     }
@@ -140,7 +144,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               });
             },
             // color: Colors.grey[700],
-            icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey[500],),
+            icon: Icon(
+              hidePassword ? Icons.visibility_off : Icons.visibility,
+              color: Colors.grey[500],
+            ),
           ),
         ),
       ),

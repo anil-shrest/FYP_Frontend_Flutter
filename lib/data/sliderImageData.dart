@@ -38,7 +38,7 @@ List<SliderModel> getSlides() {
 
   //1
   sliderModel.setDesc(
-      "Food delivery or pickup from local restaurants, Explore restaurants that deliver near you.");
+      "We have recruited the best dentist in the town, who have very high reputation and experience.");
   sliderModel.setTitle("Experienced Doctors");
   sliderModel.setImageAssetPath("assets/doctors.png");
   slides.add(sliderModel);
@@ -47,7 +47,7 @@ List<SliderModel> getSlides() {
 
   //2
   sliderModel.setDesc(
-      "Discover Restaurants offering the best fast food food near you on Foodwa");
+      "Feature to book appointment online via this application, choose the docotor you want and a prefereable time period.");
   sliderModel.setTitle("Book Appointment");
   sliderModel.setImageAssetPath("assets/booking.png");
   slides.add(sliderModel);
@@ -56,7 +56,7 @@ List<SliderModel> getSlides() {
 
   //3
   sliderModel.setDesc(
-      "Our veggie plan is filled with delicious seasonal vegetables, whole grains,  vegetarian proteins");
+      "You can easily view our various branch location and visit the nearest branc for your treatment");
   sliderModel.setTitle("Locations");
   sliderModel.setImageAssetPath("assets/maps.png");
   slides.add(sliderModel);

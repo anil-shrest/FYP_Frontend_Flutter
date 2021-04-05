@@ -68,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
         ],
       ),
-      //  Features info slides 
+      //  Features info slides
       bottomSheet: slideIndex != mySlides.length - 1
           ? Container(
               height: Platform.isAndroid ? 50 : 70,

@@ -1,11 +1,16 @@
+import 'dart:convert';
+
+import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/models/appoint.dart';
+import 'package:DentalHome/screens/payment_screen/khalti_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:DentalHome/api/api.dart';
 import 'package:DentalHome/components/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'appoint_view_screen.dart';
 
 //  Appointment page creation
@@ -15,18 +20,29 @@ class AppointmentPageScreen extends StatefulWidget {
 }
 
 class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
+  final doctorController = TextEditingController();
+  final appointTimeController = TextEditingController();
+
   List<String> _doctorList = [];
+  List<int> _doctorId = [];
   List<String> _timeList = [];
+  Map<int, String> doctorMap = {};
   List _selectedIndex = [];
 
   String csv;
+  String doc;
+  int staffId;
   String _selectedDoctor;
   String bookedTime;
   String ddlTitle = 'Select a doctor';
+  String ddlValue;
   int selectedIndex;
   int timeIndex = 0;
+  int timeId = 0;
 
   var selectedTimeSlot;
+  var docId;
+  var docName;
   var timeLabelColor = Colors.white;
   var dt = DateTime.now();
 
@@ -38,22 +54,7 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
     super.initState();
     _selectedDoctor = null;
     _getDoctorlist();
-
-    _getBookedTime();
-    // var _date = DateTime.parse(bookedTime).add(Duration(hours: 12));
-
-    // if (_date.isBefore(DateTime.now())) {
-    //   _shouldIgnore = false;
-    // } else {
-    //   _shouldIgnore = true;
-    // }
-    // var _date = DateTime.parse(bookedTime).add(Duration(hours: 12));
-
-    // if (_date.isBefore(DateTime.now())) {
-    //   _shouldIgnore = false;
-    // } else {
-    //   _shouldIgnore = true;
-    // }
+    // _getBookedTime();
   }
 
   // Getting doctor's name and storing in a list to display in drop down list
@@ -63,15 +64,26 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
     for (int i = 0; i < doctorProvider.doctor.length; i++) {
       print('this is the list :' + doctorProvider.doctor[i].full_name);
       _doctorList.add(doctorProvider.doctor[i].full_name);
+      _doctorId.add(doctorProvider.doctor[i].id);
+      // print('Doc id is -->');
+      // print(doctorProvider.doctor[i].id);
     }
+    // Maping doctor id and name
+    doctorMap = Map.fromIterables(_doctorId, _doctorList);
   }
 
   // Getting time table and storing in a list to display in chip
   _getTimeTablelist() {
+    // final staffProvider = Provider.of<Providers>(context);
     final timeProvider =
         Provider.of<AppointmentProvider>(context, listen: false);
-    csv = timeProvider.timeTable[timeIndex].time_space.toString();
+    staffId = timeProvider.timeTable[timeIndex].author.id;
+    csv = timeProvider.timeTable[timeIndex].timeSpace;
+    // ? timeProvider.timeTable[timeIndex].timeSpace
+    // : timeProvider.timeTable[timeIndex].timeSpace;
     _timeList = csv.split(new RegExp(r","));
+    // staffProvider.setStaffId(staffId);
+    // print(staffId);
   }
 
   // Getting the time of appointment booked to disbale it for a day
@@ -80,7 +92,7 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
     //DateTime.parse because you can only save Strings locally.
     // .add Adds the time limit we wanr for demo only 3 minutes
     var _date = DateTime.parse(prefs.getString('lastPressed'))
-        .add(Duration(minutes: 2));
+        .add(Duration(minutes: 1));
 
     if (_date.isBefore(DateTime.now())) {
       _shouldIgnore = false;
@@ -91,8 +103,13 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _getBookedTime();
     _getTimeTablelist();
-    final doctorProvider = Provider.of<AppointmentProvider>(context);
+    // int timeId = 0;
+    // _getDoctorlist();
+    // print(doc);
+    final paymentProvider = Provider.of<Providers>(context);
+    final appointProvider = Provider.of<AppointmentProvider>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
@@ -116,7 +133,8 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
-                      "https://i.pinimg.com/originals/1b/f4/37/1bf43723e3f0ba5c0933f490eff27cf9.jpg"),
+                      // "https://i.pinimg.com/originals/1b/f4/37/1bf43723e3f0ba5c0933f490eff27cf9.jpg"
+                      "https://image.freepik.com/foto-gratis/herramientas-cuidado-dental-sobre-superficie-blanca_185193-15011.jpg"),
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.circular(5.0),
@@ -161,44 +179,85 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10.0),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  SizedBox(height: 20.0),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: 25.0,
-                          width: 25.0,
-                          child: SvgPicture.asset('assets/doc_icon.svg')),
-                      SizedBox(width: 20.0),
-                      Text(
-                        ddlTitle,
-                        style: TextStyle(
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
-                            color: buttonColor,
-                            letterSpacing: 0.3),
-                      ),
-                      // SizedBox(width: 20.0),
-                      DropdownButton<String>(
-                        value: _selectedDoctor,
-                        icon: Icon(Icons.arrow_drop_down_circle_outlined),
-                        iconEnabledColor: Colors.teal,
-                        onChanged: (String newVal) {
-                          setState(() {
-                            _selectedDoctor = newVal;
-                            ddlTitle = '';
-                            timeIndex = _doctorList.indexOf(newVal);
-                          });
-                          print(_selectedDoctor);
-                          print(timeIndex);
-                        },
-                        items: _doctorList.map((doctor) {
-                          return DropdownMenuItem(
-                            child: new Text(doctor.toString()),
-                            value: doctor,
-                          );
-                        }).toList(),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                                height: 25.0,
+                                width: 25.0,
+                                child: SvgPicture.asset('assets/doc_icon.svg')),
+                            SizedBox(width: 20.0),
+                            Text(
+                              ddlTitle,
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: buttonColor,
+                                  letterSpacing: 0.2),
+                            )
+                          ]),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 45.0),
+                        child: DropdownButton<String>(
+                          value: _selectedDoctor,
+                          iconSize: 30.0,
+                          // icon: Icon(Icons.arrow_drop_down_circle_outlined),
+                          icon: const Icon(Icons.arrow_downward),
+                          elevation: 16,
+                          style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w700),
+                          underline: Container(
+                            height: 1,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          iconEnabledColor: Colors.teal[400],
+                          items: doctorMap
+                              .map((description, value) {
+                                return MapEntry(
+                                    description,
+                                    DropdownMenuItem<String>(
+                                      // value: description.toString(),
+                                      value: value + description.toString(),
+                                      child: Text("$value  D$description"),
+                                    ));
+                              })
+                              .values
+                              .toList(),
+                          onChanged: (String newVal) {
+                            setState(() {
+                              _selectedDoctor = newVal;
+                              // ddlTitle = '';
+                              // ddlValue =
+                              timeId += 1;
+                              docId =
+                                  newVal.replaceAll(new RegExp(r'[^0-9]'), '');
+                              docName = newVal.replaceAll(
+                                  new RegExp(r'[^a-zA-Z. ]'), '');
+                              doc = docName;
+                              // timeIndex = _doctorList.indexOf(newVal);
+                              print(int.parse(docId));
+                              print(docName);
+                              timeIndex = _doctorList.indexOf(docName);
+                            });
+                            // print(_selectedDoctor);
+                            // print(newVal);
+                            print(timeIndex);
+                          },
+                          // items: _doctorList.map((doctor) {
+                          //   return DropdownMenuItem(
+                          //     child: new Text(doctor.toString()),
+                          //     value: doctor,
+                          //   );
+                          // }).toList(),
+                        ),
                       ),
                     ],
                   ),
@@ -224,8 +283,6 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                       ),
                     ],
                   ),
-                  // SizedBox(height: 10.0),
-                  // TimeLabel(),
                   SizedBox(
                     height: 60.0,
                     child: ListView.builder(
@@ -282,26 +339,38 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                   height: 45.0,
                   minWidth: MediaQuery.of(context).size.width,
                   onPressed: () async {
-                    setState(() {
-                      _lockButton();
-                    });
-                    // // Disable book button for 12 hours (minutes: 1 -> for demo)
-                    // SharedPreferences prefs =
-                    //     await SharedPreferences.getInstance();
-                    // var _date = DateTime.parse(prefs.getString('lastPressed'))
-                    //     .add(Duration(hours: 12));
-
-                    // if (_date.isBefore(DateTime.now())) {
-                    //   _shouldIgnore = false;
-                    // } else {
-                    //   _shouldIgnore = true;
-                    // }
-                    print('tap');
-                    print(selectedTimeSlot);
+                    paymentProvider.setBookingAmount(500);
+                    appointProvider.staff_fcm(13);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AppointHomePage()));
+                            builder: (context) => KhaltiScreen()));
+                    setState(() {
+                      _lockButton();
+                    });
+                    //to get the fk of doctor
+                    String result = _selectedDoctor.substring(
+                        0, _selectedDoctor.indexOf(' '));
+                    print(result);
+                    appointProvider.addAppointment(
+                        selectedTimeSlot, int.parse(docId));
+                    // FOR APPOINTMENT POST 1st WAY
+                    // if (_selectedDoctor.isNotEmpty &&
+                    //     selectedTimeSlot != null) {
+                    //   final Appointment appointment = Appointment(
+                    //       appointmentBy: _selectedDoctor,
+                    //       appointmentTime: selectedTimeSlot);
+                    //   Provider.of<AppointmentProvider>(context, listen: false)
+                    //       .addAppointment(appointment);
+                    // } else {
+                    //   print('Failed to add appoint');
+                    // }
+                    print('tap');
+                    print(selectedTimeSlot);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => AppointHomePage()));
                   },
                   child: Text(
                     'Book Now',

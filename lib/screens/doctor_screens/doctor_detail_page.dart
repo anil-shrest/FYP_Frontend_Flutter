@@ -208,7 +208,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 18.0),
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -218,7 +218,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
               Row(
                 children: <Widget>[
                   Container(
-                    width: 150.0,
+                    width: 140.0,
                     height: 200.0,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -233,10 +233,10 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                               )),
                   ),
                   SizedBox(
-                    width: 20,
+                    width: 15,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width - 222,
+                    width: MediaQuery.of(context).size.width - 212,
                     height: 220,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -353,7 +353,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                       ),
                       Row(
                         children: <Widget>[
-                          Image.asset('assets/specialty.png'),
+                          Image.asset('assets/specialty2.png'),
                           SizedBox(
                             width: 20,
                           ),

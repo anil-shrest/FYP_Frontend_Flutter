@@ -149,20 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       key: globalFormKey,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 10.0),
-                          // Row(
-                          //   children: [
-                          //     Text(
-                          //       "Enter the details for registration",
-                          //       style: TextStyle(
-                          //           color: Colors.grey[800],
-                          //           fontSize: 18.0,
-                          //           letterSpacing: 0.2,
-                          //           fontWeight: FontWeight.w400),
-                          //     ),
-                          //   ],
-                          // ),
-                          SizedBox(height: 10.0),
+                          SizedBox(height: 20.0),
                           Center(
                             child: _image == null
                                 ? MaterialButton(

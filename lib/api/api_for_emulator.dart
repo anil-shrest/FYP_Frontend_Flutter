@@ -1,9 +1,5 @@
-// TO USE API CODES FOR RUNNING APP IN EMULATOR COPY & PASTE FROM API_FOR_EMULATOR.DART AND ALSO REMOVE "S" FROM CLASS NAME
-
-//  ------------------------------------------------------------------->  FOR RUNNING IN MOBILE DEVICES <--------------------------------------------------------//
 import 'dart:convert';
 import 'dart:math';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +12,12 @@ import 'package:DentalHome/models/time_table.dart';
 import '../models/appoint.dart';
 import 'package:http/http.dart' as http;
 
-class AppointmentProvider with ChangeNotifier {
-  AppointmentProvider() {
+class AppointmentProviderS with ChangeNotifier {
+  // SharedPref sharedPref = SharedPref();
+  // Credential userSave = Credential();
+  // bool _isLoading = false;
+
+  AppointmentProviderS() {
     fetchAllAppointment();
     fetchAppointment();
     fetchServices();
@@ -105,63 +105,6 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
-  // To get mobile devices key and store it for sending fcm
-  get_device_key() async {
-    final FirebaseMessaging _fcm = FirebaseMessaging();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token');
-    String device_key;
-    _fcm.getToken().then((token) {
-      device_key = token;
-      print('The device token is:' + device_key);
-    });
-
-    final http.Response response = await http.post(
-      'http://10.0.2.2:8000/save_device_token/',
-      headers: <String, String>{
-        'Content-type': 'application/json',
-        "Authorization": "Token $token"
-      },
-      body: jsonEncode(
-        <String, dynamic>{
-          'device_key': device_key,
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      _showToastMessage('Device key registered 🙌', Colors.teal[300]);
-      notifyListeners();
-    } else {
-      _showToastMessage('Device key failed to save!', Colors.redAccent[200]);
-      // print('Otp code registration failed!!');
-    }
-  }
-
-  // To send fcm notification to the appropriate staff for confirmation
-  staff_fcm(int staff_id) async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('token');
-      final response = await http.post(
-        "http://10.0.2.2:8000/sending_fcm/$staff_id/",
-        headers: {
-          'Content-type': 'application/json',
-          "Authorization": "Token $token"
-        },
-      );
-      if (response.statusCode == 200) {
-        _showToastMessage('Booking Requested', Colors.teal[300]);
-        notifyListeners();
-      } else {
-        _showToastMessage('Booking Failed!', Colors.redAccent[200]);
-        // print('Otp code registration failed!!');
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   // Verify recieved OTP code
   Future<String> verifyOtp(String mobile, String otp) async {
     try {
@@ -220,6 +163,46 @@ class AppointmentProvider with ChangeNotifier {
       return 'failure';
     }
   }
+
+// // to get the details of individual users
+//   Future fetchUser() async {
+//     final url = "http://10.0.2.2:8000/properties/?format=json";
+//     final response = await http.get(
+//       url,
+//       headers: {
+//         'Authorization': 'Token 86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f'
+//       },
+//     );
+//     if (response.statusCode == 200) {
+//       // var data = FetchUser.fromJson(jsonDecode(response.body));
+//       // var data = json.decode(response.body) as List;
+//       // _user = data.map<FetchUser>((json) => FetchUser.fromJson(json)).toList();
+//       // notifyListeners();
+//       set
+//     } else {
+//       throw Exception('Failed to load data!');
+//     }
+//   }
+
+  // void getAppoint(Appointment appointment) async {
+  //   var token = '86400c0ca1cc03e34fbfa3bc3a6fc3ca6ed91b1f';
+  //   final response = await http.get(
+  //     "http://10.0.2.2:8000/appointment/list/?format=json",
+  //     headers: {
+  //       'Content-type': 'application/json',
+  //       'Accept': 'application/json',
+  //       "Authorization": "Bearer $token"
+  //     },
+  //     body: json.encode(appointment)
+  //   );
+  //   if (response.statusCode == 201) {
+  //     appointment.id = json.decode(response.body)['id'];
+  //     _appointment.add(appointment);
+  //     notifyListeners();
+  //   } else {
+  //     throw Exception('Failed to add appointment!');
+  //   }
+  // }
 
   //to get reset password reset email
   Future<String> getResetEmail(String email) async {
@@ -283,6 +266,43 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
+  // Future<SignUp> signup(String first_name, String last_name, String mobile, String email,
+  //     String username, String password, String password2) async {
+  //   final http.Response response = await http.post(
+  //       "http://10.0.2.2:8000/auth/register/",
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json; charset=UTF-8'
+  //       },
+  //       body: json.encode(signUp));
+  //   if (response.statusCode == 200) {
+  //     notifyListeners();
+  //     return SignUp.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     throw Exception('Failed to register');
+  //   }
+  // }
+
+  // to add new appointment
+  // void addAppointment(Appointment appointment) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String token = prefs.getString('token');
+
+  //   final response = await http.post("http://10.0.2.2:8000/appointment/list/",
+  //       headers: {
+  //         'Content-type': 'application/json',
+  //         'Accept': 'application/json',
+  //         "Authorization": "Token $token"
+  //       },
+  //       body: json.encode(appointment));
+  //   if (response.statusCode == 201) {
+  //     appointment.id = json.decode(response.body)['id'];
+  //     _appointment.add(appointment);
+  //     notifyListeners();
+  //   } else {
+  //     _showToastMessage('Failed to add appointment!', Colors.redAccent[200]);
+  //   }
+  // }
+
   // To add appointment
   void addAppointment(String appointmentTime, int id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -317,7 +337,7 @@ class AppointmentProvider with ChangeNotifier {
     print(token);
 
     final url = "http://10.0.2.2:8000/appointment/list/?format=json";
-    // final url = "http://10.0.2.2:8000/appointment/list/?format=json";
+    // final url = "http://127.0.0.1:8000/appointment/list/?format=json";
     final response = await http.get(
       url,
       headers: {'Authorization': 'Token $token'},
@@ -468,7 +488,7 @@ class AppointmentProvider with ChangeNotifier {
   // to get the details of individual users appointment details
   void fetchServices() async {
     final url = "http://10.0.2.2:8000/service/list/?format=json";
-    // final url = "http://10.0.2.2:8000/service/list/?format=json";
+    // final url = "http://127.0.0.1:8000/service/list/?format=json";
     final response = await http.get(
       url,
     );
@@ -523,10 +543,64 @@ class AppointmentProvider with ChangeNotifier {
       msg: "$message",
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 3,
+      timeInSecForIosWeb: 2,
       backgroundColor: color,
       textColor: Colors.white,
       fontSize: 14.0,
     );
   }
+
+  // http://127.0.0.1:8000/service/list/?format=json <------ TO GET SERVCIES JSON
+
+  // void verifyToken(String token) {
+  //   var url = "<url to backend api>";
+  //   var client = http.Client();
+  //   var request = http.Request('POST', Uri.parse(url));
+  //   var body = {'id_token': token};
+  //   request.bodyFields = body;
+  //   var future = client.send(request).then((response) {
+  //     response.stream.bytesToString().then((value) {
+  //       print(value.toString());
+  //     }).catchError((error) {
+  //       print(error.toString());
+  //     });
+  //   });
+  // }
 }
+
+// class APIService {
+//   Future<LoginResponseModel> login(LoginRequestModel requestModel) async {
+//     String url = "http://10.0.2.2:8000/app/login/";
+
+//     final response = await http.post(url, body: requestModel.toJson());
+//     if (response.statusCode == 200 || response.statusCode == 400) {
+//       print(response);
+//       String token = jsonDecode(response.body)['token'].toString();
+//       print(token);
+//       return LoginResponseModel.fromJson(json.decode(response.body));
+//     }
+//     // else {
+//     //   throw Exception('Failed to load data!');
+//     // }
+//   }
+
+// Future<String> loginUser(String username, String password) async {
+//   final http.Response response =
+//       await http.post('http://10.0.2.2:8000/app/login/',
+//           headers: <String, String>{
+//             'Content-Type': 'application/json; charset=UTF-8',
+//           },
+//           body: LoginRequestModel().toJson());
+//   if (response.statusCode == 200) {
+//     print(response);
+//     String token = jsonDecode(response.body)['token'].toString();
+//     print(token);
+//     return token;
+//   } else {
+//     throw Exception('Failed to load!');
+//   }
+// }
+
+// void getToken() async {
+//   String userToken = await loginUser(username, password)
+// }

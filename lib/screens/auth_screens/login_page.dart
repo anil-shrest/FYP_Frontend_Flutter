@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:DentalHome/screens/otp_screen/otp_verification.dart';
+import 'package:DentalHome/screens/otp_screen/phone_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,6 +26,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseMessaging _fcm = FirebaseMessaging();
+
   bool hidePassword = true;
   bool isApiCallProcess = false;
   bool isStaffCheckbox = false;
@@ -42,16 +47,17 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     // fetchUser();
+
     loginRequestModel = new LoginRequestModel();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    usernameController.dispose();
-    emailController.dispose();
-    passwordController.clear();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   usernameController.dispose();
+  //   emailController.dispose();
+  //   passwordController.clear();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +118,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _uiSetup(BuildContext context) {
+    final deviceKeyProvider =
+        Provider.of<AppointmentProvider>(context, listen: false);
     return Stack(
       children: [
         Image.asset(
@@ -280,6 +288,10 @@ class _LoginPageState extends State<LoginPage> {
                     Divider(color: Colors.black, indent: 80.0, endIndent: 80.0),
                     GestureDetector(
                       onTap: () {
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => PhoneNumberScreen()));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -321,85 +333,83 @@ class _LoginPageState extends State<LoginPage> {
   _showDialog() async {
     await showDialog<String>(
       context: context,
-      child: _SystemPadding(
-        child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-          contentPadding: const EdgeInsets.all(16.0),
-          content: Row(
-            children: <Widget>[
-              new Expanded(
-                  child: Container(
-                height: 150.0,
-                width: MediaQuery.of(context).size.width,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text(
-                        'Enter email to get password reset url',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 17.0),
+      child: AlertDialog(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+        contentPadding: const EdgeInsets.all(16.0),
+        content: Row(
+          children: <Widget>[
+            new Expanded(
+                child: Container(
+              height: 140.0,
+              width: MediaQuery.of(context).size.width,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Enter email to get password reset url',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 17.0),
+                    ),
+                    TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      controller: emailController,
+                      validator: (input) => input.length < 3 || input.isEmpty
+                          ? "Enter proper credential*"
+                          : null,
+                      decoration: new InputDecoration(
+                        fillColor: Colors.white,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 11.0),
+                        hintText: "Email Address",
+                        // hintStyle: TextStyle(color: Colors.grey[800]),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: primaryColor,
+                        )),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.grey[700],
+                        )),
+                        focusColor: Colors.tealAccent,
+                        prefixIcon: Icon(Icons.mail, color: Colors.teal),
                       ),
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        controller: emailController,
-                        validator: (input) => input.length < 3 || input.isEmpty
-                            ? "Enter proper credential*"
-                            : null,
-                        decoration: new InputDecoration(
-                          fillColor: Colors.white,
-                          contentPadding:
-                              const EdgeInsets.symmetric(vertical: 11.0),
-                          hintText: "Email Address",
-                          // hintStyle: TextStyle(color: Colors.grey[800]),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: primaryColor,
-                          )),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                            color: Colors.grey[700],
-                          )),
-                          focusColor: Colors.tealAccent,
-                          prefixIcon: Icon(Icons.mail, color: Colors.teal),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ))
-            ],
-          ),
-          actions: <Widget>[
-            new FlatButton(
-                child: Text('Cancel',
-                    style: TextStyle(color: Colors.red[300], fontSize: 15.0)),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            new FlatButton(
-              child: Text('Confirm',
-                  style: TextStyle(color: Colors.black, fontSize: 15.0)),
-              onPressed: () {
-                var emailChangeProvider =
-                    Provider.of<AppointmentProvider>(context, listen: false);
-
-                if (_formKey.currentState.validate()) {
-                  print(emailController.text);
-                  // emailChangeProvider.getResetEmail(emailController.text);
-                  _showToastMessage(
-                      'Reset url has been sent to the mail', Colors.teal[300]);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SetNewPasswordScreen()));
-                }
-              },
-            )
+              ),
+            ))
           ],
         ),
+        actions: <Widget>[
+          new FlatButton(
+              child: Text('Cancel',
+                  style: TextStyle(color: Colors.red[300], fontSize: 15.0)),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          new FlatButton(
+            child: Text('Confirm',
+                style: TextStyle(color: Colors.black, fontSize: 15.0)),
+            onPressed: () {
+              var emailChangeProvider =
+                  Provider.of<AppointmentProvider>(context, listen: false);
+
+              if (_formKey.currentState.validate()) {
+                print(emailController.text);
+                emailChangeProvider.getResetEmail(emailController.text);
+                // _showToastMessage(
+                //     'Reset url has been sent to the mail', Colors.teal[300]);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SetNewPasswordScreen()));
+              }
+            },
+          )
+        ],
       ),
     );
   }
@@ -429,6 +439,8 @@ class _LoginPageState extends State<LoginPage> {
               },
             ));
     if (response.statusCode == 200) {
+      final deviceKeyProvider =
+          Provider.of<AppointmentProvider>(context, listen: false);
       print(response);
       String token = jsonDecode(response.body)['token'].toString();
       print(token);
@@ -447,35 +459,12 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
             (Route<dynamic> route) => false);
       }
+      deviceKeyProvider.get_device_key();
       return token;
     } else {
       _showToastMessage("Invalid Credentials", Colors.redAccent[200]);
     }
   }
-
-  // Future checkLogin(String token) async {
-  //   if (token != null) {
-  //     Fluttertoast.showToast(
-  //       msg: "Login Successful 🙏",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.teal[300],
-  //       textColor: Colors.white,
-  //       fontSize: 14.0,
-  //     );
-  //   } else {
-  //     Fluttertoast.showToast(
-  //       msg: "Invalid username or password!",
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.BOTTOM,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red[300],
-  //       textColor: Colors.white,
-  //       fontSize: 14.0,
-  //     );
-  //   }
-  // }
 }
 
 class _SystemPadding extends StatelessWidget {

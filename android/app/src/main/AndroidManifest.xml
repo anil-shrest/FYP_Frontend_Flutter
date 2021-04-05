@@ -8,7 +8,7 @@
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
   <uses-permission android:name="android.permission.VIBRATE" />
 
-  <application android:name="io.flutter.app.FlutterApplication" android:requestLegacyExternalStorage="true" android:label="DentalHome" android:icon="@mipmap/ic_launcher" tools:replace="android:label">
+  <application android:name=".Application" android:requestLegacyExternalStorage="true" android:label="DentalHome" android:icon="@mipmap/ic_launcher" tools:replace="android:label">
     <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCp0HvMSJWz3xAbwKE9IuDMf-ypr7LZL0s" />
     <activity android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize" android:showWhenLocked="true" android:turnScreenOn="true">
       <!-- Specifies an Android theme to apply to this Activity as soon as
@@ -25,6 +25,10 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+        <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
     <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">

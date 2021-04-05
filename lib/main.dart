@@ -1,3 +1,4 @@
+import 'package:DentalHome/screens/firebase_cloud_messaging/fcm_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,6 +11,8 @@ import 'package:DentalHome/components/providers.dart';
 import 'package:DentalHome/components/text.dart';
 import 'components/theme.dart';
 import 'screens/app_screens/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -26,7 +29,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   // Initializing local notification
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp();
   var initializationSettingsAndroid = AndroidInitializationSettings('logo');
   var initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: true,
@@ -54,6 +57,15 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (context) => PageProvider()),
     ], child: MyApp()));
   });
+}
+
+final Map<String, Item> _items = <String, Item>{};
+Item _itemForMessage(Map<String, dynamic> message) {
+  final dynamic data = message['data'] ?? message;
+  final String itemId = data['id'];
+  final Item item = _items.putIfAbsent(itemId, () => Item(itemId: itemId))
+    ..status = data['status'];
+  return item;
 }
 
 class MyApp extends StatelessWidget {
