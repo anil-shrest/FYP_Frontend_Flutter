@@ -53,7 +53,14 @@ class _SplashScreenState extends State<SplashScreen> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        _showToastMessage('An appointment has been placed', Colors.teal[300]);
+
+        // if (message["data"]["screen"] == "payment") {
+        //   print("onMessage: $message");
+        //   _showToastMessage('An appointment has been placed', Colors.teal[300]);
+        // } else {
+        //   _showToastMessage(
+        //       'Your appointment has been rejected', Colors.red[400]);
+        // }
       },
       // onBackgroundMessage: myBackgroundMessageHandler,
       onLaunch: (Map<String, dynamic> message) async {

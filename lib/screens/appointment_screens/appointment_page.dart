@@ -341,10 +341,10 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                   onPressed: () async {
                     paymentProvider.setBookingAmount(500);
                     appointProvider.staff_fcm(13);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => KhaltiScreen()));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => KhaltiScreen()));
                     setState(() {
                       _lockButton();
                     });
@@ -352,8 +352,8 @@ class _AppointmentPageScreenState extends State<AppointmentPageScreen> {
                     String result = _selectedDoctor.substring(
                         0, _selectedDoctor.indexOf(' '));
                     print(result);
-                    appointProvider.addAppointment(
-                        selectedTimeSlot, int.parse(docId));
+                    // appointProvider.addAppointment(
+                    //     selectedTimeSlot, int.parse(docId));
                     // FOR APPOINTMENT POST 1st WAY
                     // if (_selectedDoctor.isNotEmpty &&
                     //     selectedTimeSlot != null) {

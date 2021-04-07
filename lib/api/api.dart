@@ -162,6 +162,30 @@ class AppointmentProvider with ChangeNotifier {
     }
   }
 
+  // To send fcm notification to the staff after booking has been confirmed
+  patient_fcm(int appointment_id) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+      final response = await http.post(
+        "http://10.0.2.2:8000/confirmed_fcm/$appointment_id/",
+        headers: {
+          'Content-type': 'application/json',
+          "Authorization": "Token $token"
+        },
+      );
+      if (response.statusCode == 200) {
+        _showToastMessage('Your appointment has been confirmed', Colors.teal[300]);
+        notifyListeners();
+      } else {
+        _showToastMessage('Appointment was rejected!', Colors.redAccent[200]);
+        // print('Otp code registration failed!!');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   // Verify recieved OTP code
   Future<String> verifyOtp(String mobile, String otp) async {
     try {

@@ -79,25 +79,29 @@ class _ViewAllAppointmentsState extends State<ViewAllAppointments> {
                           ),
                           leading: Icon(Icons.calendar_today,
                               color: Colors.grey[600]),
+                          // trailing: IconButton(
+                          //     onPressed: () {
+                          //       print(appointmentProvider
+                          //           .allAppointment[index].id);
+                          //       appointmentProvider.deleteAppoint(
+                          //           appointmentProvider
+                          //               .allAppointment[index].id);
+                          //     },
+                          //     icon: Icon(
+                          //       Icons.delete,
+                          //       color: Colors.red,
+                          //     )),
+                          // onTap: () {},
                           trailing: IconButton(
+                              icon: Icon(Icons.domain_verification_sharp,
+                                  color: Colors.red),
                               onPressed: () {
-                                print(appointmentProvider
-                                    .allAppointment[index].id);
-                                appointmentProvider.deleteAppoint(
+                                appointmentProvider.patient_fcm(
                                     appointmentProvider
                                         .allAppointment[index].id);
-                              },
-                              icon: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                              )),
-                          // onTap: () {},
-                          // trailing: IconButton(
-                          //     icon: Icon(Icons.domain_verification_sharp,
-                          //         color: Colors.red),
-                          //     onPressed: () {
-                          //       appointmentProvider.staff_fcm(staffProvider.staffId);
-                          //     }),
+                                print(appointmentProvider
+                                    .allAppointment[index].id);
+                              }),
                         );
                       },
                     ),
