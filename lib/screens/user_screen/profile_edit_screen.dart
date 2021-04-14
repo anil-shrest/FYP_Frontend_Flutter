@@ -17,6 +17,7 @@ class UserProfileEditScreen extends StatefulWidget {
 
 class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   bool showPassword = false;
+  bool themeVal;
   String stringResponse;
   String fname;
   String lname;
@@ -25,8 +26,6 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   Map mapResponse;
 
   // Text field controllers
-  // final usernameController = TextEditingController();
-  // final emailController = TextEditingController();
   var firstNameController = TextEditingController();
   var lastNameController = TextEditingController();
   var emailController = TextEditingController();
@@ -63,6 +62,17 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
   void initState() {
     super.initState();
     fetchUser();
+    getThemeValue();
+  }
+
+  // To get theme bool value
+  Future<void> getThemeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      themeVal = prefs.getBool('darkMode');
+    });
+    print(themeVal);
+    return themeVal;
   }
 
   @override
@@ -81,8 +91,6 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
           'Edit Profile',
           style: TextStyle(color: Colors.white),
         ),
-        // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // elevation: 1,
       ),
       body: mapResponse == null
           ? Center(
@@ -184,7 +192,8 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        OutlineButton(
+                        RaisedButton(
+                          elevation: 1,
                           padding: EdgeInsets.symmetric(horizontal: 50),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
@@ -195,7 +204,9 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                               style: TextStyle(
                                   fontSize: 14,
                                   letterSpacing: 2.2,
-                                  color: Colors.black)),
+                                  color: themeVal == true
+                                      ? Colors.red
+                                      : Colors.black)),
                         ),
                         RaisedButton(
                           onPressed: () {
@@ -213,10 +224,6 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                               addressController.text.isEmpty
                                   ? mapResponse['address']
                                   : addressController.text,
-                              // 'jaade',
-                              // 'james',
-                              // '1111111',
-                              // 'kamalpokhari',
                             );
                             Navigator.push(
                                 context,
@@ -225,7 +232,7 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
                           },
                           color: buttonColor,
                           padding: EdgeInsets.symmetric(horizontal: 50),
-                          elevation: 2,
+                          elevation: 1,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(
@@ -289,7 +296,7 @@ class _UserProfileEditScreenState extends State<UserProfileEditScreen> {
             hintStyle: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
+              color: themeVal == true ? Colors.white : Colors.black,
             )),
       ),
     );

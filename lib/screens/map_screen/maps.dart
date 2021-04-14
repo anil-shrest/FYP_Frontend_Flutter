@@ -167,7 +167,7 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: Colors.white, //change your color here
+          color: Colors.white,
         ),
         title: Text(
           'Branch Locations',
@@ -177,7 +177,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
       ),
       body: Stack(children: <Widget>[
         Container(
-          // height: MediaQuery.of(context).size.height - 50.0,
           width: MediaQuery.of(context).size.width,
           child: GoogleMap(
             initialCameraPosition: _initialPosition,
@@ -187,7 +186,6 @@ class _GoogleMapScreenState extends State<GoogleMapScreen> {
             markers: Set.from(markers),
             onTap: (cordinate) {
               _controller.animateCamera(CameraUpdate.newLatLng(cordinate));
-              // addMarker(cordinate);
             },
           ),
         ),

@@ -16,6 +16,7 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   bool showPassword = false;
+  bool themeVal;
   // String stringResponse;
   // List listResponse;
   Map mapResponse;
@@ -59,6 +60,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   void initState() {
     super.initState();
     fetchUser();
+    getThemeValue();
   }
 
   @override
@@ -191,6 +193,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
+  // To get theme bool value
+  Future<void> getThemeValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      themeVal = prefs.getBool('darkMode');
+    });
+    print(themeVal);
+    return themeVal;
+  }
+
 // Building required text fields
   Widget buildTextField(
       String labelText, String placeholder, bool isPasswordTextField) {
@@ -221,11 +233,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 fontWeight: FontWeight.w600),
             floatingLabelBehavior: FloatingLabelBehavior.always,
             hintText: placeholder,
-            hintStyle: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            )),
+            hintStyle: themeVal == true
+                ? TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  )
+                : TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  )),
       ),
     );
   }

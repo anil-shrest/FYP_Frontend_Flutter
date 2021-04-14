@@ -1,101 +1,5 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:DentalHome/components/text.dart';
-
-// class SettingsPage extends StatefulWidget {
-//   @override
-//   _SettingsPageState createState() => _SettingsPageState();
-// }
-
-// class _SettingsPageState extends State<SettingsPage> {
-//   // bool isSwitched = false;
-//   SharedPreferences sharedPreferences;
-
-//   @override
-//   void initState() {
-//     // to get the status of switch at start
-//     getSwitchStatus();
-//     super.initState();
-//   }
-
-//   // future to check the state of switch button
-//   Future<bool> saveSwitchStatus(bool value) async {
-//     sharedPreferences = await SharedPreferences.getInstance();
-//     sharedPreferences.setBool('switchState', value);
-//     print('Switch value saved: $value');
-
-//     return sharedPreferences.setBool('switchState', value);
-//   }
-
-//   Future<bool> getSwitchStatus() async {
-//     sharedPreferences = await SharedPreferences.getInstance();
-//     bool status = sharedPreferences.getBool('switchState');
-
-//     return status;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     var pageProvider = Provider.of<PageProvider>(context);
-//     return Scaffold(
-//       // appBar: AppBar(
-//       //   title: Text('Settings'),
-//       // ),
-//       body: SafeArea(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: <Widget>[
-//             SizedBox(height: 30),
-//             Padding(
-//               padding: const EdgeInsets.all(8.0),
-//               child: Text('Change font size'),
-//             ),
-//             SizedBox(height: 15),
-//             ListTile(
-//               title: Text('${pageProvider.fontSize.toInt()}'),
-//               subtitle: Slider(
-//                 value: pageProvider.sliderFontSize,
-//                 min: 0.5,
-//                 onChanged: (newValue) {
-//                   pageProvider.fontSize = newValue;
-//                 },
-//               ),
-//             ),
-//             SizedBox(height: 30),
-//             Row(
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Text('Dark Mode'),
-//                 ),
-//                 SizedBox(width: 15),
-//                 Switch(
-//                   value: pageProvider.isSwitchOn,
-//                   onChanged: (value) {
-//                     setState(() {
-//                       pageProvider.isSwitchOn = value;
-//                       saveSwitchStatus(value);
-//                     });
-//                     print('Btn saved state is: $pageProvider.isSwitchOn');
-//                     // Provider.of<ThemeNotifier>(context, listen: false)
-//                     //     .switchTheme();
-//                   },
-//                   activeTrackColor: Colors.deepPurple,
-//                   activeColor: Colors.white,
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-// NEW TRY
 import 'package:day_night_switch/day_night_switch.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -116,9 +20,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     _darkTheme = (themeNotifier.getTheme() == darkTheme);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('demo'),
-      // ),
       body: ListView(
         children: <Widget>[
           Container(
@@ -131,7 +32,6 @@ class _SettingsPageState extends State<SettingsPage> {
                     letterSpacing: 0.1),
               )),
           ListTile(
-            // shape: ,
             tileColor: Colors.black12,
             title: Text('Dark Theme',
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
@@ -155,7 +55,6 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           SizedBox(height: 5.0),
           ListTile(
-            // shape: ,
             tileColor: Colors.black12,
             title: Text('Give Feedbacks',
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
@@ -167,7 +66,9 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           SizedBox(height: 5.0),
           ListTile(
-            // shape: ,
+            onTap: () {
+              _showDialog();
+            },
             tileColor: Colors.black12,
             title: Text('About App',
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
@@ -182,11 +83,34 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  //  To change the theme
   void onThemeChanged(bool value, ThemeNotifier themeNotifier) async {
     (value)
         ? themeNotifier.setTheme(darkTheme)
         : themeNotifier.setTheme(lightTheme);
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool('darkMode', value);
+  }
+
+  // Dialog for auth confirmation
+  void _showDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Dental Home Nepal v1.0.0'),
+            content: Text(
+                'This is an application made for dental home to provide easy services to their customers. This application is a final year project which is carried out by Developer -Anil'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // Navigator.push(context,
+                    //     MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                  child: Text('Ok'))
+            ],
+          );
+        });
   }
 }

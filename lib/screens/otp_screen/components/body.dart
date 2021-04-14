@@ -7,6 +7,8 @@ import 'package:DentalHome/api/api.dart';
 import 'package:DentalHome/components/colors.dart';
 import 'package:DentalHome/components/constants.dart';
 import 'package:DentalHome/components/providers.dart';
+import 'package:DentalHome/screens/auth_screens/register_page.dart';
+
 
 // Main body of otp screen
 class OtpBody extends StatelessWidget {
@@ -238,9 +240,10 @@ class _OtpFieldsState extends State<OtpFields> {
                   pin6Controller.text;
               userInputOtp.toString();
               print('User given OTP is: $userInputOtp');
-
+              print(widget.valPhone);
               // Sending OTP for verification
               otpVerifyProvider.verifyOtp(widget.valPhone, userInputOtp);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
             },
             child: Text('Continue',
                 style: TextStyle(

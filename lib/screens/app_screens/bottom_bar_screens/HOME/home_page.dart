@@ -13,20 +13,8 @@ class HomePageScreen extends StatefulWidget {
 class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
-    // final screenHeight = MediaQuery.of(context).size.height;
-    // return Scaffold(
-    // body: CustomScrollView(
-    //   physics: ClampingScrollPhysics(),
-    //   slivers: <Widget>[
-    //     _buildHeader(),
-    //     // RecommendsServices(),
-    //   ],
-    // ),
-    // );
     return SingleChildScrollView(
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeader(),
           RecommendsServices(),
@@ -59,20 +47,9 @@ Container _buildHeader() {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // SizedBox(height: screenHeight * 0.03),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            // Text(
-            //   'Are you feeling sick?',
-            //   style: const TextStyle(
-            //     color: Colors.white,
-            //     fontSize: 22.0,
-            //     fontWeight: FontWeight.w600,
-            //   ),
-            // ),
-            // SizedBox(height: screenHeight * 0.01),
             SizedBox(height: 30.0),
             Text(
               'For quick query or services, please call or text us immediately',
@@ -82,7 +59,6 @@ Container _buildHeader() {
               ),
             ),
             SizedBox(height: 30.0),
-            // SizedBox(height: screenHeight * 0.03),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -130,7 +106,7 @@ Container _buildHeader() {
                 ),
               ],
             ),
-            SizedBox(height: 15.0),
+            SizedBox(height: 10.0),
           ],
         )
       ],

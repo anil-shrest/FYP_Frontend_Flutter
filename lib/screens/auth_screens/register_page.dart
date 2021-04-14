@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:DentalHome/screens/auth_screens/widget.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +21,8 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  // final FirebaseMessaging _fcm = FirebaseMessaging();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   bool hidePassword = true;
 
@@ -39,6 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final _picker = ImagePicker();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String mobile_value;
+  String device_key;
 
 //  FOR UPLOADING IMAGE TO BACKEND
   static final String uploadEndPoint = 'http://10.0.2.2:8000/auth/register/';
@@ -198,23 +203,25 @@ class _SignUpPageState extends State<SignUpPage> {
                                 color: Colors.grey[800]),
                           ),
                           SizedBox(height: 20),
-                          _textField(
+                          textField(
                               firstNameController,
                               'Do not leave this field empty *',
                               'First Name',
                               Icon(
                                 Icons.person,
                                 color: Colors.grey[700],
-                              )),
+                              ),
+                              context),
                           SizedBox(height: 20),
-                          _textField(
+                          textField(
                               lastNameController,
                               'Do not leave this field empty *',
                               'Last Name',
                               Icon(
                                 Icons.person,
                                 color: Colors.grey[700],
-                              )),
+                              ),
+                              context),
                           SizedBox(height: 20),
                           TextFormField(
                             enableInteractiveSelection:
@@ -254,32 +261,35 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                           SizedBox(height: 20),
-                          _textField(
+                          textField(
                               addressController,
                               'Enter a valid address *',
                               'Address',
                               Icon(
                                 Icons.location_pin,
                                 color: Colors.grey[700],
-                              )),
+                              ),
+                              context),
                           SizedBox(height: 20),
-                          _textField(
+                          textField(
                               userEmailController,
                               'Enter a valid email *',
                               'Email',
                               Icon(
                                 Icons.email,
                                 color: Colors.grey[700],
-                              )),
+                              ),
+                              context),
                           SizedBox(height: 20),
-                          _textField(
+                          textField(
                               userNameController,
                               'Enter a valid username *',
                               'Username',
                               Icon(
                                 Icons.admin_panel_settings,
                                 color: Colors.grey[700],
-                              )),
+                              ),
+                              context),
                           SizedBox(height: 20),
                           _passwordTextField(
                               userPasswordController,
@@ -396,34 +406,34 @@ class _SignUpPageState extends State<SignUpPage> {
     ]);
   }
 
-// Text field creation
-  _textField(TextEditingController controller, String validator,
-      String hintText, Icon icon) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: TextFormField(
-        style: TextStyle(color: Colors.grey[800]),
-        keyboardType: TextInputType.text,
-        controller: controller,
-        validator: (input) => input.length < 3 ? "$validator" : null,
-        decoration: new InputDecoration(
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
-          hintText: "$hintText",
-          hintStyle: TextStyle(color: Colors.grey[800]),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: primaryColor,
-          )),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: Colors.black87,
-          )),
-          prefixIcon: icon,
-        ),
-      ),
-    );
-  }
+// // Text field creation
+//   _textField(TextEditingController controller, String validator,
+//       String hintText, Icon icon) {
+//     return Container(
+//       width: MediaQuery.of(context).size.width,
+//       child: TextFormField(
+//         style: TextStyle(color: Colors.grey[800]),
+//         keyboardType: TextInputType.text,
+//         controller: controller,
+//         validator: (input) => input.length < 3 ? "$validator" : null,
+//         decoration: new InputDecoration(
+//           fillColor: Colors.white,
+//           contentPadding: const EdgeInsets.symmetric(vertical: 11.0),
+//           hintText: "$hintText",
+//           hintStyle: TextStyle(color: Colors.grey[800]),
+//           enabledBorder: OutlineInputBorder(
+//               borderSide: BorderSide(
+//             color: primaryColor,
+//           )),
+//           focusedBorder: OutlineInputBorder(
+//               borderSide: BorderSide(
+//             color: Colors.black87,
+//           )),
+//           prefixIcon: icon,
+//         ),
+//       ),
+//     );
+//   }
 
 // Password field creation
   _passwordTextField(TextEditingController controller, String validator,
@@ -538,6 +548,9 @@ class _SignUpPageState extends State<SignUpPage> {
             "Accept": "application/json",
           }));
       if (response.statusCode == 200) {
+        final deviceKeyProvider =
+            Provider.of<AppointmentProvider>(context, listen: false);
+        deviceKeyProvider.get_device_key(device_key);
         print('User Registered!');
       } else {
         print('Registeration failed X');

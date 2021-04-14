@@ -66,6 +66,7 @@ class _AppointHomePageState extends State<AppointHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _getAppointments();
     // _getStaffStatus();
     // final staffStatusProvider = Provider.of<Providers>(context);
     final appointmentProvider =
@@ -136,7 +137,6 @@ class _AppointHomePageState extends State<AppointHomePage> {
                                   ),
                                 )
                               : null,
-                          onTap: () {},
                           // trailing: IconButton(
                           //     icon: Icon(Icons.delete, color: Colors.red),
                           //     onPressed: () {

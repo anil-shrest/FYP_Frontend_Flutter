@@ -258,6 +258,7 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                           height: 40,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {

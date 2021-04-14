@@ -41,7 +41,7 @@ class _RecommendsServicesState extends State<RecommendsServices> {
         // SizedBox(height: 40.0),
         SizedBox(height: 10.0),
         TitleWithMoreBtn(press: () {}),
-        SizedBox(height: 8.0),
+        // SizedBox(height: 8.0),
         SizedBox(
           height: 100.0,
           child: ListView.builder(
@@ -56,22 +56,23 @@ class _RecommendsServicesState extends State<RecommendsServices> {
                     print(serviceProvider.services[index].service_image);
                     indexProvider.indexValues(3);
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DetailsScreen(
-                                  title: serviceProvider
-                                      .services[index].service_title,
-                                  details: serviceProvider
-                                      .services[index].service_detail,
-                                  service_image: serviceProvider
-                                      .services[index].service_image,
-                                  doc_name: serviceProvider
-                                      .services[index].doctor.full_name,
-                                  nmc_number: serviceProvider
-                                      .services[index].doctor.nmc_number,
-                                  doc_image: serviceProvider
-                                      .services[index].doctor.photo,
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailsScreen(
+                          title: serviceProvider.services[index].service_title,
+                          details:
+                              serviceProvider.services[index].service_detail,
+                          service_image:
+                              serviceProvider.services[index].service_image,
+                          doc_name:
+                              serviceProvider.services[index].doctor.full_name,
+                          nmc_number:
+                              serviceProvider.services[index].doctor.nmc_number,
+                          doc_image:
+                              serviceProvider.services[index].doctor.photo,
+                        ),
+                      ),
+                    );
                   },
                 );
               }),
@@ -85,7 +86,7 @@ class _RecommendsServicesState extends State<RecommendsServices> {
         //     child: Text('Wallpaper'),
         //   ),
         // ),
-        SizedBox(height: 25.0),
+        SizedBox(height: 20.0),
         HomeScreenInfo(),
       ],
     );

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:DentalHome/screens/auth_screens/device_key.dart';
 import 'package:DentalHome/screens/otp_screen/otp_verification.dart';
 import 'package:DentalHome/screens/otp_screen/phone_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -26,8 +27,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final FirebaseMessaging _fcm = FirebaseMessaging();
-
   bool hidePassword = true;
   bool isApiCallProcess = false;
   bool isStaffCheckbox = false;
@@ -118,8 +117,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _uiSetup(BuildContext context) {
-    final deviceKeyProvider =
-        Provider.of<AppointmentProvider>(context, listen: false);
     return Stack(
       children: [
         Image.asset(
@@ -288,14 +285,14 @@ class _LoginPageState extends State<LoginPage> {
                     Divider(color: Colors.black, indent: 80.0, endIndent: 80.0),
                     GestureDetector(
                       onTap: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => PhoneNumberScreen()));
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SignUpPage()));
+                                builder: (context) => PhoneNumberScreen()));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => SignUpPage()));
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -340,47 +337,48 @@ class _LoginPageState extends State<LoginPage> {
         content: Row(
           children: <Widget>[
             new Expanded(
-                child: Container(
-              height: 140.0,
-              width: MediaQuery.of(context).size.width,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Enter email to get password reset url',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400, fontSize: 17.0),
-                    ),
-                    TextFormField(
-                      keyboardType: TextInputType.emailAddress,
-                      controller: emailController,
-                      validator: (input) => input.length < 3 || input.isEmpty
-                          ? "Enter proper credential*"
-                          : null,
-                      decoration: new InputDecoration(
-                        fillColor: Colors.white,
-                        contentPadding:
-                            const EdgeInsets.symmetric(vertical: 11.0),
-                        hintText: "Email Address",
-                        // hintStyle: TextStyle(color: Colors.grey[800]),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                          color: primaryColor,
-                        )),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                          color: Colors.grey[700],
-                        )),
-                        focusColor: Colors.tealAccent,
-                        prefixIcon: Icon(Icons.mail, color: Colors.teal),
+              child: Container(
+                height: 140.0,
+                width: MediaQuery.of(context).size.width,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Enter email to get password reset url',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 17.0),
                       ),
-                    ),
-                  ],
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailController,
+                        validator: (input) => input.length < 3 || input.isEmpty
+                            ? "Enter proper credential*"
+                            : null,
+                        decoration: new InputDecoration(
+                          fillColor: Colors.white,
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 11.0),
+                          hintText: "Email Address",
+                          // hintStyle: TextStyle(color: Colors.grey[800]),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: primaryColor,
+                          )),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                            color: Colors.grey[700],
+                          )),
+                          focusColor: Colors.tealAccent,
+                          prefixIcon: Icon(Icons.mail, color: Colors.teal),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ))
+            )
           ],
         ),
         actions: <Widget>[
@@ -441,6 +439,9 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       final deviceKeyProvider =
           Provider.of<AppointmentProvider>(context, listen: false);
+      String test = get_device_token();
+      print("Test for device token:");
+      print(test);
       print(response);
       String token = jsonDecode(response.body)['token'].toString();
       print(token);
@@ -455,11 +456,12 @@ class _LoginPageState extends State<LoginPage> {
       // Navigator.push(
       //     context, MaterialPageRoute(builder: (context) => MainMenu()));
       if (token != null) {
+        // deviceKeyProvider.get_device_key(device_key);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => MainMenu()),
             (Route<dynamic> route) => false);
       }
-      deviceKeyProvider.get_device_key();
+      // deviceKeyProvider.get_device_key();
       return token;
     } else {
       _showToastMessage("Invalid Credentials", Colors.redAccent[200]);

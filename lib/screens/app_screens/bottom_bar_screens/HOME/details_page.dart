@@ -44,7 +44,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
             flexibleSpace: FlexibleSpaceBar(
               collapseMode: CollapseMode.parallax,
               background: Image.network(
-                  'https://image.freepik.com/free-vector/flat-dentist-pattern_23-2148104069.jpg',
+                  // 'https://image.freepik.com/free-vector/flat-dentist-pattern_23-2148104069.jpg',
+                  'https://static01.nyt.com/images/2020/06/09/science/09WELL-BRODY/09WELL-BRODY-superJumbo.jpg',
                   fit: BoxFit.cover),
             ),
           )
@@ -90,7 +91,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       height: 100.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: Color(0xFF42d1a8),
+                        // color: Color(0xFF42d1a8),
+                        color: Colors.black26,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -255,5 +257,3 @@ _launchUrl() async {
     throw 'Could not launch $url';
   }
 }
-
-

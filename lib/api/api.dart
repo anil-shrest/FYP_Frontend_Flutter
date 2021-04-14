@@ -106,16 +106,9 @@ class AppointmentProvider with ChangeNotifier {
   }
 
   // To get mobile devices key and store it for sending fcm
-  get_device_key() async {
-    final FirebaseMessaging _fcm = FirebaseMessaging();
-
+  get_device_key(String device_token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    String device_key;
-    _fcm.getToken().then((token) {
-      device_key = token;
-      print('The device token is:' + device_key);
-    });
 
     final http.Response response = await http.post(
       'http://10.0.2.2:8000/save_device_token/',
@@ -125,7 +118,7 @@ class AppointmentProvider with ChangeNotifier {
       },
       body: jsonEncode(
         <String, dynamic>{
-          'device_key': device_key,
+          'device_key': device_token,
         },
       ),
     );
@@ -134,7 +127,31 @@ class AppointmentProvider with ChangeNotifier {
       notifyListeners();
     } else {
       _showToastMessage('Device key failed to save!', Colors.redAccent[200]);
-      // print('Otp code registration failed!!');
+      print('Otp code registration failed!!');
+    }
+  }
+
+  // To update the device key if user logs in with a differnt device for FCM
+  update_device_key(int author_id) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token');
+      final response = await http.post(
+        "http://10.0.2.2:8000/update_device_token/$author_id/",
+        headers: {
+          'Content-type': 'application/json',
+          "Authorization": "Token $token"
+        },
+      );
+      if (response.statusCode == 200) {
+        _showToastMessage('New Device Key Saved', Colors.teal[300]);
+        notifyListeners();
+      } else {
+        _showToastMessage('No Device Key Saved', Colors.redAccent[200]);
+        // print('Otp code registration failed!!');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -175,7 +192,8 @@ class AppointmentProvider with ChangeNotifier {
         },
       );
       if (response.statusCode == 200) {
-        _showToastMessage('Your appointment has been confirmed', Colors.teal[300]);
+        _showToastMessage(
+            'Your appointment has been confirmed', Colors.teal[300]);
         notifyListeners();
       } else {
         _showToastMessage('Appointment was rejected!', Colors.redAccent[200]);
@@ -195,7 +213,7 @@ class AppointmentProvider with ChangeNotifier {
                 'Content-type': 'application/json',
               },
               body: jsonEncode(<String, dynamic>{
-                'mobile': mobile,
+                'mobile_no': mobile,
                 'otp': otp,
               }));
       if (response.statusCode == 200) {
